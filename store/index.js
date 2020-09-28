@@ -1445,6 +1445,11 @@ export const state = () => ({
   ethChartData: [],
   litecoinChartData: [],
   dashChartData: [],
+  btcPrices: [],
+  ethPrices: [],
+  ltcPrices: [],
+  dashPrices: [],
+  daysInterval: 30,
   tokenModalActive: false,
   tokenWithdrawalModalActive: false,
   canvasClass: '',
@@ -1459,6 +1464,21 @@ export const state = () => ({
 export const mutations = {
   setUser(state, user) {
     state.user = user
+  },
+  setDaysInterval(state, payload) {
+    state.daysInterval = payload
+  },
+  setBtcPrices(state, payload) {
+    state.btcPrices = payload
+  },
+  setEthPrices(state, payload) {
+    state.ethPrices = payload
+  },
+  setLtcPrices(state, payload) {
+    state.ltcPrices = payload
+  },
+  setDashPrices(state, payload) {
+    state.dashPrices = payload
   },
   setIntervalClearer(state, payload) {
     state.intervalClearer = payload
@@ -1668,6 +1688,7 @@ export const getters = {
         market_cap: '$3.21B',
         trend: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
         balance: 0.0,
+        chart: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
       },
       {
         key: state.btcData.market_cap_rank,
@@ -1680,6 +1701,7 @@ export const getters = {
         market_cap: state.btcData.market_cap,
         trend: state.btcChartData,
         balance: 0.0,
+        chart: state.btcPrices,
       },
       {
         key: state.ethData.market_cap_rank,
@@ -1692,6 +1714,7 @@ export const getters = {
         market_cap: state.ethData.market_cap,
         trend: state.ethChartData,
         balance: 0.0,
+        chart: state.ethPrices,
       },
       {
         key: state.litecoinData.market_cap_rank,
@@ -1704,6 +1727,7 @@ export const getters = {
         market_cap: state.litecoinData.market_cap,
         trend: state.litecoinChartData,
         balance: 0.0,
+        chart: state.ltcPrices,
       },
       {
         key: state.dashData.market_cap_rank,
@@ -1716,6 +1740,7 @@ export const getters = {
         market_cap: state.dashData.market_cap,
         trend: state.dashChartData,
         balance: 0.0,
+        chart: state.dashPrices,
       },
     ]
   },
@@ -1775,5 +1800,20 @@ export const getters = {
   },
   walletModalActive(state) {
     return state.walletModalActive
+  },
+  btcPrices(state) {
+    return state.btcPrices
+  },
+  ethPrices(state) {
+    return state.ethPrices
+  },
+  ltcPrices(state) {
+    return state.ltcPrices
+  },
+  dashPrices(state) {
+    return state.dashPrices
+  },
+  daysInterval(state) {
+    return state.daysInterval
   },
 }

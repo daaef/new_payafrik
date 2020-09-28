@@ -153,7 +153,7 @@
               >
                 <template slot-scope="change">
                   <span :class="[change > 0 ? 'c-success' : 'c-alert']">
-                    ${{ change }}%
+                    {{ change > 0 ? '+' : '' }}{{ change }}%
                   </span>
                 </template>
               </a-table-column>
@@ -182,8 +182,17 @@
                 </template>
               </a-table-column>
               <a-table-column key="balance" title="BALANCE" />
-              <p slot="expandedRowRender" style="margin: 0">
-                <!--{{ record.description }}-->oi oi oi
+              <p slot="expandedRowRender" slot-scope="record" style="margin: 0">
+                <highchart
+                  :options="{
+                    series: [
+                      {
+                        name: record.name,
+                        data: record.chart,
+                      },
+                    ],
+                  }"
+                />
               </p>
             </a-table>
           </div>
@@ -300,24 +309,56 @@
         chatBoxClosed: 'chatBoxClosed',
         tokenModalActive: 'tokenModalActive',
         canvasClass: 'canvasClass',
+        daysInterval: 'daysInterval',
+        btcPrices: 'btcPrices',
+        ethPrices: 'ethPrices',
+        ltcPrices: 'ltcPrices',
+        dashPrices: 'dashPrices',
       }),
     },
     async mounted() {
       await this.triggerFetchData()
       this.$store.commit(
+        'setBtcPrices',
+        await this.getBTCChartData(this.daysInterval)
+      )
+      this.$store.commit(
+        'setEthPrices',
+        await this.getETHChartData(this.daysInterval)
+      )
+      this.$store.commit(
+        'setLtcPrices',
+        await this.getLTCChartData(this.daysInterval)
+      )
+      this.$store.commit(
+        'setDashPrices',
+        await this.getDASHChartData(this.daysInterval)
+      )
+      this.$store.commit(
         'setIntervalClearer',
         setInterval(
-          function () {
-            this.triggerFetchData()
+          async function () {
+            await this.triggerFetchData()
+            this.$store.commit(
+              'setBtcPrices',
+              await this.getBTCChartData(this.daysInterval)
+            )
+            this.$store.commit(
+              'setEthPrices',
+              await this.getETHChartData(this.daysInterval)
+            )
+            this.$store.commit(
+              'setLtcPrices',
+              await this.getLTCChartData(this.daysInterval)
+            )
+            this.$store.commit(
+              'setDashPrices',
+              await this.getDASHChartData(this.daysInterval)
+            )
           }.bind(this),
           30000
         )
       )
-      const dDate = Math.floor(
-        this.$moment().subtract(30, 'days').format('x') / 1000
-      )
-      console.log(dDate)
-      await this.getBTCChartData(dDate, 'bitcoin')
     },
     methods: {
       async triggerFetchData() {
@@ -333,33 +374,65 @@
         toggleChatBox: 'toggleChatBox',
       }),
       async getBTCChartData(period) {
+        const dDate = Math.floor(
+          this.$moment().subtract(period, 'days').format('x') / 1000
+        )
+        console.log('dDate', dDate)
         const today = Math.round(new Date().getTime() / 1000)
         const btcMarketData = await this.$axios.$get(
-          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=${period}&to=${today}`
+          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=${dDate}&to=${today}`
         )
-        console.log(btcMarketData.prices)
-        return btcMarketData.prices
+        // new Date(1598731229695).toDateString()
+        const btcArray = []
+        btcMarketData.prices.forEach((btc) => {
+          btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
+        })
+        return btcArray
       },
       async getETHChartData(period) {
-        const today = Math.round(new Date().getTime() / 1000)
-        const btcMarketData = await this.$axios.$get(
-          `https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=usd&from=${period}&to=${today}`
+        const dDate = Math.floor(
+          this.$moment().subtract(period, 'days').format('x') / 1000
         )
-        return btcMarketData.prices
+        console.log('dDate', dDate)
+        const today = Math.round(new Date().getTime() / 1000)
+        const ethMarketData = await this.$axios.$get(
+          `https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=usd&from=${dDate}&to=${today}`
+        )
+        const btcArray = []
+        ethMarketData.prices.forEach((btc) => {
+          btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
+        })
+        return btcArray
       },
       async getLTCChartData(period) {
-        const today = Math.round(new Date().getTime() / 1000)
-        const btcMarketData = await this.$axios.$get(
-          `https://api.coingecko.com/api/v3/coins/litecoin/market_chart/range?vs_currency=usd&from=${period}&to=${today}`
+        const dDate = Math.floor(
+          this.$moment().subtract(period, 'days').format('x') / 1000
         )
-        return btcMarketData.prices
+        console.log('dDate', dDate)
+        const today = Math.round(new Date().getTime() / 1000)
+        const ltcMarketData = await this.$axios.$get(
+          `https://api.coingecko.com/api/v3/coins/litecoin/market_chart/range?vs_currency=usd&from=${dDate}&to=${today}`
+        )
+        const btcArray = []
+        ltcMarketData.prices.forEach((btc) => {
+          btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
+        })
+        return btcArray
       },
       async getDASHChartData(period) {
-        const today = Math.round(new Date().getTime() / 1000)
-        const btcMarketData = await this.$axios.$get(
-          `https://api.coingecko.com/api/v3/coins/dash/market_chart/range?vs_currency=usd&from=${period}&to=${today}`
+        const dDate = Math.floor(
+          this.$moment().subtract(period, 'days').format('x') / 1000
         )
-        return btcMarketData.prices
+        console.log('dDate', dDate)
+        const today = Math.round(new Date().getTime() / 1000)
+        const dashMarketData = await this.$axios.$get(
+          `https://api.coingecko.com/api/v3/coins/dash/market_chart/range?vs_currency=usd&from=${dDate}&to=${today}`
+        )
+        const btcArray = []
+        dashMarketData.prices.forEach((btc) => {
+          btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
+        })
+        return btcArray
       },
     },
   }
