@@ -19,7 +19,7 @@
             <p class="higlight text-center">Make Transactions</p>
           </a>
         </li>
-        <li class="link-card active">
+        <li class="link-card">
           <a href="#">
             <div class="imge">
               <img src="~/assets/img/bills.png" alt="purse" />
@@ -128,6 +128,7 @@
             <a-table
               :data-source="data"
               :pagination="{ hideOnSinglePage: true }"
+              :row-key="(record) => record.className"
             >
               <a-table-column
                 key="asset_name"
@@ -181,10 +182,39 @@
                   </trend>
                 </template>
               </a-table-column>
-              <a-table-column key="balance" title="BALANCE" />
-              <p slot="expandedRowRender" slot-scope="record" style="margin: 0">
+              <!--<a-table-column key="balance" title="BALANCE" />-->
+              <p
+                slot="expandedRowRender"
+                slot-scope="record"
+                class="important_chart"
+                style="margin: 0"
+              >
+                <!-- <a-radio-group default-value="a" @change="onChange">
+                  <a-radio-button :value="`a`"> Hangzhou </a-radio-button>
+                  <a-radio-button :value="`b`"> Shanghai </a-radio-button>
+                  <a-radio-button :value="`c`"> Beijing </a-radio-button>
+                  <a-radio-button :value="`d`"> Chengdu </a-radio-button>
+                </a-radio-group>-->
                 <highchart
                   :options="{
+                    title: {
+                      text: null,
+                    },
+                    chart: {
+                      backgroundColor: null,
+                      className: record.className,
+                      styledMode: true,
+                    },
+                    xAxis: {
+                      reversed: false,
+                      gridLineWidth: 0.5,
+                      gridLineColor: '#131a4b',
+                    },
+                    yAxis: {
+                      reversed: false,
+                      gridLineWidth: 0.5,
+                      gridLineColor: '#272f6a',
+                    },
                     series: [
                       {
                         name: record.name,
@@ -225,144 +255,77 @@
   /*
   let dashChartData */
   export default {
-    async asyncData({ store, $axios }) {
-      await store.dispatch('getCoinData')
+    async fetch() {
+      await this.$store.dispatch('chart/getCoinData')
     },
-    data() {
-      return {
-        chartOptions: {
-          series: [
-            {
-              data: [
-                1.015265195472865,
-                1.01242680319435,
-                1.0096478854081303,
-                1.0124543031237503,
-                1.0127278998766567,
-                1.0110777222454648,
-                1.0100523220204507,
-                1.0099747039363762,
-                1.0105604453430104,
-                1.0090738300244995,
-                1.0106146631115616,
-                1.0109582202843705,
-                1.0092981982357934,
-                1.0107788722728457,
-                1.00805660600075,
-                1.0100710323132955,
-                1.009619186324768,
-                1.010161707574495,
-                1.0093092059065067,
-                1.0099072484037694,
-                1.0102823323155186,
-                1.0099305559899803,
-                1.0089813227144306,
-                1.0105546749128793,
-                1.0119640797496332,
-                1.0106554276055224,
-                1.0060052535236157,
-                1.0113619889110974,
-                1.011331387581466,
-                1.009657993772738,
-                1.0134647900310305,
-                1.0121680934976525,
-                1.012324264110342,
-                1.0118448153176656,
-                1.0111162012440214,
-                1.0129512244272698,
-                1.0127437543106859,
-                1.0145513451958748,
-                1.012200782172699,
-                1.010441773218563,
-                1.010892943469041,
-                1.0126299292840304,
-                1.0124375497369293,
-                1.013934291173744,
-                1.0093737168739871,
-                1.010842695946667,
-                1.0105953605250055,
-                1.0091236291784735,
-                1.011824724687361,
-                1.0092062976534548,
-              ],
-              pointStart: 1,
-            },
-          ],
-        },
-      }
-    },
+
     computed: {
       userDetails() {
         return this.$store.state.auth.user
       },
+      data() {
+        return {
+          value: 'a',
+        }
+      },
       ...mapGetters({
         countryCodes: 'countryCodes',
-        btcData: 'btcData',
-        ethData: 'ethData',
-        litecoinData: 'litecoinData',
-        dashData: 'dashData',
-        btcChartData: 'btcChartData',
-        ethChartData: 'ethChartData',
-        litecoinChartData: 'litecoinChartData',
-        dashChartData: 'dashChartData',
-        data: 'chartData',
+        btcData: 'chart/btcData',
+        ethData: 'chart/ethData',
+        litecoinData: 'chart/litecoinData',
+        dashData: 'chart/dashData',
+        btcChartData: 'chart/btcChartData',
+        ethChartData: 'chart/ethChartData',
+        litecoinChartData: 'chart/litecoinChartData',
+        dashChartData: 'chart/dashChartData',
+        data: 'chart/chartData',
         chatBoxClosed: 'chatBoxClosed',
         tokenModalActive: 'tokenModalActive',
         canvasClass: 'canvasClass',
-        daysInterval: 'daysInterval',
-        btcPrices: 'btcPrices',
-        ethPrices: 'ethPrices',
-        ltcPrices: 'ltcPrices',
-        dashPrices: 'dashPrices',
+        daysInterval: 'chart/daysInterval',
+        priceCurrency: 'chart/priceCurrency',
+        bitcoinCurrency: 'chart/bitcoinCurrency',
+        ethereumCurrency: 'chart/ethereumCurrency',
+        litecoinCurrency: 'chart/litecoinCurrency',
+        dashcoinCurrency: 'chart/dashcoinCurrency',
+        hourPeriod: 'chart/hourPeriod',
+        monthPeriod: 'chart/monthPeriod',
+        yearPeriod: 'chart/yearPeriod',
+        dayPeriod: 'chart/dayPeriod',
+        weekPeriod: 'chart/weekPeriod',
+        allPeriod: 'chart/allPeriod',
       }),
     },
     async mounted() {
-      await this.triggerFetchData()
-      this.$store.commit(
+      await this.$store.dispatch('chart/getBitcoinData', this.hourPeriod)
+      await this.$store.dispatch('chart/getEthPriceData', this.hourPeriod)
+      await this.$store.dispatch('chart/getLtcPriceData', this.hourPeriod)
+      await this.$store.dispatch('chart/getDashPriceData', this.hourPeriod)
+      // await this.triggerFetchData()
+      /* await this.$store.commit(
         'setBtcPrices',
         await this.getBTCChartData(this.daysInterval)
       )
-      this.$store.commit(
+      await this.$store.commit(
         'setEthPrices',
         await this.getETHChartData(this.daysInterval)
       )
-      this.$store.commit(
+      await this.$store.commit(
         'setLtcPrices',
         await this.getLTCChartData(this.daysInterval)
       )
-      this.$store.commit(
+      await this.$store.commit(
         'setDashPrices',
         await this.getDASHChartData(this.daysInterval)
-      )
-      this.$store.commit(
-        'setIntervalClearer',
-        setInterval(
-          async function () {
-            await this.triggerFetchData()
-            this.$store.commit(
-              'setBtcPrices',
-              await this.getBTCChartData(this.daysInterval)
-            )
-            this.$store.commit(
-              'setEthPrices',
-              await this.getETHChartData(this.daysInterval)
-            )
-            this.$store.commit(
-              'setLtcPrices',
-              await this.getLTCChartData(this.daysInterval)
-            )
-            this.$store.commit(
-              'setDashPrices',
-              await this.getDASHChartData(this.daysInterval)
-            )
-          }.bind(this),
-          30000
-        )
-      )
+      ) */
     },
     methods: {
+      /*
       async triggerFetchData() {
         await this.$store.dispatch('getCoinData')
+      }, */
+      onChange(e) {
+        console.log(`checked = ${e.target.value}`)
       },
       toggleChatBox() {
         this.$store.commit('global/toggleChatBox')
@@ -437,3 +400,104 @@
     },
   }
 </script>
+
+<style lang="scss">
+  .highcharts-credits {
+    display: none;
+  }
+
+  .highcharts-axis-labels {
+    stroke: white;
+  }
+
+  .important_chart {
+    svg {
+      rect {
+        fill: transparent;
+      }
+    }
+
+    .highcharts-tooltip {
+      fill: white;
+      stroke: black;
+    }
+    .highcharts-series {
+      fill: transparent;
+      path {
+        fill: transparent;
+        stroke: white;
+        box-shadow: 3px 3px 10px #888;
+      }
+    }
+  }
+  .afk_chart {
+    .highcharts-axis-labels {
+      stroke: #2a4ebf;
+    }
+
+    .highcharts-series {
+      fill: transparent;
+      path {
+        fill: transparent;
+        stroke: #2a4ebf;
+        box-shadow: 3px 3px 10px #888;
+      }
+    }
+  }
+  .btc_chart {
+    .highcharts-axis-labels {
+      stroke: #f7932d;
+    }
+
+    .highcharts-series {
+      fill: transparent;
+      path {
+        fill: transparent;
+        stroke: #f7932d;
+        box-shadow: 3px 3px 10px #888;
+      }
+    }
+  }
+  .eth_chart {
+    .highcharts-axis-labels {
+      stroke: #7d86a8;
+    }
+
+    .highcharts-series {
+      fill: transparent;
+      path {
+        fill: transparent;
+        stroke: #7d86a8;
+        box-shadow: 3px 3px 10px #888;
+      }
+    }
+  }
+  .ltc_chart {
+    .highcharts-axis-labels {
+      stroke: #838383;
+    }
+
+    .highcharts-series {
+      fill: transparent;
+      path {
+        fill: transparent;
+        stroke: #838383;
+        box-shadow: 3px 3px 10px #888;
+      }
+    }
+  }
+  .dash_chart {
+    .highcharts-axis-labels {
+      stroke: #018ee3;
+    }
+
+    .highcharts-series {
+      fill: transparent;
+      path {
+        fill: transparent;
+        stroke: #018ee3;
+        box-shadow: 3px 3px 10px #888;
+      }
+    }
+  }
+</style>

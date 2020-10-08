@@ -5,10 +5,11 @@
       { 'withdraw-active': withdrawActive },
       { 'transfer-token-active': transferTokenActive },
       { 'wallet-modal-active': walletModalActive },
+      { 'profile--active': profileModalActive },
       'my-canvas',
     ]"
   >
-    <div class="buy--token--modal">
+    <!--<div class="buy&#45;&#45;token&#45;&#45;modal">
       <a href="#" class="modal-close" @click="$store.commit('setBuyToken')">
         <img src="~/assets/img//close.png" alt="" />
       </a>
@@ -24,7 +25,7 @@
               <h1>2,500.24</h1>
               <p class="light">1 AFK TOKEN = 1.00 NGN</p>
             </div>
-            <div class="token--description">
+            <div class="token&#45;&#45;description">
               <p class="c-white">
                 You can use AFK tokens to carry out transactions on this
                 platform from purchasing utilities to other items in our mart.
@@ -32,7 +33,7 @@
                 payments on physical machines or withdraw from an ATM.
               </p>
             </div>
-            <div class="cash--crypto--btns">
+            <div class="cash&#45;&#45;crypto&#45;&#45;btns">
               <div>
                 <div class="sub-button mr-50">
                   <button>BUY WITH CASH</button>
@@ -46,6 +47,10 @@
           </div>
         </div>
       </div>
+    </div>-->
+    <BuyToken />
+    <div class="profile--modal">
+      <UserProfile />
     </div>
     <div class="withdraw--page--transfer--modals">
       <section class="withdraw--modal">
@@ -163,12 +168,12 @@
               <img src="~/assets/img//logo.png" alt="logo" />
             </div>
             <ul>
-              <li class="active">
+              <nuxt-link tag="li" to="/">
                 <a href="#">
                   <img class="mr-20" src="~/assets/img//home.png" alt="" /> Home
                 </a>
-              </li>
-              <li>
+              </nuxt-link>
+              <nuxt-link tag="li" to="/wallet">
                 <a href="#">
                   <img
                     class="mr-20"
@@ -177,13 +182,13 @@
                   />
                   Wallet
                 </a>
-              </li>
-              <li>
+              </nuxt-link>
+              <nuxt-link tag="li" to="/mart">
                 <a href="#">
                   <img class="mr-20" src="~/assets/img//mart.png" alt="" /> Mart
                 </a>
-              </li>
-              <li>
+              </nuxt-link>
+              <nuxt-link tag="li" to="/exchange">
                 <a href="#">
                   <img
                     class="mr-20"
@@ -192,7 +197,7 @@
                   />
                   Exchange
                 </a>
-              </li>
+              </nuxt-link>
               <li>
                 <a href="#">
                   <img class="mr-20" src="~/assets/img//chat.png" alt="" /> Chat
@@ -243,7 +248,7 @@
                     WITHDRAW
                   </a>
                 </li>
-                <li>
+                <li class="mr-32">
                   <a href="#" @click="$store.commit('setTransferToken')">
                     <img
                       class="mr-8"
@@ -253,9 +258,19 @@
                     TRANSFER AFRITOKEN
                   </a>
                 </li>
+                <li>
+                  <a href="#" @click="$store.commit('setTransferToken')">
+                    <img
+                      class="mr-8"
+                      src="~/assets/img//credit_card.png"
+                      alt="transfer"
+                    />
+                    REQUEST CARD
+                  </a>
+                </li>
               </ul>
               <div class="user-account">
-                <a href="#">
+                <a href="#" @click="$store.commit('setProfileModal')">
                   <img
                     class="mr-12"
                     src="~/assets/img//user.png"
@@ -439,8 +454,11 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import UserProfile from '~/components/partials/user-profile'
+  import BuyToken from '~/components/partials/buy-token'
 
   export default {
+    components: { UserProfile, BuyToken },
     computed: {
       userDetails() {
         return this.$store.state.auth.user
@@ -462,7 +480,18 @@
         withdrawActive: 'withdrawActive',
         transferTokenActive: 'transferTokenActive',
         walletModalActive: 'walletModalActive',
+        profileModalActive: 'profileModalActive',
       }),
     },
   }
 </script>
+<style lang="scss">
+  nav .nav-links img {
+    transition: 0.2s ease-in-out;
+  }
+  nav .nav-links li {
+    &:hover img {
+      transform: scale(1.5);
+    }
+  }
+</style>

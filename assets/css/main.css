@@ -1607,7 +1607,7 @@ aside li {
 
 aside li img {
   height: 25px;
-  opacity: .69
+  /*opacity: .69*/
 }
 
 aside li a {
@@ -2691,9 +2691,11 @@ aside .links--and--logo:after {
   overflow-x: hidden;
   height: calc((100vh) - (100px));
   width: 100%;
-  background-image: url("../img/auth_bg.png"), linear-gradient(to right, #162655, #0f0b46);
+  background-image: url("../img/auth_bg.png"), linear-gradient(to right, rgba(22, 38, 85, 0.6), rgba(15, 11, 70, 0.6));
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
+  box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(40px);
 }
 
 
@@ -2942,7 +2944,7 @@ aside .links--and--logo:after {
 
 .main-content main .dash-body > div .wallets--and--transactions .transactions {
   width: 100%;
-  padding-left: 20px;
+  /*padding-left: 20px;*/
   padding-bottom: 20px
 }
 
@@ -3738,4 +3740,8 @@ form div .ivu-select-selection {
 
 .table--holder tbody svg {
   width: unset;
+}
+
+tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
+  background: transparent;
 }

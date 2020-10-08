@@ -1460,6 +1460,15 @@ export const state = () => ({
   withdrawActive: false,
   transferTokenActive: false,
   walletModalActive: false,
+  profileModalActive: false,
+  priceCurrency: 'USD',
+  cryptoCurrency: 'BTC',
+  hourPeriod: 'hour',
+  monthPeriod: 'month',
+  yearPeriod: 'year',
+  dayPeriod: 'day',
+  weekPeriod: 'week',
+  allPeriod: 'all',
 })
 export const mutations = {
   setUser(state, user) {
@@ -1480,8 +1489,8 @@ export const mutations = {
   setDashPrices(state, payload) {
     state.dashPrices = payload
   },
-  setIntervalClearer(state, payload) {
-    state.intervalClearer = payload
+  setPriceCurrency(state, payload) {
+    state.priceCurrency = payload
   },
   setBuyToken(state) {
     state.buyTokenActive = !state.buyTokenActive
@@ -1494,6 +1503,9 @@ export const mutations = {
   },
   setWalletModal(state) {
     state.walletModalActive = !state.walletModalActive
+  },
+  setProfileModal(state) {
+    state.profileModalActive = !state.profileModalActive
   },
   toggleSidebar(state) {
     state.sidebarClosed = !state.sidebarClosed
@@ -1511,35 +1523,35 @@ export const mutations = {
     }
   },
   loadBTCData(state, data) {
-    console.log(data)
+    // console.log(data)
     state.btcData = data
   },
   loadEthData(state, data) {
-    console.log(data)
+    // console.log(data)
     state.ethData = data
   },
   loadLitecoinData(state, data) {
-    console.log(data)
+    // console.log(data)
     state.litecoinData = data
   },
   loadDashData(state, data) {
-    console.log(data)
+    // console.log(data)
     state.dashData = data
   },
   loadBTCChartData(state, data) {
-    console.log('btc chart data', data)
+    // console.log('btc chart data', data)
     state.btcChartData = data
   },
   loadEthChartData(state, data) {
-    console.log('eth chart data', data)
+    // console.log('eth chart data', data)
     state.ethChartData = data
   },
   loadLitecoinChartData(state, data) {
-    console.log('lite coin chart data', data)
+    // console.log('lite coin chart data', data)
     state.litecoinChartData = data
   },
   loadDashChartData(state, data) {
-    console.log('dash chart data', data)
+    // console.log('dash chart data', data)
     state.dashChartData = data
   },
   openFunctionModal(state, data) {
@@ -1569,50 +1581,14 @@ export const mutations = {
   },
   loadTickets(state, tickets) {
     state.supportTickets = tickets
-    console.log('STORE===>', state.supportTickets)
+    // console.log('STORE===>', state.supportTickets)
   },
   selectTicket(state, ticket) {
     state.selectedTicket = ticket
   },
 }
 export const actions = {
-  /* async nuxtServerInit({ commit, $axios }) {
-    try {
-      const coinMarketData = await $axios.$get(
-        'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h'
-      )
-      const btcSparkline = []
-      for (let i = 0; i < 50; i++) {
-        btcSparkline.push(coinMarketData[0].sparkline_in_7d.price[i])
-      }
-      const ethSparkline = []
-      for (let i = 0; i < 50; i++) {
-        ethSparkline.push(coinMarketData[1].sparkline_in_7d.price[i])
-      }
-      const litecoinSparkline = []
-      for (let i = 0; i < 50; i++) {
-        litecoinSparkline.push(coinMarketData[8].sparkline_in_7d.price[i])
-      }
-      const dashSparkline = []
-      for (let i = 0; i < 50; i++) {
-        dashSparkline.push(coinMarketData[25].sparkline_in_7d.price[i])
-      }
-      await commit('loadBTCChartData', btcSparkline)
-      await commit('loadEthChartData', ethSparkline)
-      await commit('loadLitecoinChartData', litecoinSparkline)
-      await commit('loadDashChartData', dashSparkline)
-
-      await commit('loadBTCData', coinMarketData[0])
-      await commit('loadEthData', coinMarketData[1])
-      await commit('loadLitecoinData', coinMarketData[8])
-      await commit('loadDashData', coinMarketData[25])
-
-      // this.loadingData = false;
-    } catch (e) {
-      console.log(e)
-    }
-  }, */
-  async getCoinData({ commit, dispatch }) {
+  async getCoinData({ commit, dispatch, state }) {
     const coinMarketData = await this.$axios.$get(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h'
     )
@@ -1677,6 +1653,7 @@ export const getters = {
   chartData(state) {
     return [
       {
+        className: 'afk_chart',
         key: 1000,
         asset_name: {
           name: 'Africoin',
@@ -1691,6 +1668,7 @@ export const getters = {
         chart: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
       },
       {
+        className: 'btc_chart',
         key: state.btcData.market_cap_rank,
         asset_name: {
           name: state.btcData.name,
@@ -1704,6 +1682,7 @@ export const getters = {
         chart: state.btcPrices,
       },
       {
+        className: 'eth_chart',
         key: state.ethData.market_cap_rank,
         asset_name: {
           name: state.ethData.name,
@@ -1717,6 +1696,7 @@ export const getters = {
         chart: state.ethPrices,
       },
       {
+        className: 'ltc_chart',
         key: state.litecoinData.market_cap_rank,
         asset_name: {
           name: state.litecoinData.name,
@@ -1731,6 +1711,7 @@ export const getters = {
       },
       {
         key: state.dashData.market_cap_rank,
+        className: 'dash_chart',
         asset_name: {
           name: state.dashData.name,
           img: state.dashData.image,
@@ -1801,6 +1782,9 @@ export const getters = {
   walletModalActive(state) {
     return state.walletModalActive
   },
+  profileModalActive(state) {
+    return state.profileModalActive
+  },
   btcPrices(state) {
     return state.btcPrices
   },
@@ -1815,5 +1799,8 @@ export const getters = {
   },
   daysInterval(state) {
     return state.daysInterval
+  },
+  priceCurrency(state) {
+    return state.priceCurrency
   },
 }

@@ -34,7 +34,21 @@ export default {
         content: process.env.npm_package_description || '',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      {
+        rel: 'preconnect',
+        href: 'https://api.payafrik.io/',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://payafrik.immanuel.com.ng/v1/api/interswitch/',
+      },
+      {
+        rel: 'preconnect',
+        href: 'https://api.coingecko.com/api/v3/',
+      },
+    ],
   },
   /*
    ** Global CSS
@@ -132,5 +146,6 @@ export default {
   },
   router: {
     middleware: ['auth'],
+    linkExactActiveClass: 'active',
   },
 }
