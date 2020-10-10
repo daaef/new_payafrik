@@ -3181,7 +3181,7 @@ aside .links--and--logo:after {
 
 .wallet-content {
   padding: 10px 20px;
-  width: calc((100%) - (220px));
+  width: 100%;
   display: flex
 }
 
@@ -3199,7 +3199,7 @@ aside .links--and--logo:after {
 
 .wallet-content > * {
   order: 1;
-  width: 70%
+  width: 100%
 }
 
 .wallet-content > .wallet-description {
@@ -3744,4 +3744,280 @@ form div .ivu-select-selection {
 
 tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
   background: transparent;
+}
+
+.ant-tabs .ant-tabs-left-bar .ant-tabs-tab {
+  color: #8c8b8b;
+}
+
+.ant-tabs .ant-tabs-left-bar {
+  border-right: solid 1px #e8e8e8;
+  transition: all .3s ease-in-out;
+}
+
+.highcharts-container {
+  height: 250px!important;
+}
+
+.highcharts-container svg {
+  height: 100%;
+}
+
+.ant-tabs .ant-tabs-left-bar .ant-tabs-ink-bar {
+  right: 1.5px;
+  width: 4.5px;
+}
+
+.ant-tabs .ant-tabs-left-content {
+  border-left-color: transparent !important;
+}
+
+.ant-tabs-nav .ant-tabs-tab-active span {
+  font-weight: 600;
+  font-family: "Avenir Bold", sans-serif;
+}
+
+.afk_chart .ant-tabs-left-bar .ant-tabs-ink-bar {
+  background: #2a4ebf;
+}
+
+
+.afk_chart .ant-tabs-left-bar {
+  border-right: solid 1px #2a4ebf;
+}
+
+.afk_chart .ant-tabs-nav .ant-tabs-tab-active {
+  color: #2a4ebf;
+}
+
+.afk_chart .currency__balance {
+  color: #2a4ebf;
+}
+
+.afk_chart .normal-btn.afk-bordered {
+  border-color: #2a4ebf;
+}
+
+.btc_chart .ant-tabs-left-bar .ant-tabs-ink-bar {
+  background: #f2a900;
+}
+
+
+.btc_chart .ant-tabs-left-bar {
+  border-right: solid 1px #f2a900;
+}
+
+.btc_chart .ant-tabs-nav .ant-tabs-tab-active {
+  color: #f2a900;
+}
+
+.btc_chart .currency__balance {
+  color: #f2a900;
+}
+
+.btc_chart .normal-btn.afk-bordered {
+  border-color: #f2a900;
+}
+
+.eth_chart .ant-tabs-left-bar .ant-tabs-ink-bar {
+  background: #50599c;
+}
+
+.eth_chart .ant-tabs-left-bar {
+  border-right: solid 1px #50599c;
+}
+
+.eth_chart .ant-tabs-nav .ant-tabs-tab-active {
+  color: #50599c;
+}
+
+.eth_chart .currency__balance {
+  color: #50599c;
+}
+
+.eth_chart .normal-btn.afk-bordered {
+  border-color: #50599c;
+}
+
+.ltc_chart .ant-tabs-left-bar .ant-tabs-ink-bar {
+  background: #838383;
+}
+
+.ltc_chart .ant-tabs-left-bar {
+  border-right: solid 1px #838383;
+}
+
+.ltc_chart .ant-tabs-nav .ant-tabs-tab-active {
+  color: #838383;
+}
+
+.ltc_chart .currency__balance {
+  color: #838383;
+}
+
+.ltc_chart .normal-btn.afk-bordered {
+  border-color: #838383;
+}
+
+.dash_chart .ant-tabs-left-bar .ant-tabs-ink-bar {
+  background: #018ee3;
+}
+
+.dash_chart .ant-tabs-left-bar {
+  border-right: solid 1px #018ee3;
+}
+
+.dash_chart .ant-tabs-nav .ant-tabs-tab-active {
+  color: #018ee3;
+}
+
+.dash_chart .currency__balance {
+  color: #018ee3;
+}
+
+.dash_chart .normal-btn.afk-bordered {
+  border-color: #018ee3;
+}
+
+.normal-btn {
+  border-width: 2.5px;
+  transition: .3s ease-in-out;
+}
+
+.normal-btn:hover {
+  background: #0d1038 !important;
+}
+
+.ant-collapse, .ant-collapse-content {
+  background: transparent!important;
+  border: none;
+  border-radius: 0;
+}
+
+.ant-collapse > .ant-collapse-item {
+  border-bottom: none;
+}
+
+.ant-collapse-icon-position-right > .ant-collapse-item > .ant-collapse-header {
+  border-bottom: solid 1px #9e9e9e;
+  color: #9e9e9e;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+  color: #9e9e9e;
+}
+
+.ant-collapse > .ant-collapse-item:last-child, .ant-collapse > .ant-collapse-item:last-child > .ant-collapse-header {
+  border-radius: 0;
+}
+
+
+.highcharts-credits {
+  display: none;
+}
+
+.highcharts-axis-labels {
+  stroke: white;
+}
+
+.important_chart svg rect, .wallet-content svg rect {
+  fill: transparent;
+}
+
+.important_chart .highcharts-tooltip, .wallet-content .highcharts-tooltip {
+  fill: white;
+  stroke: black;
+}
+
+.important_chart .highcharts-series, .wallet-content .highcharts-series {
+  fill: transparent;
+}
+
+.important_chart path{
+  fill: transparent;
+  stroke: white;
+  box-shadow: 3px 3px 10px #888;
+}
+
+.afk_chart .highcharts-axis-labels {
+  stroke: #2a4ebf;
+}
+
+.afk_chart .highcharts-series {
+  fill: transparent;
+}
+
+.afk_chart .highcharts-series path {
+  fill: transparent;
+  stroke: #2a4ebf;
+  box-shadow: 3px 3px 10px #888;
+}
+
+.btc_chart .highcharts-axis-labels {
+  stroke: #f7932d;
+}
+
+.btc_chart .highcharts-series {
+  fill: transparent;
+}
+
+.btc_chart .highcharts-series path {
+  fill: transparent;
+  stroke: #f7932d;
+  box-shadow: 3px 3px 10px #888;
+}
+
+.eth_chart .highcharts-axis-labels {
+  stroke: #50599c;
+}
+
+.eth_chart .highcharts-series {
+  fill: transparent;
+}
+
+.eth_chart .highcharts-series path {
+  fill: transparent;
+  stroke: #50599c;
+  box-shadow: 3px 3px 10px #888;
+}
+
+.ltc_chart .highcharts-axis-labels {
+  stroke: #838383;
+}
+
+.ltc_chart .highcharts-series {
+  fill: transparent;
+}
+
+.ltc_chart .highcharts-series path {
+  fill: transparent;
+  stroke: #838383;
+  box-shadow: 3px 3px 10px #888;
+}
+
+.dash_chart .highcharts-axis-labels {
+  stroke: #018ee3;
+}
+
+.dash_chart .highcharts-series {
+  fill: transparent;
+}
+
+.dash_chart .highcharts-series path {
+  fill: transparent;
+  stroke: #018ee3;
+  box-shadow: 3px 3px 10px #888;
+}
+
+.highcharts-background {
+  fill: transparent !important;
+}
+
+.highcharts-plot-background, .highcharts-plot-border {
+  fill: transparent;
+}
+
+.highcharts-tooltip {
+  fill: white;
+  stroke: black;
 }

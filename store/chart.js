@@ -1,4 +1,5 @@
 export const state = () => ({
+  myUserDetails: {},
   btcPrices: [],
   ethPrices: [],
   ltcPrices: [],
@@ -25,6 +26,9 @@ export const state = () => ({
   dashChartData: [],
 })
 export const mutations = {
+  setUser(state, payload) {
+    state.myUserDetails = payload
+  },
   setDaysInterval(state, payload) {
     state.daysInterval = payload
   },
@@ -74,7 +78,11 @@ export const mutations = {
   },
 }
 export const actions = {
+  setUser({ rootState, commit }) {
+    commit('setUser', rootState.auth.user)
+  },
   async getCoinData({ commit, dispatch, state }) {
+    dispatch('setUser')
     const coinMarketData = await this.$axios.$get(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h'
     )
@@ -178,23 +186,25 @@ export const getters = {
     return [
       {
         className: 'afk_chart',
+        currency: 'AFK',
         key: 1000,
         asset_name: {
           name: 'Africoin',
           img:
             'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAADd0lEQVRYhcWYWUhUYRTHf7O0mEtWZotbRhvUQwS20EoELRMGvVRmSbRZYEREDxFtVg/1EkVklD20TEQUUlY+RLQQBFIRWoilTWKmlW1jLmUa5/bdQZ3l3huT/mHgzr3n+5/f3Dvfd75zbYlj72JB8cAiYDYwARgBxKjh3wEPUArcB4qAWrPWZkFmAjuABYDTpPdv4DZwGHhoFGw3uD4SKAQeAIstQIgcaswD5THyX0FWAM8Al4XkweRSXhlWQXYD7g7PPxwSr4vK2xTITmBfGAG6Srx3GYHI4zj4HyF05apcAUFSgVPdAKHrlMrpB3IciO5GkGiVsxPIjDDNDqtyqTXKB7KjByB0bddBZNle2IMgUjLineog4Ip5aO8YlqYPpanpd0gnu93Gd28rG7eU8rKswSqIxuBUBSygzl+qYcmiIcQN6m3odrWglrLyH1YhdM2xqyoaUGXlDeSdrTJ0qfQ0cvZ8NW1t7cydPYhpk2Otgoy3q1IeUO3tcOnK+5C3W2IuXK6huqaZ/jFO7XFmr022CpJqN1o7PtX/JP9ctZYwkIqffOWc+512ZXVGAgnD+jJrxkBc8wdbAYkWEJtR1LXrtTwu/up3vrW1nZNnqmhpaWP0qEgylyVo550OG2syE4mKMr9rEBCvUZAkPHK0kqbmzrOnoLCOO/fqtVmzPiuJ4cP6+K5NSYtl1fLh2Ax/piavgLwxE1n89BsFNz74vn/89JMTp99qx9OnDiDdFe83ZsOaJJISI8zYewTkhSlm4Fieh7oPLdpxXn4VrysaiejrICsjgch+Dr94mfY5G1PMWJcKyD2zINXvmrVZVP76B4VFf+/O/Hlx2ieYliyOJ21SfyPr+46YuKz3wFYT+1dNryoaefT4CxWVjdovPnxgXMgFr5fTTkpyBM9LvNR//hUopBXYJMnr1NbflGQ6l7z4+//evC6ZsaMjDcdMTYtlW05qsMuSu05vJ2aq3XZPaJa0G/rjkL7jZg9A3NJ7no7/iy1m1pQwSnLl6HYdQSqB7G4EyVY5/UBE7mB9R5i1R/VNPgWasrkq8H9C7O96MtjaIYErAcvbrRBqUJ5+EKFAULduYphm0y3l5Q4WYLSaVqiOXraT0tGH3rx2VpsaI2OlbRCvoDK7YZDFTj5SYsVUf1EjFU0vJN8AKcfyokZi5d2IlA9jAX8AjTrqj3odLhAAAAAASUVORK5CYII=',
         },
-        price: '$1.00',
+        price: '1.00',
         change: +0.3,
-        market_cap: '$3.21B',
+        market_cap: '3.21B',
         trend: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
-        balance: 0.0,
+        balance: state.myUserDetails.afk_balance,
         chart: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
         query: 'chart/getBitcoinData',
       },
       {
-        key: state.btcData.market_cap_rank,
+        key: 1,
         className: 'btc_chart',
+        currency: 'BTC',
         asset_name: {
           name: state.btcData.name,
           img: state.btcData.image,
@@ -203,13 +213,14 @@ export const getters = {
         change: state.btcData.price_change_percentage_24h,
         market_cap: state.btcData.market_cap,
         trend: state.btcChartData,
-        balance: 0.0,
+        balance: state.myUserDetails.btc_balance,
         chart: state.btcPrices,
         query: 'chart/getBitcoinData',
       },
       {
-        key: state.ethData.market_cap_rank,
+        key: 2,
         className: 'eth_chart',
+        currency: 'ETH',
         asset_name: {
           name: state.ethData.name,
           img: state.ethData.image,
@@ -218,13 +229,14 @@ export const getters = {
         change: state.ethData.price_change_percentage_24h,
         market_cap: state.ethData.market_cap,
         trend: state.ethChartData,
-        balance: 0.0,
+        balance: state.myUserDetails.eth_balance,
         chart: state.ethPrices,
         query: 'chart/getEthPriceData',
       },
       {
-        key: state.litecoinData.market_cap_rank,
+        key: 3,
         className: 'ltc_chart',
+        currency: 'LTC',
         asset_name: {
           name: state.litecoinData.name,
           img: state.litecoinData.image,
@@ -238,8 +250,9 @@ export const getters = {
         query: 'chart/getLtcPriceData',
       },
       {
-        key: state.dashData.market_cap_rank,
+        key: 4,
         className: 'dash_chart',
+        currency: 'DASH',
         asset_name: {
           name: state.dashData.name,
           img: state.dashData.image,

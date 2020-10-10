@@ -229,7 +229,7 @@
                   alt="logo"
                 />
                 <span>AfriToken:</span>
-                <h3>{{ +userDetails.balance }}</h3>
+                <h3>{{ userDetails.balance }}</h3>
               </div>
               <ul class="nav-links">
                 <li class="mr-32">

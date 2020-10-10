@@ -10,6 +10,11 @@
       </div>
       <div class="summary__chart">
         <highchart
+          v-if="
+            +userDetails.afk_balance !== 0 &&
+            +userDetails.btc_balance !== 0 &&
+            +userDetails.eth_balance !== 0
+          "
           :options="{
             chart: {
               plotBackgroundColor: null,
@@ -32,9 +37,10 @@
             },
             plotOptions: {
               pie: {
+                borderColor: '#000000',
                 allowPointSelect: true,
                 cursor: 'pointer',
-                borderWidth: 0,
+                borderWidth: 1,
                 dataLabels: {
                   enabled: false,
                   format: '<b>{point.name}</b>: {point.percentage:.1f} %',
@@ -47,16 +53,119 @@
                 innerSize: '95%',
                 name: 'balance',
                 data: [
-                  { name: 'AfriToken Balance', y: 150.41 },
-                  { name: 'Bitcoin Balance', y: 0.084 },
-                  { name: 'Ethereum Balance', y: 0.85 },
-                  { name: 'Litecoin Balance', y: 4.67 },
-                  { name: 'Dashcoin Balance', y: 1.18 },
+                  { name: 'AfriToken Balance', y: +userDetails.afk_balance },
+                  { name: 'Bitcoin Balance', y: +userDetails.btc_balance },
+                  { name: 'Ethereum Balance', y: +userDetails.eth_balance },
                 ],
               },
             ],
           }"
         />
+        <a-empty
+          v-else
+          image="https://gw.alipayobjects.com/mdn/miniapp_social/afts/img/A*pevERLJC9v0AAAAAAAAAAABjAQAAAQ/original"
+          :image-style="{
+            height: '60px',
+          }"
+        >
+          <span slot="description" class="c-white">
+            You have 0 credit in all your wallets
+          </span>
+          <div class="sub-button mt-20">
+            <button class="w-100">Buy Crypto</button>
+          </div>
+        </a-empty>
+      </div>
+      <div class="wallet-content mt-40">
+        <a-tabs
+          :tab-position="$device.isMobileOrTablet ? 'top' : 'left'"
+          :class="tabClass"
+          @change="callback"
+        >
+          <a-tab-pane v-for="data in chartData" :key="data.className">
+            <span slot="tab">
+              <span class="d-block">${{ data.price | formatNumber }}</span>
+              {{ data.asset_name.name }}
+              <span class="d-block">
+                {{ data.balance | formatNumberLong }}
+                {{ data.currency }}
+              </span>
+            </span>
+            <div class="w-100">
+              <div class="w-100 text-center">
+                <img height="40" :src="data.asset_name.img" alt="" />
+                <h2 class="currency__balance mt-8">
+                  <span class="large-text">
+                    {{ data.balance | doubleForm }}
+                  </span>
+                  {{ data.currency }}
+                </h2>
+                <h3 class="c-white light">
+                  <span class="small-text mr-4">$</span>
+                  {{ data.price | doubleForm }}
+                  <span class="small-text">USD</span>
+                </h3>
+              </div>
+              <div class="wallet-btns flex flex-center flex-wrap w-100 mt-20">
+                <button class="normal-btn afk-bordered mr-20">Send</button>
+                <button class="normal-btn afk-bordered mr-20">Recieve</button>
+                <a class="icon-btn">
+                  <img
+                    src="~/assets/img/exchange-icon.png"
+                    height="35"
+                    alt=""
+                  />
+                </a>
+              </div>
+              <a-collapse v-model="collapse" expand-icon-position="right">
+                <a-collapse-panel key="1" header="PRICE CHART">
+                  <highchart
+                    :options="{
+                      title: {
+                        text: null,
+                      },
+                      chart: {
+                        backgroundColor: false,
+                        className: data.className,
+                        styledMode: true,
+                      },
+                      xAxis: {
+                        reversed: false,
+                        gridLineWidth: 0.5,
+                        gridLineColor: '#131a4b',
+                      },
+                      yAxis: {
+                        reversed: false,
+                        gridLineWidth: 0.5,
+                        gridLineColor: '#272f6a',
+                      },
+                      series: [
+                        {
+                          name: data.name,
+                          data: data.chart,
+                        },
+                      ],
+                    }"
+                  />
+                </a-collapse-panel>
+                <a-collapse-panel
+                  key="2"
+                  header="DESCRIPTION"
+                  :disabled="false"
+                >
+                  <p class="c-white">
+                    <span class="small-text"
+                      >PayAfrik offers a cryptocurrency wallet with which users
+                      can accept cryptocurrencies for services rendered & pay
+                      with cryptocurrencies for services received. The PayAfrik
+                      wallet can receive and send value anywhere.</span
+                    >
+                  </p>
+                </a-collapse-panel>
+              </a-collapse>
+            </div>
+          </a-tab-pane>
+        </a-tabs>
       </div>
     </div>
 
@@ -152,6 +261,10 @@
 
   export default {
     components: {},
+    async fetch() {
+      await this.$store.dispatch('chart/getCoinData')
+    },
+
     data() {
       return {
         baseUrl: process.env.baseUrl,
@@ -159,6 +272,8 @@
         processing: false,
         amount: 0,
         cryptoToReceive: '',
+        tabClass: 'afk_chart',
+        collapse: ['1'],
       }
     },
     computed: {
@@ -167,38 +282,53 @@
       },
       ...mapGetters({
         countryCodes: 'countryCodes',
-        btcData: 'btcData',
-        ethData: 'ethData',
-        litecoinData: 'litecoinData',
-        dashData: 'dashData',
-        btcChartData: 'btcChartData',
-        ethChartData: 'ethChartData',
-        litecoinChartData: 'litecoinChartData',
-        dashChartData: 'dashChartData',
-        data: 'chartData',
-        chatBoxClosed: 'chatBoxClosed',
-        tokenModalActive: 'tokenModalActive',
+        btcData: 'chart/btcData',
+        ethData: 'chart/ethData',
+        litecoinData: 'chart/litecoinData',
+        dashData: 'chart/dashData',
+        btcChartData: 'chart/btcChartData',
+        ethChartData: 'chart/ethChartData',
+        litecoinChartData: 'chart/litecoinChartData',
+        dashChartData: 'chart/dashChartData',
+        chartData: 'chart/chartData',
         canvasClass: 'canvasClass',
         daysInterval: 'daysInterval',
-        btcPrices: 'btcPrices',
-        ethPrices: 'ethPrices',
-        ltcPrices: 'ltcPrices',
-        dashPrices: 'dashPrices',
+        btcPrices: 'chart/btcPrices',
+        ethPrices: 'chart/ethPrices',
+        ltcPrices: 'chart/ltcPrices',
+        dashPrices: 'chart/dashPrices',
         activeCurrency: 'activeCurrency',
+        hourPeriod: 'chart/hourPeriod',
+        monthPeriod: 'chart/monthPeriod',
+        yearPeriod: 'chart/yearPeriod',
+        dayPeriod: 'chart/dayPeriod',
+        weekPeriod: 'chart/weekPeriod',
+        allPeriod: 'chart/allPeriod',
       }),
     },
-    mounted() {
+    async mounted() {
       // this.loadChart()
-      console.log('BTCDATA ======', this.btcData)
+      await this.$store.dispatch('chart/getBitcoinData', this.hourPeriod)
+      await this.$store.dispatch('chart/getEthPriceData', this.hourPeriod)
+      await this.$store.dispatch('chart/getLtcPriceData', this.hourPeriod)
+      await this.$store.dispatch('chart/getDashPriceData', this.hourPeriod)
+      console.log(this.$device)
       if (this.$route.query.active) {
         // console.log('theres a query')
         this.changeWallet(this.$route.query.active)
       }
+      console.log('afk_balance', +this.userDetails.afk_balance)
+      console.log('btc_balance', +this.userDetails.btc_balance)
+      console.log('eth_balance', +this.userDetails.eth_balance)
     },
     beforeMount() {
       this.closeSideBar()
     },
     methods: {
+      callback(val) {
+        console.log(val)
+        this.tabClass = val
+      },
       openModal(modalId) {
         /* $('#' + modalId).modal('show')
         $('.modal-backdrop').hide() */
@@ -276,6 +406,10 @@
 </script>
 
 <style scoped lang="scss">
+  .welcome-text,
+  .summary__chart {
+    padding-left: 115px;
+  }
   #buyCryptoModal {
     display: none;
   }

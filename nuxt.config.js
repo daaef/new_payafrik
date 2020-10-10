@@ -90,6 +90,7 @@ export default {
     '@nuxtjs/auth',
     '@nuxtjs/pwa',
     'nuxt-highcharts',
+    '@nuxtjs/device',
   ],
   highcharts: {},
   /*

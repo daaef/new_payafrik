@@ -182,6 +182,13 @@
                   </trend>
                 </template>
               </a-table-column>
+              <a-table-column
+                key="balance"
+                title="BALANCE"
+                data-index="balance"
+              >
+                <template slot-scope="balance"> ${{ balance }} </template>
+              </a-table-column>
               <!--<a-table-column key="balance" title="BALANCE" />-->
               <p
                 slot="expandedRowRender"
@@ -401,103 +408,4 @@
   }
 </script>
 
-<style lang="scss">
-  .highcharts-credits {
-    display: none;
-  }
-
-  .highcharts-axis-labels {
-    stroke: white;
-  }
-
-  .important_chart {
-    svg {
-      rect {
-        fill: transparent;
-      }
-    }
-
-    .highcharts-tooltip {
-      fill: white;
-      stroke: black;
-    }
-    .highcharts-series {
-      fill: transparent;
-      path {
-        fill: transparent;
-        stroke: white;
-        box-shadow: 3px 3px 10px #888;
-      }
-    }
-  }
-  .afk_chart {
-    .highcharts-axis-labels {
-      stroke: #2a4ebf;
-    }
-
-    .highcharts-series {
-      fill: transparent;
-      path {
-        fill: transparent;
-        stroke: #2a4ebf;
-        box-shadow: 3px 3px 10px #888;
-      }
-    }
-  }
-  .btc_chart {
-    .highcharts-axis-labels {
-      stroke: #f7932d;
-    }
-
-    .highcharts-series {
-      fill: transparent;
-      path {
-        fill: transparent;
-        stroke: #f7932d;
-        box-shadow: 3px 3px 10px #888;
-      }
-    }
-  }
-  .eth_chart {
-    .highcharts-axis-labels {
-      stroke: #7d86a8;
-    }
-
-    .highcharts-series {
-      fill: transparent;
-      path {
-        fill: transparent;
-        stroke: #7d86a8;
-        box-shadow: 3px 3px 10px #888;
-      }
-    }
-  }
-  .ltc_chart {
-    .highcharts-axis-labels {
-      stroke: #838383;
-    }
-
-    .highcharts-series {
-      fill: transparent;
-      path {
-        fill: transparent;
-        stroke: #838383;
-        box-shadow: 3px 3px 10px #888;
-      }
-    }
-  }
-  .dash_chart {
-    .highcharts-axis-labels {
-      stroke: #018ee3;
-    }
-
-    .highcharts-series {
-      fill: transparent;
-      path {
-        fill: transparent;
-        stroke: #018ee3;
-        box-shadow: 3px 3px 10px #888;
-      }
-    }
-  }
-</style>
+<style lang="scss"></style>
