@@ -3933,11 +3933,11 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
   fill: transparent;
 }
 
-.important_chart path{
+/*.important_chart path{
   fill: transparent;
   stroke: white;
   box-shadow: 3px 3px 10px #888;
-}
+}*/
 
 .afk_chart .highcharts-axis-labels {
   stroke: #2a4ebf;

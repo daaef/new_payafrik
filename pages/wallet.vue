@@ -260,11 +260,8 @@
   import { mapGetters, mapMutations } from 'vuex'
 
   export default {
+    middleware: 'query',
     components: {},
-    async fetch() {
-      await this.$store.dispatch('chart/getCoinData')
-    },
-
     data() {
       return {
         baseUrl: process.env.baseUrl,
@@ -306,20 +303,13 @@
         allPeriod: 'chart/allPeriod',
       }),
     },
-    async mounted() {
+    mounted() {
       // this.loadChart()
-      await this.$store.dispatch('chart/getBitcoinData', this.hourPeriod)
-      await this.$store.dispatch('chart/getEthPriceData', this.hourPeriod)
-      await this.$store.dispatch('chart/getLtcPriceData', this.hourPeriod)
-      await this.$store.dispatch('chart/getDashPriceData', this.hourPeriod)
       console.log(this.$device)
       if (this.$route.query.active) {
         // console.log('theres a query')
         this.changeWallet(this.$route.query.active)
       }
-      console.log('afk_balance', +this.userDetails.afk_balance)
-      console.log('btc_balance', +this.userDetails.btc_balance)
-      console.log('eth_balance', +this.userDetails.eth_balance)
     },
     beforeMount() {
       this.closeSideBar()

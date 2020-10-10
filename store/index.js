@@ -1588,7 +1588,13 @@ export const mutations = {
   },
 }
 export const actions = {
+  async nuxtServerInit({ commit, dispatch, redirect }, { req }) {
+    await console.log('in nuxt Server init')
+    await console.log(this.$auth.$state)
+    await dispatch('chart/getCoinData')
+  },
   async getCoinData({ commit, dispatch, state }) {
+    console.log('running getcoin data')
     const coinMarketData = await this.$axios.$get(
       'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=true&price_change_percentage=24h'
     )

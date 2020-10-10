@@ -93,6 +93,7 @@
   export default {
     name: 'Login',
     layout: 'auth',
+    middleware: 'guest',
     data() {
       return {
         country4Code: 'Albania',

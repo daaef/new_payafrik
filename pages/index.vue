@@ -262,9 +262,7 @@
   /*
   let dashChartData */
   export default {
-    async fetch() {
-      await this.$store.dispatch('chart/getCoinData')
-    },
+    middleware: 'query',
 
     computed: {
       userDetails() {
@@ -302,29 +300,6 @@
         weekPeriod: 'chart/weekPeriod',
         allPeriod: 'chart/allPeriod',
       }),
-    },
-    async mounted() {
-      await this.$store.dispatch('chart/getBitcoinData', this.hourPeriod)
-      await this.$store.dispatch('chart/getEthPriceData', this.hourPeriod)
-      await this.$store.dispatch('chart/getLtcPriceData', this.hourPeriod)
-      await this.$store.dispatch('chart/getDashPriceData', this.hourPeriod)
-      // await this.triggerFetchData()
-      /* await this.$store.commit(
-        'setBtcPrices',
-        await this.getBTCChartData(this.daysInterval)
-      )
-      await this.$store.commit(
-        'setEthPrices',
-        await this.getETHChartData(this.daysInterval)
-      )
-      await this.$store.commit(
-        'setLtcPrices',
-        await this.getLTCChartData(this.daysInterval)
-      )
-      await this.$store.commit(
-        'setDashPrices',
-        await this.getDASHChartData(this.daysInterval)
-      ) */
     },
     methods: {
       /*

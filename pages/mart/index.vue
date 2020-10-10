@@ -158,6 +158,7 @@
   import { mapMutations } from 'vuex'
 
   export default {
+    middleware: 'query',
     components: {},
     data() {
       return {

@@ -96,6 +96,7 @@
   import { mapGetters, mapMutations } from 'vuex'
 
   export default {
+    middleware: 'query',
     computed: {
       userDetails() {
         return this.$store.state.auth.user
