@@ -9,9 +9,7 @@
       </div>
       <ul class="card-links">
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 1 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 1 } }">
             <div class="imge">
               <img src="~/assets/img/bills.png" alt="purse" />
             </div>
@@ -22,9 +20,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 2 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 2 } }">
             <div class="imge">
               <img src="~/assets/img/purse.png" alt="purse" />
             </div>
@@ -35,9 +31,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 3 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 3 } }">
             <div class="imge">
               <img src="~/assets/img/mobile-recharge.png" alt="purse" />
             </div>
@@ -48,9 +42,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 41 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 41 } }">
             <div class="imge">
               <img src="~/assets/img/betting.png" alt="purse" />
             </div>
@@ -61,9 +53,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 11 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 11 } }">
             <div class="imge">
               <img src="~/assets/img/travels.png" alt="purse" />
             </div>
@@ -74,9 +64,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 13 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 13 } }">
             <div class="imge">
               <img src="~/assets/img/online-shop.png" alt="purse" />
             </div>
@@ -87,9 +75,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 33 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 33 } }">
             <div class="imge">
               <img src="~/assets/img/school.png" alt="purse" />
             </div>
@@ -100,9 +86,7 @@
           </nuxt-link>
         </li>
         <li class="link-card mt-20">
-          <nuxt-link
-            :to="{ name: 'user-area-mart-category-id', params: { id: 61 } }"
-          >
+          <nuxt-link :to="{ name: 'mart-category-id', params: { id: 61 } }">
             <div class="imge">
               <img src="~/assets/img/loan.png" alt="purse" />
             </div>
@@ -137,7 +121,7 @@
               <i class="fas fa-angle-right c-white fa-2x"></i>
               <nuxt-link
                 :to="{
-                  name: 'user-area-mart-category-id',
+                  name: 'mart-category-id',
                   params: { id: category.categoryid },
                 }"
               >

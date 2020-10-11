@@ -1,0 +1,212 @@
+<template>
+  <section class="transfer--modal">
+    <a href="#" class="modal-close" @click="$store.commit('setTransferToken')">
+      <img src="~/assets/img//close.png" alt="" />
+    </a>
+    <div class="modal-content">
+      <div class="main-modal">
+        <div class="modal-title">
+          <h3 class="light text-center">TRANSFER</h3>
+          <h3 class="am-type">token</h3>
+        </div>
+        <div class="token-details">
+          <p class="highlight">AVAILABLE TOKEN</p>
+          <h1>{{ +userDetails.balance }}</h1>
+          <p class="light">1 AFK TOKEN = 1.00 NGN</p>
+        </div>
+        <div class="transfer--info flex flex-center">
+          <form class="text-center">
+            <div class="mt-20">
+              <div style="margin-bottom: 16px" class="phoneNum">
+                <a-input
+                  id="rec-phone"
+                  v-model="username"
+                  default-value="mysite"
+                  placeholder="The phone number of the user you are transferring to"
+                  type="text"
+                >
+                  <a-select
+                    slot="addonBefore"
+                    v-model="country4Code"
+                    placeholder="country"
+                    :default-value="countryCodes[0].name"
+                    style="width: 90px"
+                    show-search
+                    option-filter-prop="children"
+                    :filter-option="filterOption"
+                    @focus="handleFocus"
+                    @blur="handleBlur"
+                    @change="handleChange"
+                  >
+                    <a-select-option
+                      v-for="country in countryCodes"
+                      :key="country.name"
+                    >
+                      {{ country.name }}
+                    </a-select-option>
+                  </a-select>
+                  <img
+                    v-if="selectedCountry.flag"
+                    slot="addonAfter"
+                    :src="selectedCountry.flag"
+                    alt="flag"
+                  />
+                </a-input>
+                <div class="prefixNum">{{ selectedCountry.number }}</div>
+                <label for="rec-phone" class="">
+                  Recipients <span class="c-white">Phone number</span>
+                </label>
+              </div>
+            </div>
+            <div class="mt-20">
+              <img src="~/assets/img//tokenam.png" alt="" />
+              <input
+                id="token-am"
+                v-model="afkAmountToTransfer"
+                type="number"
+                placeholder="How much you want to transfer"
+              />
+              <label for="token-am"
+                >Token <span class="c-white">Amount</span></label
+              >
+            </div>
+            <div class="text-right sub--btn--holder w-100">
+              <div class="sub-button mt-20 w-100">
+                <button
+                  class="w-100"
+                  :disabled="transferringAfk"
+                  @click="transferAfk"
+                >
+                  <span v-if="transferringAfk">
+                    <a-spin>
+                      <a-icon
+                        slot="indicator"
+                        type="loading"
+                        style="font-size: 24px; color: #1c27be"
+                        spin
+                      />
+                    </a-spin>
+                  </span>
+                  TRANSFER<span v-if="transferringAfk">RING TOKENS...</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script>
+  import { mapGetters } from 'vuex'
+
+  export default {
+    name: 'TransferModal',
+    data() {
+      return {
+        baseUrl: process.env.baseUrl,
+        transferringAfk: false,
+        userTransferAfk: '',
+        afkAmountToTransfer: 0,
+        prefixNum: '',
+        country4Code: 'Albania',
+        username: '',
+        password: '',
+        processing: false,
+        confirmationStatus: 'false',
+        viewPassword: false,
+        selectedCountry: {},
+      }
+    },
+    methods: {
+      handleChange(value) {
+        this.selectedCountry = this.countryCodes.filter((country) => {
+          return country.name === value
+        })[0]
+      },
+      handleBlur() {
+        console.log('blur')
+      },
+      handleFocus() {
+        console.log('focus')
+      },
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text
+          .toLowerCase()
+          .includes(input.toLowerCase())
+      },
+      async transferAfk() {
+        this.transferringAfk = true
+        const payload = {
+          recipient: this.userTransferAfk,
+          requested_amount: this.afkAmountToTransfer,
+          wallet: 'AfriToken',
+        }
+
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: this.userDetails.token,
+        }
+
+        try {
+          const transferResponse = await this.$axios.$post(
+            this.baseUrl + 'transactions/transactions/send/',
+            payload,
+            { headers }
+          )
+          console.log(transferResponse)
+          this.$notification.success({
+            key: 'updatable',
+            message: 'Success!',
+            description: 'Transfer successful!',
+            duration: 0,
+            class: 'success',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
+          console.log('AFK Transfer successfull...')
+          this.transferringAfk = false
+        } catch (e) {
+          console.log(e)
+          this.$notification.error({
+            key: 'updatable',
+            message: 'Error!',
+            description: JSON.stringify(e.response.data.error),
+            duration: 0,
+            class: 'error',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
+          this.transferringAfk = false
+        }
+      },
+    },
+    computed: {
+      userDetails() {
+        return this.$store.state.auth.user
+      },
+      ...mapGetters({
+        countryCodes: 'countryCodes',
+        btcData: 'btcData',
+        ethData: 'ethData',
+        litecoinData: 'litecoinData',
+        dashData: 'dashData',
+        btcChartData: 'btcChartData',
+        ethChartData: 'ethChartData',
+        litecoinChartData: 'litecoinChartData',
+        dashChartData: 'dashChartData',
+        chatBoxClosed: 'chatBoxClosed',
+        tokenModalActive: 'tokenModalActive',
+        canvasClass: 'canvasClass',
+        buyTokenActive: 'buyTokenActive',
+        withdrawActive: 'withdrawActive',
+        transferTokenActive: 'transferTokenActive',
+        walletModalActive: 'walletModalActive',
+        profileModalActive: 'profileModalActive',
+      }),
+    },
+  }
+</script>

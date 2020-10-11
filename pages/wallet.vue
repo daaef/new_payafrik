@@ -76,97 +76,100 @@
           </div>
         </a-empty>
       </div>
-      <div class="wallet-content mt-40">
-        <a-tabs
-          :tab-position="$device.isMobileOrTablet ? 'top' : 'left'"
-          :class="tabClass"
-          @change="callback"
-        >
-          <a-tab-pane v-for="data in chartData" :key="data.className">
-            <span slot="tab">
-              <span class="d-block">${{ data.price | formatNumber }}</span>
-              {{ data.asset_name.name }}
-              <span class="d-block">
-                {{ data.balance | formatNumberLong }}
-                {{ data.currency }}
-              </span>
-            </span>
-            <div class="w-100">
-              <div class="w-100 text-center">
-                <img height="40" :src="data.asset_name.img" alt="" />
-                <h2 class="currency__balance mt-8">
-                  <span class="large-text">
-                    {{ data.balance | doubleForm }}
-                  </span>
+      <a-skeleton :loading="loading" active :paragraph="{ rows: 12 }">
+        <div class="wallet-content mt-40">
+          <a-tabs
+            :tab-position="$device.isMobileOrTablet ? 'top' : 'left'"
+            :class="tabClass"
+            @change="callback"
+          >
+            <a-tab-pane v-for="data in chartData" :key="data.className">
+              <span slot="tab">
+                <span class="d-block">${{ data.price | doubleForm }}</span>
+                {{ data.asset_name.name }}
+                <span class="d-block">
+                  {{ data.balance | formatNumberLong }}
                   {{ data.currency }}
-                </h2>
-                <h3 class="c-white light">
-                  <span class="small-text mr-4">$</span>
-                  {{ data.price | doubleForm }}
-                  <span class="small-text">USD</span>
-                </h3>
-              </div>
-              <div class="wallet-btns flex flex-center flex-wrap w-100 mt-20">
-                <button class="normal-btn afk-bordered mr-20">Send</button>
-                <button class="normal-btn afk-bordered mr-20">Recieve</button>
-                <a class="icon-btn">
-                  <img
-                    src="~/assets/img/exchange-icon.png"
-                    height="35"
-                    alt=""
-                  />
-                </a>
-              </div>
-              <a-collapse v-model="collapse" expand-icon-position="right">
-                <a-collapse-panel key="1" header="PRICE CHART">
-                  <highchart
-                    :options="{
-                      title: {
-                        text: null,
-                      },
-                      chart: {
-                        backgroundColor: false,
-                        className: data.className,
-                        styledMode: true,
-                      },
-                      xAxis: {
-                        reversed: false,
-                        gridLineWidth: 0.5,
-                        gridLineColor: '#131a4b',
-                      },
-                      yAxis: {
-                        reversed: false,
-                        gridLineWidth: 0.5,
-                        gridLineColor: '#272f6a',
-                      },
-                      series: [
-                        {
-                          name: data.name,
-                          data: data.chart,
+                </span>
+              </span>
+              <div class="w-100">
+                <div class="w-100 text-center">
+                  <img height="40" :src="data.asset_name.img" alt="" />
+                  <h2 class="currency__balance mt-8">
+                    <span class="large-text">
+                      {{ data.balance | doubleForm }}
+                    </span>
+                    {{ data.currency }}
+                  </h2>
+                  <h3 class="c-white light">
+                    <span class="small-text mr-4">$</span>
+                    {{ data.price | doubleForm }}
+                    <span class="small-text">USD</span>
+                  </h3>
+                </div>
+                <div class="wallet-btns flex flex-center flex-wrap w-100 mt-20">
+                  <button class="normal-btn afk-bordered mr-20">Send</button>
+                  <button class="normal-btn afk-bordered mr-20">Recieve</button>
+                  <a class="icon-btn">
+                    <img
+                      src="~/assets/img/exchange-icon.png"
+                      height="35"
+                      alt=""
+                    />
+                  </a>
+                </div>
+                <a-collapse v-model="collapse" expand-icon-position="right">
+                  <a-collapse-panel key="1" header="PRICE CHART">
+                    <highchart
+                      :options="{
+                        title: {
+                          text: null,
                         },
-                      ],
-                    }"
-                  />
-                </a-collapse-panel>
-                <a-collapse-panel
-                  key="2"
-                  header="DESCRIPTION"
-                  :disabled="false"
-                >
-                  <p class="c-white">
-                    <span class="small-text"
-                      >PayAfrik offers a cryptocurrency wallet with which users
-                      can accept cryptocurrencies for services rendered & pay
-                      with cryptocurrencies for services received. The PayAfrik
-                      wallet can receive and send value anywhere.</span
-                    >
-                  </p>
-                </a-collapse-panel>
-              </a-collapse>
-            </div>
-          </a-tab-pane>
-        </a-tabs>
-      </div>
+                        chart: {
+                          backgroundColor: false,
+                          className: data.className,
+                          styledMode: true,
+                        },
+                        xAxis: {
+                          reversed: false,
+                          gridLineWidth: 0.5,
+                          gridLineColor: '#131a4b',
+                        },
+                        yAxis: {
+                          reversed: false,
+                          gridLineWidth: 0.5,
+                          gridLineColor: '#272f6a',
+                        },
+                        series: [
+                          {
+                            name: data.name,
+                            data: data.chart,
+                          },
+                        ],
+                      }"
+                    />
+                  </a-collapse-panel>
+                  <a-collapse-panel
+                    key="2"
+                    header="DESCRIPTION"
+                    :disabled="false"
+                  >
+                    <p class="c-white">
+                      <span class="small-text"
+                        >PayAfrik offers a cryptocurrency wallet with which
+                        users can accept cryptocurrencies for services rendered
+                        & pay with cryptocurrencies for services received. The
+                        PayAfrik wallet can receive and send value
+                        anywhere.</span
+                      >
+                    </p>
+                  </a-collapse-panel>
+                </a-collapse>
+              </div>
+            </a-tab-pane>
+          </a-tabs>
+        </div>
+      </a-skeleton>
     </div>
 
     <!-- Card Request Modal -->
@@ -301,11 +304,22 @@
         dayPeriod: 'chart/dayPeriod',
         weekPeriod: 'chart/weekPeriod',
         allPeriod: 'chart/allPeriod',
+        loading: 'dataLoading',
       }),
     },
     mounted() {
       // this.loadChart()
-      console.log(this.$device)
+      /* this.$notification.error({
+        message: 'Notification Title',
+        description:
+          'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+        duration: 0,
+        class: 'error',
+        icon: false,
+        onClick: () => {
+          console.log('Notification Clicked!')
+        },
+      }) */
       if (this.$route.query.active) {
         // console.log('theres a query')
         this.changeWallet(this.$route.query.active)
@@ -366,7 +380,7 @@
 
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
         try {
           const requestResponse = await this.$axios.$post(

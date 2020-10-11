@@ -435,7 +435,7 @@
 
         const headers = {
           'Content-Type': 'multipart/form-data',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
 
         try {
@@ -473,7 +473,7 @@
 
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
 
         console.log(payload)
@@ -499,7 +499,7 @@
       async getUserDetails() {
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
 
         try {
@@ -507,7 +507,7 @@
             this.baseUrl + 'auth/accounts/' + this.userDetails.id + '/',
             { headers }
           )
-          updatedUserDetails.token = this.userDetails.token
+          updatedUserDetails.token = this.$auth.getToken('local')
           console.log('updated user =====>', updatedUserDetails)
           this.authenticate(updatedUserDetails)
           this.firstname = this.userDetails.first_name

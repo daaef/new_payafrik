@@ -130,7 +130,7 @@
         this.$store.commit('global/setActiveBiller', biller)
         console.log('working here...')
         this.$router.push({
-          name: 'user-area-mart-biller-id',
+          name: 'mart-biller-id',
           params: {
             id: biller.billerid,
           },

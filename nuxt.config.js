@@ -13,11 +13,11 @@ export default {
     port: 3000, // default: 3000
     host: '0.0.0.0', // default: localhost
   },
-  mode: 'universal',
   /*
    ** Nuxt target
    ** See https://nuxtjs.org/api/configuration-target
    */
+  mode: 'universal',
   target: 'static',
   /*
    ** Headers of the page
@@ -54,10 +54,9 @@ export default {
    ** Global CSS
    */
   css: [
-    'ant-design-vue/dist/antd.css',
-    '~/assets/css/normalize.css',
+    '~/assets/variables.less',
+    // '~/assets/css/normalize.css',
     '~/assets/css/main.css',
-    '~/assets/css/font-awesome/all.css',
   ],
   /*
    ** Plugins to load before mounting the App
@@ -80,6 +79,8 @@ export default {
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
     '@nuxtjs/moment',
+    'nuxt-compress',
+    '@nuxtjs/pwa',
   ],
   /*
    ** Nuxt.js modules
@@ -88,11 +89,35 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/pwa',
     'nuxt-highcharts',
     '@nuxtjs/device',
+    '@nuxtjs/toast',
   ],
   highcharts: {},
+  'nuxt-compress': {
+    gzip: {
+      cache: true,
+    },
+    brotli: {
+      threshold: 10240,
+    },
+  },
+  toast: {
+    position: 'top-center',
+    duration: 7000,
+    closeOnSwipe: true,
+    singleton: true,
+    register: [
+      // Register custom toasts
+      {
+        name: 'my-error',
+        message: 'Oops...Something went wrong',
+        options: {
+          type: 'error',
+        },
+      },
+    ],
+  },
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
@@ -139,11 +164,21 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {
+    analyze: {
+      analyzerMode: 'static',
+    },
     plugins: [
       new webpack.IgnorePlugin({
         resourceRegExp: /\@highcharts\/map\-collection/,
       }),
     ],
+    loaders: {
+      less: {
+        lessOptions: {
+          javascriptEnabled: true,
+        },
+      },
+    },
   },
   router: {
     middleware: ['auth'],

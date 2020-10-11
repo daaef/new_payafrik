@@ -188,6 +188,7 @@ export const getters = {
         className: 'afk_chart',
         currency: 'AFK',
         key: 1000,
+        currClass: 'afk-color',
         asset_name: {
           name: 'Africoin',
           img:
@@ -203,6 +204,7 @@ export const getters = {
       },
       {
         key: 1,
+        currClass: 'btc-color',
         className: 'btc_chart',
         currency: 'BTC',
         asset_name: {
@@ -219,6 +221,7 @@ export const getters = {
       },
       {
         key: 2,
+        currClass: 'eth-color',
         className: 'eth_chart',
         currency: 'ETH',
         asset_name: {
@@ -235,6 +238,7 @@ export const getters = {
       },
       {
         key: 3,
+        currClass: 'ltc-color',
         className: 'ltc_chart',
         currency: 'LTC',
         asset_name: {
@@ -251,6 +255,7 @@ export const getters = {
       },
       {
         key: 4,
+        currClass: 'dash-color',
         className: 'dash_chart',
         currency: 'DASH',
         asset_name: {

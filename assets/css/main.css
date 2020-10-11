@@ -1623,7 +1623,21 @@ aside li:hover {
 }
 
 aside li.active {
-  background: #162655
+  background: #162655;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  aside li.active:after {
+    content: '';
+    background: #162655;
+    height: 100%;
+    width: 2px;
+    position: absolute;
+    right: -1px;
+    top: 0;
+    z-index: 230;
+  }
 }
 
 aside .links--and--logo {
@@ -1734,7 +1748,8 @@ aside .links--and--logo:after {
 
 .modal-content .main-modal .token-details h1 {
   margin: 5px 0;
-  font-size: 3rem
+  font-size: 3rem;
+  color: #FFFFFF;
 }
 
 .modal-content .main-modal .token-details .light {
@@ -2691,11 +2706,10 @@ aside .links--and--logo:after {
   overflow-x: hidden;
   height: calc((100vh) - (100px));
   width: 100%;
-  background-image: url("../img/auth_bg.png"), linear-gradient(to right, rgba(22, 38, 85, 0.6), rgba(15, 11, 70, 0.6));
+  background-image: url("../img/auth_bg.png"), linear-gradient(to right, #162655, rgba(15, 11, 70, 0.6));
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   box-shadow: 0px 50px 100px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(40px);
 }
 
 
@@ -3917,7 +3931,10 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 .highcharts-axis-labels {
-  stroke: white;
+  fill: white;
+  font-size: 20px;
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
 }
 
 .important_chart svg rect, .wallet-content svg rect {
@@ -3940,7 +3957,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }*/
 
 .afk_chart .highcharts-axis-labels {
-  stroke: #2a4ebf;
+  fill: #2a4ebf;
 }
 
 .afk_chart .highcharts-series {
@@ -3954,7 +3971,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 .btc_chart .highcharts-axis-labels {
-  stroke: #f7932d;
+  fill: #f7932d;
 }
 
 .btc_chart .highcharts-series {
@@ -3968,7 +3985,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 .eth_chart .highcharts-axis-labels {
-  stroke: #50599c;
+  fill: #50599c;
 }
 
 .eth_chart .highcharts-series {
@@ -3982,7 +3999,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 .ltc_chart .highcharts-axis-labels {
-  stroke: #838383;
+  fill: #838383;
 }
 
 .ltc_chart .highcharts-series {
@@ -3996,7 +4013,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 }
 
 .dash_chart .highcharts-axis-labels {
-  stroke: #018ee3;
+  fill: #018ee3;
 }
 
 .dash_chart .highcharts-series {
@@ -4020,4 +4037,102 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 .highcharts-tooltip {
   fill: white;
   stroke: black;
+}
+
+.ant-modal-header {
+  background: transparent;
+  color: #fffdef;
+  border-bottom: none;
+}
+
+.ant-modal-footer {
+  border: none;
+}
+
+.ant-modal-content {
+  background: #131c4b;
+}
+
+.ant-modal-title, .ant-modal-body {
+  color: #fffdef;
+}
+
+.ant-modal-wrap .anticon {
+  color: #fffdef;
+}
+
+.inter__btn {
+  background: #11154b;
+  color: #f6f6f6;
+  border: solid #2832c3;
+  padding: 10px 40px;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-title, .ant-skeleton.ant-skeleton-active .ant-skeleton-content .ant-skeleton-paragraph > li {
+  background: linear-gradient(90deg, #162655 25%, #182455 37%, #0f143c 63%);
+  background-size: 400% 100%;
+  -webkit-animation: ant-skeleton-loading 1.4s ease infinite;
+  animation: ant-skeleton-loading 1.4s ease infinite;
+}
+
+.ant-modal-content .ant-select-selection {
+  border: 2px solid #3341ff;
+  border-radius: 10px;
+  height: 55px;
+  width: 100%;
+  background: #0c0a3c;
+  color: hsla(0, 0%, 100%, .72);
+  padding-left: 50px;
+  padding-top: 20px;
+}
+
+.relative {
+  position: relative;
+}
+
+.token_modal {
+  position: absolute;
+  z-index: 2;
+  left: 63px;
+  top: 5px;
+  font-weight: 600;
+  filter: brightness(110%);
+}
+
+.custom--select .ant-select{
+  width: 100%!important;
+}
+
+.custom--select .prefix-img {
+  position: absolute;
+  z-index: 2;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.prefix-img img {
+  height: 34px;
+}
+
+.afk-color{
+  color: #2a4ebf;
+}
+
+.btc-color{
+  color: #f7932d;
+}
+
+.eth-color{
+  color: #50599c;
+}
+
+.ltc-color{
+  color: #838383;
+}
+
+.dash-color{
+  color: #018ee3;
 }

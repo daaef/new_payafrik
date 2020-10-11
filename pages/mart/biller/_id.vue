@@ -399,7 +399,7 @@
         this.makingPayment = true
         const headers = {
           'Content-Type': 'application/json',
-          'pfk-user-token': this.userDetails.token,
+          'pfk-user-token': this.$auth.getToken('local'),
         }
 
         const payload = {
@@ -445,7 +445,7 @@
       async getUserDetails() {
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
 
         try {
@@ -453,7 +453,7 @@
             this.baseUrl + 'auth/user/profile/',
             { headers }
           )
-          updatedUserDetails.token = this.userDetails.token
+          updatedUserDetails.token = this.$auth.getToken('local')
           console.log('User ==>', updatedUserDetails)
           this.authenticate(updatedUserDetails)
         } catch (e) {

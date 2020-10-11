@@ -1,25 +1,9 @@
 import Vue from 'vue'
 import Trend from 'vuetrend'
-import {
-  Input,
-  Icon,
-  Select,
-  Table,
-  Radio,
-  Empty,
-  Tabs,
-  Collapse,
-} from 'ant-design-vue/lib'
+import Antd from 'ant-design-vue/lib'
 
-Vue.use(Input)
-Vue.use(Select)
-Vue.use(Icon)
-Vue.use(Table)
-Vue.use(Radio)
-Vue.use(Empty)
-Vue.use(Tabs)
-Vue.use(Collapse)
-
+Vue.use(Antd)
+console.log(Antd)
 const numeral = require('numeral')
 
 Vue.filter('formatNumber', function (value) {

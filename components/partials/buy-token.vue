@@ -37,21 +37,24 @@
           <div class="cash--crypto--btns">
             <div>
               <div class="sub-button">
-                <button
-                  v-if="!processing"
-                  type="submit"
-                  @click="generateTransaction()"
-                >
+                <button type="submit" @click="generateTransaction">
+                  <span v-if="processing" class="mr-8">
+                    <a-spin>
+                      <a-icon
+                        slot="indicator"
+                        type="loading"
+                        style="font-size: 24px; color: #1c27be"
+                        spin
+                      />
+                    </a-spin>
+                  </span>
                   BUY WITH CASH
-                </button>
-                <button v-if="processing" type="submit">
-                  <i class="fas fa-circle-notch fa-spin" />
                 </button>
               </div>
 
               <div class="sub-button">
                 <button>
-                  <a target="_blank" @click="openModal('buyWithCryptoModal')">
+                  <a target="_blank" @click="buywithCrypto = true">
                     <!-- href="https://commerce.coinbase.com/checkout/0bb96b95-c8bc-42bd-b1b7-a67a48f4357b" -->
                     BUY WITH CRYPTO
                   </a>
@@ -64,332 +67,123 @@
       </div>
     </div>
 
-    <!-- Cofirmation Modal -->
-    <div
-      id="confirmationModal"
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="confirmationModal"
-      aria-hidden="true"
+    <a-modal
+      title="Buy AfriTokens"
+      :visible="buyWithCash"
+      centered
+      @cancel="cancelBuywithCash"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Buy AfriTokens
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container ml-3">
-              <div class="row">
-                <div class="col-md-12">
-                  <p>
-                    You are about to pay for
-                    <span class="warn">{{ tokens }} AfriTokens</span>.
-                  </p>
-
-                  <label>Amount due today:</label>
-                  <h2 class="warn">
-                    NGN {{ (amountToPay / 100) | formatNumber }}
-                  </h2>
-
-                  <label>Transaction Reference:</label>
-                  <p>{{ transactionRef }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="col-md-12 ml-auto mr-auto">
-              <form
-                name="form1"
-                action="https://sandbox.interswitchng.com/collections/w/pay"
-                method="post"
-              >
-                <input v-model="productId" name="product_id" type="hidden" />
-                <input
-                  v-model="paymentItemId"
-                  name="pay_item_id"
-                  type="hidden"
+      <span class="d-block">You are about to pay:</span>
+      <span class="text-large">
+        NGN {{ (amountToPay / 100) | formatNumber }}
+      </span>
+      <span class="d-block">
+        for <span class="warn">{{ tokens }} AfriTokens</span>
+      </span>
+      <label>Transaction Reference:</label>
+      <p>{{ transactionRef }}</p>
+      <template slot="footer">
+        <form
+          name="form1"
+          action="https://sandbox.interswitchng.com/collections/w/pay"
+          method="post"
+        >
+          <input v-model="productId" name="product_id" type="hidden" />
+          <input v-model="paymentItemId" name="pay_item_id" type="hidden" />
+          <input v-model="amountToPay" name="amount" type="hidden" />
+          <input v-model="currency" name="currency" type="hidden" />
+          <input v-model="redirectUrl" name="site_redirect_url" type="hidden" />
+          <input v-model="transactionRef" name="txn_ref" type="hidden" />
+          <input v-model="customerId" name="cust_id" type="hidden" />
+          <input v-model="customerName" name="cust_name" type="hidden" />
+          <input v-model="transactionHash" name="hash" type="hidden" />
+          <button
+            key="submit"
+            class="w-100 inter__btn"
+            type="submit"
+            @click="handleBuyWithCash"
+          >
+            <span v-if="buyWithCashLoading" class="mr-8">
+              <a-spin>
+                <a-icon
+                  slot="indicator"
+                  type="loading"
+                  style="font-size: 24px; color: #1c27be"
+                  spin
                 />
-                <input v-model="amountToPay" name="amount" type="hidden" />
-                <input v-model="currency" name="currency" type="hidden" />
-                <input
-                  v-model="redirectUrl"
-                  name="site_redirect_url"
-                  type="hidden"
-                />
-                <input v-model="transactionRef" name="txn_ref" type="hidden" />
-                <input v-model="customerId" name="cust_id" type="hidden" />
-                <input v-model="customerName" name="cust_name" type="hidden" />
-                <input v-model="transactionHash" name="hash" type="hidden" />
-                <button class="w-100" type="submit">
-                  <img
-                    src="../../assets/img/interswitch_icon.png"
-                    class="mr-2"
-                  />PAY WITH INTERSWICH
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Buy with crypto Modal -->
-    <div
-      id="buyWithCryptoModal"
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="buyWithCryptoModal"
-      aria-hidden="true"
+              </a-spin>
+            </span>
+            <img src="~/assets/img/interswitch_icon.png" class="mr-2" />
+            PAY WITH INTERSWICH
+          </button>
+        </form>
+      </template>
+    </a-modal>
+    <a-modal
+      title="Buy AfriTokens"
+      :visible="buywithCrypto"
+      :confirm-loading="buywithCryptoLoading"
+      centered
+      @cancel="cancelBuywithCrypto"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Buy AfriTokens
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container ml-3">
-              <div class="row">
-                <div class="col-md-12">
-                  <p>
-                    You are about to pay for
-                    <span class="warn">{{ tokens }} AfriTokens</span> using
-                    cryptocurrency. Please select one of your cryptocurrency
-                    wallets to complete this transacion.
-                  </p>
-
-                  <!-- <label>Amount due today:</label>
-                  <h2 class="warn">
-                    NGN {{ (amountToPay / 100) | formatNumber }}
-                  </h2> -->
-
-                  <!-- <label>Transaction Reference:</label>
-                  <p>{{ transactionRef }}</p> -->
-
-                  <div class="dropdown coin-options">
-                    <a
-                      v-if="fromCurrency === 'AFK'"
-                      id="dropdownMenuButton"
-                      class="coin-option afk dropdown-toggle w-100"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <img src="../../assets/img/Africoin.png" alt="" />
-                      <label for="exchange-afk"
-                        >AFK <span class="c-white">Africoin</span>
-                      </label>
-                      <span class="rate"
-                        >Balance:
-                        {{ userDetails.afk_balance | formatNumberLong }}</span
-                      >
-                    </a>
-                    <a
-                      v-if="fromCurrency === 'BTC'"
-                      id="dropdownMenuButton"
-                      class="coin-option btc dropdown-toggle w-100"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <img src="../../assets/img/bitcoin.png" alt="" />
-                      <label for="exchange-btc"
-                        >BTC <span class="c-white">Bitcoin</span>
-                      </label>
-                      <span class="rate"
-                        >Balance:
-                        {{ userDetails.btc_balance | formatNumberLong }}</span
-                      >
-                    </a>
-                    <a
-                      v-if="fromCurrency === 'ETH'"
-                      id="dropdownMenuButton"
-                      class="coin-option eth dropdown-toggle w-100"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <img src="../../assets/img/eth.png" alt="" />
-                      <label for="exchange-afk"
-                        >ETH <span class="c-white">Ethereum</span>
-                      </label>
-                      <span class="rate"
-                        >Balance:
-                        {{ userDetails.eth_balance | formatNumberLong }}</span
-                      >
-                    </a>
-                    <a
-                      v-if="fromCurrency === 'LTC'"
-                      id="dropdownMenuButton"
-                      class="coin-option eth dropdown-toggle w-100"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <img
-                        src="../../assets/img/litecoin.png"
-                        style="width: 35px"
-                        alt=""
-                      />
-                      <label for="exchange-afk"
-                        >LTC <span class="c-white">Litecoin</span>
-                      </label>
-                      <span class="rate"
-                        >Balance:
-                        {{ userDetails.ltc_balance | formatNumberLong }}</span
-                      >
-                    </a>
-                    <a
-                      v-if="fromCurrency === 'DASH'"
-                      id="dropdownMenuButton"
-                      class="coin-option eth dropdown-toggle w-100"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <img
-                        src="../../assets/img/dash.png"
-                        style="width: 35px"
-                        alt=""
-                      />
-                      <label for="exchange-afk"
-                        >Dash <span class="c-white">Dash</span>
-                      </label>
-                      <span class="rate"
-                        >Balance:
-                        {{ userDetails.dash_balance | formatNumberLong }}</span
-                      >
-                    </a>
-                    <div
-                      class="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton"
-                    >
-                      <a
-                        v-if="fromCurrency !== 'AFK'"
-                        class="dropdown-item afk"
-                        @click="fromCurrency = 'AFK'"
-                      >
-                        <img src="../../assets/img/Africoin.png" alt="" />
-                        <label>AFK <span class="c-white">Africoin</span></label>
-                        <span class="rate"
-                          >Balance:
-                          {{ userDetails.afk_balance | formatNumberLong }}</span
-                        >
-                      </a>
-                      <a
-                        v-if="fromCurrency !== 'BTC'"
-                        class="dropdown-item btc"
-                        @click="fromCurrency = 'BTC'"
-                      >
-                        <img src="../../assets/img/bitcoin.png" alt="" />
-                        <label for="exchange-afk"
-                          >BTC <span class="c-white">Bitcoin</span></label
-                        >
-                        <span class="rate"
-                          >Balance:
-                          {{ userDetails.btc_balance | formatNumberLong }}</span
-                        >
-                      </a>
-                      <a
-                        v-if="fromCurrency !== 'ETH'"
-                        class="dropdown-item eth"
-                        @click="fromCurrency = 'ETH'"
-                      >
-                        <img src="../../assets/img/eth.png" alt="" />
-                        <label for="exchange-afk"
-                          >ETH <span class="c-white">Ethereum</span></label
-                        >
-                        <span class="rate"
-                          >Balance:
-                          {{ userDetails.eth_balance | formatNumberLong }}</span
-                        >
-                      </a>
-                      <a
-                        v-if="fromCurrency !== 'LTC'"
-                        class="dropdown-item eth"
-                        @click="fromCurrency = 'LTC'"
-                      >
-                        <img
-                          src="../../assets/img/litecoin.png"
-                          style="width: 35px"
-                          alt=""
-                        />
-                        <label for="exchange-afk"
-                          >LTC <span class="c-white">Litecoin</span></label
-                        >
-                        <span class="rate"
-                          >Balance:
-                          {{
-                            userDetails.litecoin_balance | formatNumberLong
-                          }}</span
-                        >
-                      </a>
-                      <a
-                        v-if="fromCurrency !== 'DASH'"
-                        class="dropdown-item eth"
-                        @click="fromCurrency = 'DASH'"
-                      >
-                        <img
-                          src="../../assets/img/dash.png"
-                          style="width: 35px"
-                          alt=""
-                        />
-                        <label for="exchange-afk"
-                          >DASH <span class="c-white">Dash</span></label
-                        >
-                        <span class="rate"
-                          >Balance:
-                          {{
-                            userDetails.dash_balance | formatNumberLong
-                          }}</span
-                        >
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="col-md-12 ml-auto mr-auto">
-              <button
-                v-if="!purchasingWithCrypto"
-                class="w-100"
-                type="submit"
-                @click="purchaseWithCrypto()"
-              >
-                PAY NOW
-              </button>
-              <button v-if="purchasingWithCrypto" class="w-100" type="submit">
-                <i class="fas fa-circle-notch fa-spin" />
-              </button>
-            </div>
-          </div>
+      <p>
+        You are about to pay for
+        <span class="warn">{{ tokens }} AfriTokens</span> using cryptocurrency.
+        Please select one of your cryptocurrency wallets to complete this
+        transacion.
+      </p>
+      <div class="relative custom--select">
+        <label :class="[crypClass, 'token_modal']" for="currency">
+          {{ cryptoCurrency }}
+        </label>
+        <div class="prefix-img">
+          <img :src="selImg" alt="" />
         </div>
+        <a-select
+          id="currency"
+          v-model="fromCurrency"
+          :class="dataClass"
+          style="width: 120px"
+          :show-arrow="false"
+          @change="handleChange"
+          @select="handleSelect"
+        >
+          <a-select-option
+            v-for="myAsset in data"
+            :key="myAsset.key"
+            :value="myAsset.currency"
+          >
+            <span class="mr-12">$ {{ +myAsset.price | doubleForm }}</span>
+            <span
+              >Balance: {{ +myAsset.balance | doubleForm }}
+              <span :class="myAsset.currClass">{{
+                myAsset.currency
+              }}</span></span
+            >
+          </a-select-option>
+        </a-select>
       </div>
-    </div>
+      <template slot="footer">
+        <button
+          key="submit"
+          class="w-100 inter__btn"
+          type="submit"
+          @click="handleBuywithCrypto"
+        >
+          <span v-if="buywithCryptoLoading" class="mr-8">
+            <a-spin>
+              <a-icon
+                slot="indicator"
+                type="loading"
+                style="font-size: 24px; color: #1c27be"
+                spin
+              />
+            </a-spin>
+          </span>
+          PAY NOW
+        </button>
+      </template>
+    </a-modal>
   </div>
 </template>
 
@@ -413,7 +207,12 @@
         // amount: 1000000, // in kobo
         initiatingPayment: false,
         tokens: '',
+        crypClass: 'afk-color',
         email: '',
+        dataClass: 'afk_chart',
+        selImg:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAADd0lEQVRYhcWYWUhUYRTHf7O0mEtWZotbRhvUQwS20EoELRMGvVRmSbRZYEREDxFtVg/1EkVklD20TEQUUlY+RLQQBFIRWoilTWKmlW1jLmUa5/bdQZ3l3huT/mHgzr3n+5/f3Dvfd75zbYlj72JB8cAiYDYwARgBxKjh3wEPUArcB4qAWrPWZkFmAjuABYDTpPdv4DZwGHhoFGw3uD4SKAQeAIstQIgcaswD5THyX0FWAM8Al4XkweRSXhlWQXYD7g7PPxwSr4vK2xTITmBfGAG6Srx3GYHI4zj4HyF05apcAUFSgVPdAKHrlMrpB3IciO5GkGiVsxPIjDDNDqtyqTXKB7KjByB0bddBZNle2IMgUjLineog4Ip5aO8YlqYPpanpd0gnu93Gd28rG7eU8rKswSqIxuBUBSygzl+qYcmiIcQN6m3odrWglrLyH1YhdM2xqyoaUGXlDeSdrTJ0qfQ0cvZ8NW1t7cydPYhpk2Otgoy3q1IeUO3tcOnK+5C3W2IuXK6huqaZ/jFO7XFmr022CpJqN1o7PtX/JP9ctZYwkIqffOWc+512ZXVGAgnD+jJrxkBc8wdbAYkWEJtR1LXrtTwu/up3vrW1nZNnqmhpaWP0qEgylyVo550OG2syE4mKMr9rEBCvUZAkPHK0kqbmzrOnoLCOO/fqtVmzPiuJ4cP6+K5NSYtl1fLh2Ax/piavgLwxE1n89BsFNz74vn/89JMTp99qx9OnDiDdFe83ZsOaJJISI8zYewTkhSlm4Fieh7oPLdpxXn4VrysaiejrICsjgch+Dr94mfY5G1PMWJcKyD2zINXvmrVZVP76B4VFf+/O/Hlx2ieYliyOJ21SfyPr+46YuKz3wFYT+1dNryoaefT4CxWVjdovPnxgXMgFr5fTTkpyBM9LvNR//hUopBXYJMnr1NbflGQ6l7z4+//evC6ZsaMjDcdMTYtlW05qsMuSu05vJ2aq3XZPaJa0G/rjkL7jZg9A3NJ7no7/iy1m1pQwSnLl6HYdQSqB7G4EyVY5/UBE7mB9R5i1R/VNPgWasrkq8H9C7O96MtjaIYErAcvbrRBqUJ5+EKFAULduYphm0y3l5Q4WYLSaVqiOXraT0tGH3rx2VpsaI2OlbRCvoDK7YZDFTj5SYsVUf1EjFU0vJN8AKcfyokZi5d2IlA9jAX8AjTrqj3odLhAAAAAASUVORK5CYII=',
+        keygen: 1,
         pricePerToken: 1,
         amountToPay: 0,
         redirectUrl: '',
@@ -423,20 +222,17 @@
         transactionHash: '',
         productId: 1076,
         paymentItemId: 101,
+        cryptoCurrency: 'Africoin',
         currency: 566,
         processing: false,
         fromCurrency: 'AFK',
         purchasingWithCrypto: false,
+        buyWithCash: false,
+        buywithCrypto: false,
+        buyWithCashLoading: false,
+        buywithCryptoLoading: false,
       }
     },
-    /* computed: {
-      tokenModalActive() {
-        return this.$store.state.global.tokenModalActive
-      },
-      userDetails() {
-        return this.$store.state.authenticatedUser
-      },
-    }, */
     computed: {
       userDetails() {
         return this.$store.state.auth.user
@@ -451,7 +247,7 @@
         ethChartData: 'ethChartData',
         litecoinChartData: 'litecoinChartData',
         dashChartData: 'dashChartData',
-        data: 'chartData',
+        data: 'chart/chartData',
         chatBoxClosed: 'chatBoxClosed',
         tokenModalActive: 'tokenModalActive',
         canvasClass: 'canvasClass',
@@ -464,6 +260,33 @@
       }),
     },
     methods: {
+      handleChange(value) {
+        console.log(`selected ${value}`)
+      },
+      handleBuyWithCash() {
+        console.log('handleBuyWithCash')
+        this.buyWithCashLoading = true
+        setTimeout(() => {
+          this.buyWithCash = false
+          this.buyWithCashLoading = false
+        }, 2000)
+      },
+      cancelBuywithCash() {
+        console.log('cancelBuywithCash')
+        this.buyWithCash = false
+      },
+      handleSelect(val) {
+        const current = this.data.filter((datum) => {
+          return datum.currency === val
+        })
+        this.cryptoCurrency = current[0].asset_name.name
+        this.selImg = current[0].asset_name.img
+        this.crypClass = current[0].currClass
+        this.dataClass = current[0].className
+      },
+      cancelBuywithCrypto() {
+        this.buywithCrypto = false
+      },
       openModal(modalId) {
         /* $('#' + modalId).modal('show')
         $('.modal-backdrop').hide() */
@@ -487,11 +310,6 @@
         const sidebar = document.querySelector('.sidebar_bg')
         sidebar.style.display = 'block'
       },
-
-      closeFunctionModal() {
-        this.$store.commit('closeFunctionModal')
-      },
-
       ...mapMutations({
         toggleChatBox: 'toggleTokenModal',
         closeFunctionModal: 'closeFunctionModal',
@@ -514,7 +332,7 @@
         this.transactionRef = this.reference()
         this.amountToPay = this.tokens * this.pricePerToken * 100
         this.redirectUrl =
-          // "http://localhost:3000/user-area/payment-done?ref=" +
+          // "http://localhost:3000/payment-done?ref=" +
           'https://portal.payafrik.io/user-area/payment-done?ref=' +
           this.transactionRef +
           '&amount=' +
@@ -552,9 +370,10 @@
 
         const headers = {
           'Content-Type': 'application/json',
-          'pfk-user-token': this.userDetails.token,
+          'pfk-user-token': this.$auth.getToken('local'),
         }
         try {
+          console.log('token', this.$auth.getToken('local'))
           const response = await this.$axios.$post(
             this.interswitchBaseUrl + 'transactions/new',
             payload,
@@ -562,25 +381,41 @@
           )
           console.log('request response', response)
           this.processing = false
-          this.openModal('confirmationModal')
+          this.buyWithCash = true
         } catch (e) {
           console.log(e.response)
-          this.$toast.error(e.response.data.error)
           this.processing = false
         }
       },
-
-      async purchaseWithCrypto() {
+      async handleBuywithCrypto() {
         if (!this.amountToPay || this.amountToPay === 0) {
-          this.$toast.error('Please select an amount greater than 0')
+          this.$notification.error({
+            key: 'updatable',
+            message: 'Error!',
+            description: 'Please select an amount greater than 0',
+            duration: 0,
+            class: 'error',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
           return
         }
         if (!this.fromCurrency || this.fromCurrency === '') {
-          this.$toast.error('Please choose a currency to use')
+          this.$toast.error({
+            key: 'updatable',
+            message: 'Error!',
+            description: 'Please choose a currency to use',
+            duration: 0,
+            class: 'error',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
           return
         }
 
-        this.purchasingWithCrypto = true
+        this.buywithCryptoLoading = true
 
         const payload = {
           amount: this.amountToPay,
@@ -590,7 +425,7 @@
 
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
         try {
           const requestResponse = await this.$axios.$post(
@@ -599,17 +434,34 @@
             { headers }
           )
           console.log('request response', requestResponse)
-          this.$toast.success('Token purchase successful!')
-          this.purchasingWithCrypto = false
+          this.$notification.success({
+            key: 'updatable',
+            message: 'Success!',
+            description: 'Token purchase successful!',
+            duration: 0,
+            class: 'success',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
+          this.buywithCryptoLoading = false
           this.closeModal('#buyWithCryptoModal')
         } catch (e) {
           console.log(e.response)
-          this.$toast.error(JSON.stringify(e.response.data.error))
-          this.purchasingWithCrypto = false
+          this.$notification.error({
+            key: 'updatable',
+            message: 'Error!',
+            description: JSON.stringify(e.response.data.error),
+            duration: 0,
+            class: 'error',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
+          this.buywithCryptoLoading = false
         }
       },
     },
-    mounted() {},
   }
 </script>
 

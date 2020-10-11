@@ -1469,8 +1469,12 @@ export const state = () => ({
   dayPeriod: 'day',
   weekPeriod: 'week',
   allPeriod: 'all',
+  dataLoading: false,
 })
 export const mutations = {
+  setDataLoading(state, payload) {
+    state.dataLoading = payload
+  },
   setUser(state, user) {
     state.user = user
   },
@@ -1808,5 +1812,8 @@ export const getters = {
   },
   priceCurrency(state) {
     return state.priceCurrency
+  },
+  dataLoading(state) {
+    return state.dataLoading
   },
 }
