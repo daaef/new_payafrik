@@ -16,6 +16,36 @@
         </div>
         <div class="transfer--info flex flex-center">
           <form class="text-center">
+            <div class="relative custom--select">
+              <label :class="[crypClass, 'token_modal']" for="currency">
+                {{ cryptoCurrency }}
+              </label>
+              <div class="prefix-img">
+                <img :src="selImg" alt="" />
+              </div>
+              <a-select
+                id="currency"
+                v-model="fromCurrency"
+                :class="dataClass"
+                style="width: 120px"
+                :show-arrow="false"
+                @select="handleSelect"
+              >
+                <a-select-option
+                  v-for="myAsset in data"
+                  :key="myAsset.key"
+                  :value="myAsset.currency"
+                >
+                  <span class="mr-12">$ {{ +myAsset.price | doubleForm }}</span>
+                  <span
+                    >Balance: {{ +myAsset.balance | doubleForm }}
+                    <span :class="myAsset.currClass">{{
+                      myAsset.currency
+                    }}</span></span
+                  >
+                </a-select-option>
+              </a-select>
+            </div>
             <div class="mt-20">
               <div style="margin-bottom: 16px" class="phoneNum">
                 <a-input
@@ -58,6 +88,7 @@
                 </label>
               </div>
             </div>
+
             <div class="mt-20">
               <img src="~/assets/img//tokenam.png" alt="" />
               <input
@@ -75,7 +106,7 @@
                 <button
                   class="w-100"
                   :disabled="transferringAfk"
-                  @click="transferAfk"
+                  @click.prevent="transferAfk"
                 >
                   <span v-if="transferringAfk">
                     <a-spin>
@@ -107,7 +138,6 @@
       return {
         baseUrl: process.env.baseUrl,
         transferringAfk: false,
-        userTransferAfk: '',
         afkAmountToTransfer: 0,
         prefixNum: '',
         country4Code: 'Albania',
@@ -117,6 +147,13 @@
         confirmationStatus: 'false',
         viewPassword: false,
         selectedCountry: {},
+        // currencies: ['AFK', 'BTC', 'ETH', 'LTC', 'DASH'],
+        selImg:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAADd0lEQVRYhcWYWUhUYRTHf7O0mEtWZotbRhvUQwS20EoELRMGvVRmSbRZYEREDxFtVg/1EkVklD20TEQUUlY+RLQQBFIRWoilTWKmlW1jLmUa5/bdQZ3l3huT/mHgzr3n+5/f3Dvfd75zbYlj72JB8cAiYDYwARgBxKjh3wEPUArcB4qAWrPWZkFmAjuABYDTpPdv4DZwGHhoFGw3uD4SKAQeAIstQIgcaswD5THyX0FWAM8Al4XkweRSXhlWQXYD7g7PPxwSr4vK2xTITmBfGAG6Srx3GYHI4zj4HyF05apcAUFSgVPdAKHrlMrpB3IciO5GkGiVsxPIjDDNDqtyqTXKB7KjByB0bddBZNle2IMgUjLineog4Ip5aO8YlqYPpanpd0gnu93Gd28rG7eU8rKswSqIxuBUBSygzl+qYcmiIcQN6m3odrWglrLyH1YhdM2xqyoaUGXlDeSdrTJ0qfQ0cvZ8NW1t7cydPYhpk2Otgoy3q1IeUO3tcOnK+5C3W2IuXK6huqaZ/jFO7XFmr022CpJqN1o7PtX/JP9ctZYwkIqffOWc+512ZXVGAgnD+jJrxkBc8wdbAYkWEJtR1LXrtTwu/up3vrW1nZNnqmhpaWP0qEgylyVo550OG2syE4mKMr9rEBCvUZAkPHK0kqbmzrOnoLCOO/fqtVmzPiuJ4cP6+K5NSYtl1fLh2Ax/piavgLwxE1n89BsFNz74vn/89JMTp99qx9OnDiDdFe83ZsOaJJISI8zYewTkhSlm4Fieh7oPLdpxXn4VrysaiejrICsjgch+Dr94mfY5G1PMWJcKyD2zINXvmrVZVP76B4VFf+/O/Hlx2ieYliyOJ21SfyPr+46YuKz3wFYT+1dNryoaefT4CxWVjdovPnxgXMgFr5fTTkpyBM9LvNR//hUopBXYJMnr1NbflGQ6l7z4+//evC6ZsaMjDcdMTYtlW05qsMuSu05vJ2aq3XZPaJa0G/rjkL7jZg9A3NJ7no7/iy1m1pQwSnLl6HYdQSqB7G4EyVY5/UBE7mB9R5i1R/VNPgWasrkq8H9C7O96MtjaIYErAcvbrRBqUJ5+EKFAULduYphm0y3l5Q4WYLSaVqiOXraT0tGH3rx2VpsaI2OlbRCvoDK7YZDFTj5SYsVUf1EjFU0vJN8AKcfyokZi5d2IlA9jAX8AjTrqj3odLhAAAAAASUVORK5CYII=',
+        cryptoCurrency: 'Africoin',
+        fromCurrency: 'AFK',
+        dataClass: 'afk_chart',
+        crypClass: 'afk-color',
       }
     },
     methods: {
@@ -124,6 +161,15 @@
         this.selectedCountry = this.countryCodes.filter((country) => {
           return country.name === value
         })[0]
+      },
+      handleSelect(val) {
+        const current = this.data.filter((datum) => {
+          return datum.currency === val
+        })
+        this.cryptoCurrency = current[0].asset_name.name
+        this.selImg = current[0].asset_name.img
+        this.crypClass = current[0].currClass
+        this.dataClass = current[0].className
       },
       handleBlur() {
         console.log('blur')
@@ -139,19 +185,22 @@
       async transferAfk() {
         this.transferringAfk = true
         const payload = {
-          recipient: this.userTransferAfk,
-          requested_amount: this.afkAmountToTransfer,
-          wallet: 'AfriToken',
+          recipient: `${this.selectedCountry.number}${
+            this.username[0] === '0' ? this.username.slice(1) : this.username
+          }`,
+          amount: this.afkAmountToTransfer,
+          currency: this.fromCurrency,
+          address_type: 'USERNAME',
         }
 
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
 
         try {
           const transferResponse = await this.$axios.$post(
-            this.baseUrl + 'transactions/transactions/send/',
+            `${this.baseUrl}exchange/utilities/transfer/`,
             payload,
             { headers }
           )
@@ -159,7 +208,7 @@
           this.$notification.success({
             key: 'updatable',
             message: 'Success!',
-            description: 'Transfer successful!',
+            description: transferResponse.msg,
             duration: 0,
             class: 'success',
             onClick: () => {
@@ -169,11 +218,11 @@
           console.log('AFK Transfer successfull...')
           this.transferringAfk = false
         } catch (e) {
-          console.log(e)
+          console.dir(e.response.data.error)
           this.$notification.error({
             key: 'updatable',
             message: 'Error!',
-            description: JSON.stringify(e.response.data.error),
+            // description: JSON.stringify(e.response.data),
             duration: 0,
             class: 'error',
             onClick: () => {
@@ -194,6 +243,7 @@
         ethData: 'ethData',
         litecoinData: 'litecoinData',
         dashData: 'dashData',
+        data: 'chart/chartData',
         btcChartData: 'btcChartData',
         ethChartData: 'ethChartData',
         litecoinChartData: 'litecoinChartData',
@@ -210,3 +260,9 @@
     },
   }
 </script>
+<style>
+  .ant-select-no-arrow .ant-select-selection__rendered {
+    position: absolute;
+    top: 0;
+  }
+</style>

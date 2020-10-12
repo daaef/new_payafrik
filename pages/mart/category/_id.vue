@@ -123,11 +123,11 @@
       },
 
       ...mapMutations({
-        toggleChatBox: 'global/setActiveBiller',
+        toggleChatBox: 'setActiveBiller',
       }),
 
       setBillerAndNavigate(biller) {
-        this.$store.commit('global/setActiveBiller', biller)
+        this.$store.commit('setActiveBiller', biller)
         console.log('working here...')
         this.$router.push({
           name: 'mart-biller-id',

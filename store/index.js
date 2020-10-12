@@ -1454,7 +1454,7 @@ export const state = () => ({
   tokenWithdrawalModalActive: false,
   canvasClass: '',
   activeWalletModal: '',
-  activeCurrency: 'afk',
+  activeCurrency: 'AFK',
   intervalClearer: '',
   buyTokenActive: false,
   withdrawActive: false,
@@ -1470,6 +1470,8 @@ export const state = () => ({
   weekPeriod: 'week',
   allPeriod: 'all',
   dataLoading: false,
+  walletSendActive: false,
+  walletRecieveActive: false,
 })
 export const mutations = {
   setDataLoading(state, payload) {
@@ -1510,6 +1512,14 @@ export const mutations = {
   },
   setProfileModal(state) {
     state.profileModalActive = !state.profileModalActive
+  },
+  setWalletSend(state, payload = 'AFK') {
+    state.walletSendActive = !state.walletSendActive
+    state.activeCurrency = payload
+  },
+  setWalletRecieve(state, payload = 'AFK') {
+    state.walletRecieveActive = !state.walletRecieveActive
+    state.activeCurrency = payload
   },
   toggleSidebar(state) {
     state.sidebarClosed = !state.sidebarClosed
@@ -1815,5 +1825,11 @@ export const getters = {
   },
   dataLoading(state) {
     return state.dataLoading
+  },
+  walletSendActive(state) {
+    return state.walletSendActive
+  },
+  walletRecieveActive(state) {
+    return state.walletRecieveActive
   },
 }

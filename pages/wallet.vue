@@ -1,14 +1,14 @@
 <template>
   <section class="dash-body">
     <div>
-      <div class="welcome-text">
+      <div :class="[{ 'pl-0': $device.isMobileOrTablet }, 'welcome-text']">
         <div class="text-center">
           <h1 class="w-100 c-white am-type mt-0 mb-0 text-large light">
             Wallets
           </h1>
         </div>
       </div>
-      <div class="summary__chart">
+      <div :class="[{ 'pl-0': $device.isMobileOrTablet }, 'summary__chart']">
         <highchart
           v-if="
             +userDetails.afk_balance !== 0 &&
@@ -108,8 +108,18 @@
                   </h3>
                 </div>
                 <div class="wallet-btns flex flex-center flex-wrap w-100 mt-20">
-                  <button class="normal-btn afk-bordered mr-20">Send</button>
-                  <button class="normal-btn afk-bordered mr-20">Recieve</button>
+                  <button
+                    class="normal-btn afk-bordered mr-20"
+                    @click="$store.commit('setWalletSend', data.currency)"
+                  >
+                    Send
+                  </button>
+                  <button
+                    class="normal-btn afk-bordered mr-20"
+                    @click="$store.commit('setWalletRecieve', data.currency)"
+                  >
+                    Recieve
+                  </button>
                   <a class="icon-btn">
                     <img
                       src="~/assets/img/exchange-icon.png"
@@ -129,6 +139,8 @@
                           backgroundColor: false,
                           className: data.className,
                           styledMode: true,
+                          type: 'line',
+                          width: 1200,
                         },
                         xAxis: {
                           reversed: false,

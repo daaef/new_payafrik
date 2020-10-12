@@ -101,7 +101,7 @@
         <a
           v-if="!loadingCategories"
           class="btn dashed"
-          @click="getBillerCategories()"
+          @click="getBillerCategories"
         >
           + Show more
         </a>

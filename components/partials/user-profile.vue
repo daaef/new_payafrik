@@ -334,7 +334,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapGetters } from 'vuex'
   // import { mapState } from 'vuex'
 
   export default {
@@ -488,10 +488,18 @@
           this.processing = false
         } catch (e) {
           console.log(e.response)
-          this.$toast.error(
-            e.response.statusText +
-              ': Please make sure all ur fields are provided'
-          )
+          this.$toast.error({
+            key: 'updatable',
+            message: 'Error!',
+            description:
+              e.response.statusText +
+              ': Please make sure all ur fields are provided',
+            duration: 0,
+            class: 'error',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
           this.processing = false
         }
       },
@@ -522,15 +530,6 @@
           console.log(e.response)
         }
       },
-
-      closeFunctionModal() {
-        this.$store.commit('global/closeFunctionModal')
-      },
-      ...mapMutations({
-        toggleChatBox: 'global/toggleTokenModal',
-        closeFunctionModal: 'global/closeFunctionModal',
-        openFunctionModal: 'global/openFunctionModal',
-      }),
     },
   }
 </script>

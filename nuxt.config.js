@@ -55,7 +55,7 @@ export default {
    */
   css: [
     '~/assets/variables.less',
-    // '~/assets/css/normalize.css',
+    '~/assets/css/normalize.css',
     '~/assets/css/main.css',
   ],
   /*

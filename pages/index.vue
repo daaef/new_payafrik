@@ -59,9 +59,11 @@
           <div class="table--holder">
             <a-skeleton :loading="loading" active :paragraph="{ rows: 12 }">
               <a-table
+                :expand-row-by-click="true"
                 :data-source="data"
                 :pagination="{ hideOnSinglePage: true }"
                 :row-key="(record) => record.className"
+                @expand="onRowExpandChange"
               >
                 <a-table-column
                   key="asset_name"
@@ -101,18 +103,25 @@
                   </template>
                 </a-table-column>
                 <a-table-column
-                  key="trend"
+                  key="data"
                   title="30 DAY TREND"
-                  data-index="trend"
+                  data-index="data"
+                  class="relative"
                 >
-                  <template slot-scope="trend">
+                  <template slot-scope="data">
                     <trend
-                      :data="trend"
+                      :data="data.trend"
                       :gradient="['#6fa8dc', '#42b983', '#2c3e50']"
                       auto-draw
                       smooth
                     >
                     </trend>
+                    <h3 v-if="!data.collapsed" class="table-expand-text">
+                      Expand
+                    </h3>
+                    <h3 v-if="data.collapsed" class="table-expand-text">
+                      Collapse
+                    </h3>
                   </template>
                 </a-table-column>
                 <a-table-column
@@ -144,6 +153,10 @@
                         backgroundColor: null,
                         className: record.className,
                         styledMode: true,
+                        spacingLeft: 0,
+                        spacingRight: 0,
+                        type: 'line',
+                        width: 1600,
                       },
                       xAxis: {
                         reversed: false,
@@ -196,16 +209,12 @@
   /*
   let dashChartData */
   export default {
-    middleware: 'query',
-
+    data() {
+      return { width: 1000 }
+    },
     computed: {
       userDetails() {
         return this.$store.state.auth.user
-      },
-      data() {
-        return {
-          value: 'a',
-        }
       },
       ...mapGetters({
         countryCodes: 'countryCodes',
@@ -237,19 +246,6 @@
       }),
     },
     methods: {
-      /*
-      async triggerFetchData() {
-        await this.$store.dispatch('getCoinData')
-      }, */
-      onChange(e) {
-        console.log(`checked = ${e.target.value}`)
-      },
-      toggleChatBox() {
-        this.$store.commit('global/toggleChatBox')
-      },
-      toggleTokenModal() {
-        this.$store.commit('global/toggleTokenModal')
-      },
       ...mapMutations({
         toggleChatBox: 'toggleChatBox',
       }),
@@ -265,6 +261,21 @@
         // new Date(1598731229695).toDateString()
         const btcArray = []
         btcMarketData.prices.forEach((btc) => {
+          btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
+        })
+        return btcArray
+      },
+      async getDASHChartData(period) {
+        const dDate = Math.floor(
+          this.$moment().subtract(period, 'days').format('x') / 1000
+        )
+        console.log('dDate', dDate)
+        const today = Math.round(new Date().getTime() / 1000)
+        const dashMarketData = await this.$axios.$get(
+          `https://api.coingecko.com/api/v3/coins/dash/market_chart/range?vs_currency=usd&from=${dDate}&to=${today}`
+        )
+        const btcArray = []
+        dashMarketData.prices.forEach((btc) => {
           btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
         })
         return btcArray
@@ -299,22 +310,25 @@
         })
         return btcArray
       },
-      async getDASHChartData(period) {
-        const dDate = Math.floor(
-          this.$moment().subtract(period, 'days').format('x') / 1000
-        )
-        console.log('dDate', dDate)
-        const today = Math.round(new Date().getTime() / 1000)
-        const dashMarketData = await this.$axios.$get(
-          `https://api.coingecko.com/api/v3/coins/dash/market_chart/range?vs_currency=usd&from=${dDate}&to=${today}`
-        )
-        const btcArray = []
-        dashMarketData.prices.forEach((btc) => {
-          btcArray.push([new Date(btc[0]).toDateString(), btc[1]])
-        })
-        return btcArray
+      /*
+      async triggerFetchData() {
+        await this.$store.dispatch('getCoinData')
+      }, */
+      onChange(e) {
+        console.log(`checked = ${e.target.value}`)
+      },
+      onRowExpandChange(val, record) {
+        record.balance = 1
+        this.$store.commit('chart/setChartDataCollapsed', record.currency)
+      },
+      toggleChatBox() {
+        this.$store.commit('global/toggleChatBox')
+      },
+      toggleTokenModal() {
+        this.$store.commit('global/toggleTokenModal')
       },
     },
+    middleware: 'query',
   }
 </script>
 

@@ -6,6 +6,8 @@
       { 'transfer-token-active': transferTokenActive },
       { 'wallet-modal-active': walletModalActive },
       { 'profile--active': profileModalActive },
+      { 'wallet-modal-active': walletSendActive },
+      { 'wallet-modal-active': walletRecieveActive },
       'my-canvas',
     ]"
   >
@@ -24,6 +26,7 @@
       </section>
       <TransferModal />
     </div>
+    <WalletModals />
   </div>
 </template>
 
@@ -34,9 +37,11 @@
   import Sidebar from '~/components/partials/sidebar'
   import TransferModal from '~/components/partials/transfer-modal'
   import WithdrawModal from '~/components/partials/withdraw-modal'
+  import WalletModals from '~/components/partials/wallet-modals'
 
   export default {
     components: {
+      WalletModals,
       WithdrawModal,
       TransferModal,
       Sidebar,
@@ -65,6 +70,8 @@
         transferTokenActive: 'transferTokenActive',
         walletModalActive: 'walletModalActive',
         profileModalActive: 'profileModalActive',
+        walletSendActive: 'walletSendActive',
+        walletRecieveActive: 'walletRecieveActive',
       }),
     },
   }

@@ -18,7 +18,7 @@
               v-model="tokens"
               type="number"
               placeholder="How many tokens?"
-              @keyup="calculateParams()"
+              @keyup="calculateParams"
             />
             <input
               v-model="email"
@@ -207,11 +207,13 @@
         // amount: 1000000, // in kobo
         initiatingPayment: false,
         tokens: '',
-        crypClass: 'afk-color',
         email: '',
-        dataClass: 'afk_chart',
         selImg:
           'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAADd0lEQVRYhcWYWUhUYRTHf7O0mEtWZotbRhvUQwS20EoELRMGvVRmSbRZYEREDxFtVg/1EkVklD20TEQUUlY+RLQQBFIRWoilTWKmlW1jLmUa5/bdQZ3l3huT/mHgzr3n+5/f3Dvfd75zbYlj72JB8cAiYDYwARgBxKjh3wEPUArcB4qAWrPWZkFmAjuABYDTpPdv4DZwGHhoFGw3uD4SKAQeAIstQIgcaswD5THyX0FWAM8Al4XkweRSXhlWQXYD7g7PPxwSr4vK2xTITmBfGAG6Srx3GYHI4zj4HyF05apcAUFSgVPdAKHrlMrpB3IciO5GkGiVsxPIjDDNDqtyqTXKB7KjByB0bddBZNle2IMgUjLineog4Ip5aO8YlqYPpanpd0gnu93Gd28rG7eU8rKswSqIxuBUBSygzl+qYcmiIcQN6m3odrWglrLyH1YhdM2xqyoaUGXlDeSdrTJ0qfQ0cvZ8NW1t7cydPYhpk2Otgoy3q1IeUO3tcOnK+5C3W2IuXK6huqaZ/jFO7XFmr022CpJqN1o7PtX/JP9ctZYwkIqffOWc+512ZXVGAgnD+jJrxkBc8wdbAYkWEJtR1LXrtTwu/up3vrW1nZNnqmhpaWP0qEgylyVo550OG2syE4mKMr9rEBCvUZAkPHK0kqbmzrOnoLCOO/fqtVmzPiuJ4cP6+K5NSYtl1fLh2Ax/piavgLwxE1n89BsFNz74vn/89JMTp99qx9OnDiDdFe83ZsOaJJISI8zYewTkhSlm4Fieh7oPLdpxXn4VrysaiejrICsjgch+Dr94mfY5G1PMWJcKyD2zINXvmrVZVP76B4VFf+/O/Hlx2ieYliyOJ21SfyPr+46YuKz3wFYT+1dNryoaefT4CxWVjdovPnxgXMgFr5fTTkpyBM9LvNR//hUopBXYJMnr1NbflGQ6l7z4+//evC6ZsaMjDcdMTYtlW05qsMuSu05vJ2aq3XZPaJa0G/rjkL7jZg9A3NJ7no7/iy1m1pQwSnLl6HYdQSqB7G4EyVY5/UBE7mB9R5i1R/VNPgWasrkq8H9C7O96MtjaIYErAcvbrRBqUJ5+EKFAULduYphm0y3l5Q4WYLSaVqiOXraT0tGH3rx2VpsaI2OlbRCvoDK7YZDFTj5SYsVUf1EjFU0vJN8AKcfyokZi5d2IlA9jAX8AjTrqj3odLhAAAAAASUVORK5CYII=',
+        cryptoCurrency: 'Africoin',
+        fromCurrency: 'AFK',
+        dataClass: 'afk_chart',
+        crypClass: 'afk-color',
         keygen: 1,
         pricePerToken: 1,
         amountToPay: 0,
@@ -220,12 +222,11 @@
         customerId: '',
         customerName: '',
         transactionHash: '',
-        productId: 1076,
+        productId: 22108792,
+        // productId: 1076,
         paymentItemId: 101,
-        cryptoCurrency: 'Africoin',
         currency: 566,
         processing: false,
-        fromCurrency: 'AFK',
         purchasingWithCrypto: false,
         buyWithCash: false,
         buywithCrypto: false,
@@ -260,9 +261,6 @@
       }),
     },
     methods: {
-      handleChange(value) {
-        console.log(`selected ${value}`)
-      },
       handleBuyWithCash() {
         console.log('handleBuyWithCash')
         this.buyWithCashLoading = true
@@ -274,6 +272,9 @@
       cancelBuywithCash() {
         console.log('cancelBuywithCash')
         this.buyWithCash = false
+      },
+      handleChange(value) {
+        console.log(`selected ${value}`)
       },
       handleSelect(val) {
         const current = this.data.filter((datum) => {
@@ -332,8 +333,8 @@
         this.transactionRef = this.reference()
         this.amountToPay = this.tokens * this.pricePerToken * 100
         this.redirectUrl =
-          // "http://localhost:3000/payment-done?ref=" +
-          'https://portal.payafrik.io/user-area/payment-done?ref=' +
+          // 'https://portal.payafrik.io/user-area/payment-done?ref=' +
+          'http://localhost:3000/payment-done?ref=' +
           this.transactionRef +
           '&amount=' +
           this.amountToPay +
@@ -343,7 +344,7 @@
         this.customerName =
           this.userDetails.first_name + ' ' + this.userDetails.last_name
         const macKey =
-          'D3D1D05AFE42AD50818167EAC73C109168A0F108F32645C8B59E897FA930DA44F9230910DAC9E20641823799A107A02068F7BC0F4CC41D2952E249552255710F'
+          'kP31VzqzzYKmvW7ShN3BNXOP4fQY1AOMeIv5XwiXT7GzBfFhuZ0Yga8iuNh85H7NdAUBNWCtkCopcuLWGOA1NK42DCAeclercLH8L8NgEWh8S9AVZzxD3oPjAjTQ9A5W'
         this.transactionHash = sha512(
           this.transactionRef +
             this.productId +
@@ -445,7 +446,6 @@
             },
           })
           this.buywithCryptoLoading = false
-          this.closeModal('#buyWithCryptoModal')
         } catch (e) {
           console.log(e.response)
           this.$notification.error({

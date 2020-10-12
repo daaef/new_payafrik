@@ -24,8 +24,17 @@ export const state = () => ({
   ethChartData: [],
   litecoinChartData: [],
   dashChartData: [],
+  AFK: false,
+  BTC: false,
+  ETH: false,
+  LTC: false,
+  DASH: false,
 })
 export const mutations = {
+  setChartDataCollapsed(state, payload) {
+    state[payload] = !state[payload]
+    console.log(`set ${payload} done`)
+  },
   setUser(state, payload) {
     state.myUserDetails = payload
   },
@@ -197,7 +206,10 @@ export const getters = {
         price: '1.00',
         change: +0.3,
         market_cap: '3.21B',
-        trend: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
+        data: {
+          trend: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
+          collapsed: state.AFK,
+        },
         balance: state.myUserDetails.afk_balance,
         chart: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
         query: 'chart/getBitcoinData',
@@ -214,7 +226,10 @@ export const getters = {
         price: state.btcData.current_price,
         change: state.btcData.price_change_percentage_24h,
         market_cap: state.btcData.market_cap,
-        trend: state.btcChartData,
+        data: {
+          trend: state.btcChartData,
+          collapsed: state.BTC,
+        },
         balance: state.myUserDetails.btc_balance,
         chart: state.btcPrices,
         query: 'chart/getBitcoinData',
@@ -228,10 +243,13 @@ export const getters = {
           name: state.ethData.name,
           img: state.ethData.image,
         },
+        data: {
+          trend: state.ethChartData,
+          collapsed: state.ETH,
+        },
         price: state.ethData.current_price,
         change: state.ethData.price_change_percentage_24h,
         market_cap: state.ethData.market_cap,
-        trend: state.ethChartData,
         balance: state.myUserDetails.eth_balance,
         chart: state.ethPrices,
         query: 'chart/getEthPriceData',
@@ -248,7 +266,10 @@ export const getters = {
         price: state.litecoinData.current_price,
         change: state.litecoinData.price_change_percentage_24h,
         market_cap: state.litecoinData.market_cap,
-        trend: state.litecoinChartData,
+        data: {
+          trend: state.litecoinChartData,
+          collapsed: state.LTC,
+        },
         balance: 0.0,
         chart: state.ltcPrices,
         query: 'chart/getLtcPriceData',
@@ -265,7 +286,10 @@ export const getters = {
         price: state.dashData.current_price,
         change: state.dashData.price_change_percentage_24h,
         market_cap: state.dashData.market_cap,
-        trend: state.dashChartData,
+        data: {
+          trend: state.dashChartData,
+          collapsed: state.DASH,
+        },
         balance: 0.0,
         chart: state.dashPrices,
         query: 'chart/getDashPriceData',

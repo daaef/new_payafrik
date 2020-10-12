@@ -279,7 +279,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapGetters } from 'vuex'
   export default {
     middleware: 'query',
     components: {},
@@ -424,9 +424,6 @@
             this.pfkTransactionRef = adviceResponse.data.payafrikTransactionRef
             this.$toast.success('Successful')
             this.paymentSuccess = true
-
-            // this.getUserDetails()
-            this.$store.dispatch('getUserDetails')
           }
         } catch (e) {
           console.log(e.response)
@@ -462,13 +459,6 @@
           console.log(e.response)
         }
       },
-
-      authenticate(user) {
-        this.$store.commit('global/authenticateUser', user)
-      },
-      ...mapMutations({
-        authenticate: 'global/authenticateUser',
-      }),
 
       async queryTransaction(transactionRef) {
         try {

@@ -1,17 +1,20 @@
 @font-face {
   font-family: "Avenir Light";
+  font-display: fallback;
   src: url("../fonts/avenir-light/avenir-light.eot");
   src: url("../fonts/avenir-light/avenir-light.eot?#iefix") format("embedded-opentype"), url("../fonts/avenir-light/avenir-light.woff2") format("woff2"), url("../fonts/avenir-light/avenir-light.woff") format("woff"), url("../fonts/avenir-light/avenir-light.ttf") format("truetype"), url("../fonts/avenir-light/avenir-light.svg#Avenir Light") format("svg")
 }
 
 @font-face {
   font-family: "Avenir Medium";
+  font-display: fallback;
   src: url("../fonts/avenir-medium/avenir-medium.eot");
   src: url("../fonts/avenir-medium/avenir-medium.eot?#iefix") format("embedded-opentype"), url("../fonts/avenir-medium/avenir-medium.woff2") format("woff2"), url("../fonts/avenir-medium/avenir-medium.woff") format("woff"), url("../fonts/avenir-medium/avenir-medium.ttf") format("truetype"), url("../fonts/avenir-medium/avenir-medium.svg#Avenir Light") format("svg")
 }
 
 @font-face {
   font-family: "American Typewriter";
+  font-display: fallback;
   src: url("../fonts/american-typewriter/american-typewriter.eot");
   src: url("../fonts/american-typewriter/american-typewriter.eot?#iefix") format("embedded-opentype"), url("../fonts/american-typewriter/american-typewriter.woff2") format("woff2"), url("../fonts/american-typewriter/american-typewriter.woff") format("woff"), url("../fonts/american-typewriter/american-typewriter.ttf") format("truetype"), url("../fonts/american-typewriter/american-typewriter.svg#Avenir Light") format("svg")
 }
@@ -23,7 +26,7 @@
   font-family: "Avenir Light", sans-serif;
   outline: none !important;
   text-rendering: optimizeLegibility;
-  color-rendering: optimizeQuality
+  color-rendering: optimizeQuality;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -4077,7 +4080,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
   animation: ant-skeleton-loading 1.4s ease infinite;
 }
 
-.ant-modal-content .ant-select-selection {
+.custom--select .ant-select-selection {
   border: 2px solid #3341ff;
   border-radius: 10px;
   height: 55px;
@@ -4111,6 +4114,8 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
+  height: 34px;
+  width: 34px;
 }
 
 .prefix-img img {
@@ -4135,4 +4140,38 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 
 .dash-color{
   color: #018ee3;
+}
+
+.ant-input-affix-wrapper .ant-input {
+  text-align: left;
+}
+
+.ant-table-expand-icon-th, .ant-table-row-expand-icon-cell {
+  display: none;
+}
+
+h3.table-expand-text {
+  color: #fff;
+  background: #000000c4;
+  padding: 10px;
+  position: absolute;
+  opacity: 0;
+  font-size: 1.4rem;
+  top: 50%;
+  border-radius: 20px;
+  transition: .3s ease-in-out;
+  min-width: 70%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%, -50%);
+}
+
+.ant-table-row:hover .table-expand-text {
+  opacity: .6;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.custom--select img {
+  position: static;
+  transform: none;
 }

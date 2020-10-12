@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="$device.isMobileOrTablet">
     <input id="navi-toggle" type="checkbox" class="navigation__checkbox" />
 
     <label for="navi-toggle" class="navigation__button">
