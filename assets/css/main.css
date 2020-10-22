@@ -1272,41 +1272,6 @@ form div label {
   border-radius: 0
 }
 
-.line--input input.c-afk {
-  border-bottom: solid #1c27be 2px !important;
-  color: #4451ff
-}
-
-.line--input input.c-afk ~ .wallet--name {
-  color: #4451ff;
-  position: absolute;
-  bottom: 2px;
-  right: 0;
-  font-size: 1.03rem
-}
-
-.line--input input.c-afk::placeholder {
-  color: #4451ff;
-  font-size: 1.3rem
-}
-
-.line--input input.c-btc {
-  border-bottom: solid #c36b10 2px !important;
-  color: #f98e12
-}
-
-.line--input input.c-btc ~ .wallet--name {
-  color: #f98e12;
-  position: absolute;
-  bottom: 2px;
-  right: 0;
-  font-size: 1.03rem
-}
-
-.line--input input.c-btc::placeholder {
-  color: #f98e12;
-  font-size: 1.3rem
-}
 
 .plain-btn {
   border: 0;
@@ -3292,9 +3257,9 @@ aside .links--and--logo:after {
   z-index: 50
 }
 
-.exchange--content .recieve label {
+/*.exchange--content .recieve label {
   color: #f9921b
-}
+}*/
 
 .exchange--content .recieve input {
   border: solid 2px #f9921b
@@ -3305,10 +3270,10 @@ aside .links--and--logo:after {
   position: relative;
   z-index: 50
 }
-
+/*
 .exchange--content .exchange label {
   color: #3341ff
-}
+}*/
 
 .exchange--content .exchange input {
   border: solid 2px #3341ff
@@ -4174,4 +4139,116 @@ h3.table-expand-text {
 .custom--select img {
   position: static;
   transform: none;
+}
+
+.exchange--btn svg {
+  height: 31px;
+}
+
+span.exchange__filtered {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+
+.line--input input.afk-color {
+  border-bottom: solid #2a4ebf 2px !important;
+  color: #4451ff
+}
+
+.line--input input.afk-color ~ .wallet--name {
+  color: #4451ff;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  font-size: 1.03rem
+}
+
+.line--input input.afk-color::placeholder {
+  color: #4451ff;
+  font-size: 1.3rem
+}
+
+.line--input input.btc-color {
+  border-bottom: solid #f7932d 2px !important;
+  color: #f98e12
+}
+
+.line--input input.btc-color ~ .wallet--name {
+  color: #f98e12;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  font-size: 1.03rem
+}
+
+.line--input input.btc-color::placeholder {
+  color: #f98e12;
+  font-size: 1.3rem
+}
+
+.line--input input.eth-color {
+  border-bottom: solid #50599c 2px !important;
+  color: #50599c
+}
+
+.line--input input.eth-color ~ .wallet--name {
+  color: #50599c;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  font-size: 1.03rem
+}
+
+.line--input input.eth-color::placeholder {
+  color: #50599c;
+  font-size: 1.3rem
+}
+
+.line--input input.ltc-color {
+  border-bottom: solid #838383 2px !important;
+  color: #838383
+}
+
+.line--input input.ltc-color ~ .wallet--name {
+  color: #838383;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  font-size: 1.03rem
+}
+
+.line--input input.ltc-color::placeholder {
+  color: #838383;
+  font-size: 1.3rem
+}
+
+.line--input input.dash-color {
+  border-bottom: solid #018ee3 2px !important;
+  color: #018ee3
+}
+
+.line--input input.dash-color ~ .wallet--name {
+  color: #018ee3;
+  position: absolute;
+  bottom: 2px;
+  right: 0;
+  font-size: 1.03rem
+}
+
+.line--input input.dash-color::placeholder {
+  color: #018ee3;
+  font-size: 1.3rem
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

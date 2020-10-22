@@ -156,7 +156,6 @@ export const actions = {
     currencyData.data.prices.forEach((btc) => {
       btcArray.push([new Date(btc.time).toDateString(), +btc.price])
     })
-    console.log(btcArray)
     commit('setBtcPrices', btcArray)
   },
   async getEthPriceData({ state, commit }, period) {
@@ -367,5 +366,17 @@ export const getters = {
   },
   dashChartData(state) {
     return state.dashChartData
+  },
+  btcPrice(state) {
+    return state.btcData.current_price
+  },
+  ethPrice(state) {
+    return state.ethData.current_price
+  },
+  ltcPrice(state) {
+    return state.litecoinData.current_price
+  },
+  dashPrice(state) {
+    return state.dashData.current_price
   },
 }

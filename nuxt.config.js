@@ -92,6 +92,7 @@ export default {
     'nuxt-highcharts',
     '@nuxtjs/device',
     '@nuxtjs/toast',
+    'vue-currency-input/nuxt',
   ],
   highcharts: {},
   'nuxt-compress': {
