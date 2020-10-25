@@ -170,6 +170,9 @@
                       },
                       series: [
                         {
+                          marker: {
+                            enabled: false,
+                          },
                           name: record.name,
                           data: record.chart,
                         },

@@ -60,7 +60,7 @@
               </div>
             </div>
             <div class="exchange--btn">
-              <a href="#">
+              <a href="#" @click="flipCurrencies">
                 <ExchangeBtn
                   :left-color="leftCrypClass"
                   :right-color="rightCrypClass"
@@ -113,13 +113,13 @@
                   placeholder="0.00"
                   locale="ng"
                   :distraction-free="false"
-                  @blur="blurredRightExchange"
+                  disabled
                 />
                 <span class="wallet--name">{{ rightFromCurrency }}</span>
               </div>
               <div class="sending--amnt flex flex-between">
                 <span class="amount c-white">{{
-                  rightExchangeValue1 | doubleForm
+                  leftExchangeValue1 | doubleForm
                 }}</span>
                 <span class="currency c-white">USD</span>
               </div>
@@ -134,7 +134,7 @@
             <div>
               <span class="c-white mb-4 d-block">You are exchanging</span>
               <h2 :class="leftCrypClass">
-                {{ leftExchangeValue }} {{ leftFromCurrency }}
+                {{ leftExchangeValue | doubleForm }} {{ leftFromCurrency }}
               </h2>
               <span class="small-text c-white"
                 >${{ leftExchangeValue1 | doubleForm }}</span
@@ -151,10 +151,10 @@
             <div>
               <span class="c-white mb-4 d-block">You will receive</span>
               <h2 :class="rightCrypClass">
-                {{ rightExchangeValue }} {{ rightFromCurrency }}
+                {{ rightExchangeValue | doubleForm }} {{ rightFromCurrency }}
               </h2>
               <span class="small-text c-white"
-                >${{ rightExchangeValue1 | doubleForm }}</span
+                >${{ leftExchangeValue1 | doubleForm }}</span
               >
             </div>
           </div>
@@ -162,7 +162,10 @@
 
         <div class="text-center mt-20 sub--btn--holder">
           <div class="sub-button mt-20">
-            <button class="w-100">EXCHANGE</button>
+            <button class="w-100" :disabled="exchanging" @click="exchange">
+              <span v-if="exchanging">EXCHANGING</span>
+              <span v-else>EXCHANGE</span>
+            </button>
           </div>
         </div>
       </div>
@@ -184,6 +187,7 @@
     middleware: 'query',
     data() {
       return {
+        exchanging: false,
         leftSide: '',
         rightSide: '',
         leftSelImg:
@@ -255,12 +259,26 @@
         this.leftCrypClass = current[0].currClass
         this.leftDataClass = current[0].className
         this.leftPrice = current[0].price
-        this.rightExchangeValue = 0
-        this.leftExchangeValue = 0
-        this.rightExchangeValue =
-          this.rightExchangeValue * (this.leftPrice / this.rightPrice)
-        this.leftExchangeValue =
-          this.rightExchangeValue * (this.rightPrice / this.leftPrice)
+      },
+      flipCurrencies() {
+        ;[
+          this.leftDataClass,
+          this.rightDataClass,
+          this.leftFromCurrency,
+          this.rightFromCurrency,
+          this.leftPrice,
+          this.rightPrice,
+        ] = [
+          this.rightDataClass,
+          this.leftDataClass,
+          this.rightFromCurrency,
+          this.leftFromCurrency,
+          this.rightPrice,
+          this.leftPrice,
+        ]
+        this.handleLeftSelect(this.leftFromCurrency)
+        this.handleRightSelect(this.rightFromCurrency)
+        this.leftExchangeValue1 = this.leftExchangeValue * this.leftPrice
       },
       handleRightSelect(val) {
         const current = this.data.filter((datum) => {
@@ -272,9 +290,50 @@
         this.rightDataClass = current[0].className
         this.rightPrice = current[0].price
         this.rightExchangeValue =
-          this.rightExchangeValue * (this.leftPrice / this.rightPrice)
-        this.leftExchangeValue =
-          this.rightExchangeValue * (this.rightPrice / this.leftPrice)
+          this.leftExchangeValue * (this.leftPrice / this.rightPrice)
+      },
+      async exchange() {
+        this.exchanging = true
+        const payload = {
+          amount: this.leftExchangeValue,
+          from_currency: this.leftFromCurrency,
+          to_currency: this.rightFromCurrency,
+        }
+
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: this.$auth.getToken('local'),
+        }
+
+        try {
+          const response = await this.$axios.$post(
+            this.baseUrl + 'exchange/barter/swap/',
+            payload,
+            { headers }
+          )
+          this.exchanging = false
+          console.log(response)
+          this.$notification.success({
+            key: 'updatable',
+            message: 'Success!',
+            description: response.msg,
+            duration: 0,
+            class: 'success',
+          })
+        } catch (e) {
+          console.log(e.response)
+          this.$notification.error({
+            key: 'updatable',
+            message: 'Error!',
+            description: e.response.data.detail,
+            duration: 0,
+            class: 'error',
+            onClick: () => {
+              console.log('Notification Clicked!')
+            },
+          })
+          this.exchanging = false
+        }
       },
       toggleTokenModal() {
         this.$store.commit('global/toggleTokenModal')

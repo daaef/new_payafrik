@@ -154,6 +154,9 @@
                         },
                         series: [
                           {
+                            marker: {
+                              enabled: false,
+                            },
                             name: data.name,
                             data: data.chart,
                           },
