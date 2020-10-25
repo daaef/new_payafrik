@@ -259,6 +259,10 @@
         this.leftCrypClass = current[0].currClass
         this.leftDataClass = current[0].className
         this.leftPrice = current[0].price
+        this.leftExchangeValue1 = this.leftExchangeValue * this.leftPrice
+        this.rightExchangeValue =
+          this.leftExchangeValue * (this.leftPrice / this.rightPrice)
+        console.log('changing leftExcangevalue')
       },
       flipCurrencies() {
         ;[
