@@ -1576,6 +1576,8 @@ aside li {
 aside li img {
   height: 25px;
   /*opacity: .69*/
+  width: 25px;
+  object-fit: contain;
 }
 
 aside li a {
@@ -1689,7 +1691,8 @@ aside .links--and--logo:after {
 
 .modal-content .main-modal .modal-title h3 {
   color: #fff;
-  text-align: center
+  text-align: center;
+  line-height: 1.15;
 }
 
 .modal-content .main-modal .modal-title .am-type {
@@ -2702,7 +2705,13 @@ aside .links--and--logo:after {
 }
 
 .main-content main .dash-body > div .welcome-text p {
-  font-size: 1.2rem
+  font-size: 1.2rem;
+  margin-bottom: 0;
+}
+
+.main-content main .dash-body > div .welcome-text h1 {
+  line-height: 1.15;
+  font-size: 2rem;
 }
 
 .main-content main .dash-body > div .card-links {
@@ -4251,4 +4260,30 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+
+input.afk-color {
+  border-color: #2a4ebf;
+  color: #FFFFFF;
+}
+
+input.btc-color {
+  border-color: #f7932d;
+  color: #FFFFFF;
+}
+
+input.eth-color {
+  border-color: #50599c;
+  color: #FFFFFF;
+}
+
+input.ltc-color {
+  border-color: #838383;
+  color: #FFFFFF;
+}
+
+.dash-color {
+  border-color: #018ee3;
+  color: #FFFFFF;
 }

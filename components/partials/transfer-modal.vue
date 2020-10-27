@@ -90,14 +90,15 @@
             </div>
 
             <div class="mt-20">
-              <img src="~/assets/img//tokenam.png" alt="" />
+              <img :src="selImg" alt="" />
               <input
                 id="token-am"
                 v-model="afkAmountToTransfer"
                 type="number"
+                :class="crypClass"
                 placeholder="How much you want to transfer"
               />
-              <label for="token-am"
+              <label for="token-am" :class="crypClass"
                 >Token <span class="c-white">Amount</span></label
               >
             </div>

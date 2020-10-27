@@ -27,9 +27,16 @@
             Exchange
           </a>
         </nuxt-link>
+        <nuxt-link tag="li" to="/transactions">
+          <a href="#">
+            <img class="mr-20" src="~/assets/img//trans.png" alt="" />
+            Transactions
+          </a>
+        </nuxt-link>
         <li>
           <a href="#">
-            <img class="mr-20" src="~/assets/img//chat.png" alt="" /> Chat
+            <img class="mr-20" src="~/assets/img//buy-crypto.png" alt="" /> Buy
+            Crypto
           </a>
         </li>
       </ul>
@@ -37,8 +44,8 @@
     <ul class="main-links">
       <li>
         <a href="#">
-          <img class="mr-20" src="~/assets/img//setting.png" alt="" />
-          Setting
+          <img class="mr-20" src="~/assets/img//chat.png" alt="" />
+          Support
         </a>
       </li>
       <li>
