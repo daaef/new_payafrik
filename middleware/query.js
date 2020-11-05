@@ -8,6 +8,7 @@ export default function ({ store, redirect }) {
   store.dispatch('chart/getEthPriceData', store.getters['chart/hourPeriod'])
   store.dispatch('chart/getLtcPriceData', store.getters['chart/hourPeriod'])
   store.dispatch('chart/getDashPriceData', store.getters['chart/hourPeriod'])
+  store.commit('setMobSideBar')
   setTimeout(() => {
     store.commit('setDataLoading', false)
   }, 1000)

@@ -1445,6 +1445,7 @@ export const state = () => ({
   ethChartData: [],
   litecoinChartData: [],
   dashChartData: [],
+  mobSideOpen: false,
   btcPrices: [],
   ethPrices: [],
   ltcPrices: [],
@@ -1476,6 +1477,12 @@ export const state = () => ({
 export const mutations = {
   setDataLoading(state, payload) {
     state.dataLoading = payload
+  },
+  toggleMobSideBar(state) {
+    state.mobSideOpen = !state.mobSideOpen
+  },
+  setMobSideBar(state) {
+    state.mobSideOpen = false
   },
   setUser(state, user) {
     state.user = user
@@ -1813,6 +1820,9 @@ export const getters = {
   },
   ltcPrices(state) {
     return state.ltcPrices
+  },
+  mobSideOpen(state) {
+    return state.mobSideOpen
   },
   dashPrices(state) {
     return state.dashPrices

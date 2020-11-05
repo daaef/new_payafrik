@@ -33,12 +33,18 @@
             Transactions
           </a>
         </nuxt-link>
-        <li>
+        <nuxt-link tag="li" to="/power">
+          <a href="#">
+            <img class="mr-20" src="~/assets/img//turn-on.png" alt="" />
+            Power
+          </a>
+        </nuxt-link>
+        <!--<nuxt-link tag="li" to="/buy-crypto">
           <a href="#">
             <img class="mr-20" src="~/assets/img//buy-crypto.png" alt="" /> Buy
             Crypto
           </a>
-        </li>
+        </nuxt-link>-->
       </ul>
     </div>
     <ul class="main-links">

@@ -13,6 +13,12 @@
 }
 
 @font-face {
+  font-family: "Orbon ITC Regular";
+  src: url("../fonts/orboni/94cf8d3956c24c8df50c9094364df54c.eot"); /* IE9*/
+  src: url("../fonts/orboni/94cf8d3956c24c8df50c9094364df54c.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */ url("../fonts/orboni/94cf8d3956c24c8df50c9094364df54c.woff2") format("woff2"), /* chrome、firefox */ url("../fonts/orboni/94cf8d3956c24c8df50c9094364df54c.woff") format("woff"), /* chrome、firefox */ url("../fonts/orboni/94cf8d3956c24c8df50c9094364df54c.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/ url("../fonts/orboni/94cf8d3956c24c8df50c9094364df54c.svg#Orbon ITC Regular") format("svg"); /* iOS 4.1- */
+}
+
+@font-face {
   font-family: "American Typewriter";
   font-display: fallback;
   src: url("../fonts/american-typewriter/american-typewriter.eot");
@@ -1095,9 +1101,9 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
     margin-bottom: 30px;
   }
 
-  nav .nav-links img, .navigation .nav-links img {
+  /*nav .nav-links img, .navigation .nav-links img {
     width: 50px!important;
-  }
+  }*/
 }
 
 form div {
@@ -1712,7 +1718,7 @@ aside .links--and--logo:after {
   width: 1005
 }
 
-.modal-content .main-modal .token-details .highlight {
+.highlight {
   color: #ffd343;
   font-weight: 100
 }

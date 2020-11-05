@@ -1,6 +1,11 @@
 <template>
   <div v-if="$device.isMobileOrTablet">
-    <input id="navi-toggle" type="checkbox" class="navigation__checkbox" />
+    <input
+      id="navi-toggle"
+      v-model="mobSideOpen"
+      type="checkbox"
+      class="navigation__checkbox"
+    />
 
     <label for="navi-toggle" class="navigation__button">
       <span class="navigation__icon">&nbsp;</span>
@@ -12,63 +17,69 @@
       </div>
       <ul class="nav-links">
         <li>
-          <a href="#" data-link-class="buy-token-active">
+          <a href="#" @click="$store.commit('setBuyToken')">
             <img class="mr-8" src="~/assets/img//plus.png" alt="plus" />
-            BUY TOKEN
+            Buy Token
           </a>
         </li>
         <li>
-          <a href="#" data-link-class="withdraw-active">
+          <a href="#" @click="$store.commit('setWithdraw')">
             <img class="mr-8" src="~/assets/img//wallet.png" alt="wallet" />
-            WITHDRAW
+            Withdraw
           </a>
         </li>
         <li>
-          <a href="#" data-link-class="transfer-token-active">
+          <a href="#" @click="$store.commit('setTransferToken')">
             <img class="mr-8" src="~/assets/img//transfer.png" alt="transfer" />
-            TRANSFER AFRITOKEN
+            Transfer Token
           </a>
         </li>
-        <li class="active">
+        <nuxt-link tag="li" to="/">
           <a href="#" class="mt-8">
             <img class="mr-8" src="~/assets/img//home.png" alt="" />
-            HOME
+            Home
           </a>
-        </li>
-        <li>
+        </nuxt-link>
+        <nuxt-link tag="li" to="/wallet">
           <a href="" class="mt-8">
             <img class="mr-8" src="~/assets/img//side-wallet.png" alt="" />
-            WALLET
+            Wallet
           </a>
-        </li>
-        <li>
+        </nuxt-link>
+        <nuxt-link tag="li" to="/mart">
           <a href="" class="mt-8">
             <img class="mr-8" src="~/assets/img//mart.png" alt="" />
-            MART
+            Mart
           </a>
-        </li>
-        <li>
+        </nuxt-link>
+        <nuxt-link tag="li" to="/exchange">
           <a href="" class="mt-8">
             <img class="mr-8" src="~/assets/img//side-exchange.png" alt="" />
-            EXCHANGE
+            Exchange
           </a>
-        </li>
+        </nuxt-link>
+        <nuxt-link tag="li" to="/transactions">
+          <a href="" class="mt-8">
+            <img class="mr-8" src="~/assets/img//trans.png" alt="" />
+            Transactions
+          </a>
+        </nuxt-link>
+        <!--<nuxt-link tag="li" to="/buy-crypto">
+          <a href="" class="mt-8">
+            <img class="mr-8" src="~/assets/img//buy-crypto.png" alt="" />
+            Buy Crypto
+          </a>
+        </nuxt-link>-->
         <li>
           <a href="" class="mt-8">
             <img class="mr-8" src="~/assets/img//chat.png" alt="" />
-            CHAT
+            Support
           </a>
         </li>
         <li>
-          <a href="" class="mt-8">
-            <img class="mr-8" src="~/assets/img//setting.png" alt="" />
-            SETTING
-          </a>
-        </li>
-        <li>
-          <a href="" class="mt-8">
+          <a href="" class="mt-8" @click="$auth.logout()">
             <img class="mr-8" src="~/assets/img//exit.png" alt="" />
-            EXIT
+            Exit
           </a>
         </li>
       </ul>
@@ -109,7 +120,16 @@
         transferTokenActive: 'transferTokenActive',
         walletModalActive: 'walletModalActive',
         profileModalActive: 'profileModalActive',
+        mobileSidebar: 'mobSideOpen',
       }),
+      mobSideOpen: {
+        get() {
+          return this.mobileSidebar
+        },
+        set() {
+          this.$store.commit('toggleMobSideBar')
+        },
+      },
     },
   }
 </script>
