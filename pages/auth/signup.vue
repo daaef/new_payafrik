@@ -1,157 +1,129 @@
 <template>
-  <section class="main-content">
-    <main class="full">
-      <section class="auth__page dash-body">
-        <!-- <a href="#" class="modal-close">
-          <img src="~/assets/img/close.png" alt="" />
-        </a> -->
-
-        <div class="auth--content">
-          <div class="col-lg-5 ml-auto mr-auto">
-            <div class="w-100">
-              <form class="w-100">
-                <div class="w-100">
-                  <div class="welcome-text">
-                    <div class="text-center">
-                      <p class="w-100 c-white">sign up</p>
-                      <h1 class="w-100 c-white am-type mt-0 mb-50">
-                        To PayAfrik
-                      </h1>
-                    </div>
-                  </div>
-                  <div class="exchange centerdiv mb-20">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/user-icon.png"
-                        alt=""
-                      />
-                      <input
-                        v-model="firstName"
-                        type="text"
-                        placeholder="Enter First Name"
-                      />
-                      <label for="exchange-afk">First Name</label>
-                      <div class="exchange--dropdown"></div>
-                    </div>
-                  </div>
-                  <div class="exchange centerdiv mb-20">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/user-icon.png"
-                        alt=""
-                      />
-                      <input
-                        v-model="lastName"
-                        type="text"
-                        placeholder="Enter Last Name"
-                      />
-                      <label for="exchange-afk">Last Name</label>
-                      <div class="exchange--dropdown"></div>
-                    </div>
-                  </div>
-                  <div class="exchange centerdiv">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/iphone.png"
-                        alt=""
-                      />
-                      <input
-                        v-model="phone"
-                        type="text"
-                        placeholder="Enter Phone Number (eg: +2348012345678)"
-                      />
-                      <label for="exchange-afk">Phone Number</label>
-                      <div class="exchange--dropdown"></div>
-                    </div>
-                  </div>
-                  <p class="authhint">Please add your phone code (eg: +234)</p>
-                  <div class="exchange centerdiv">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/right-arrow.png"
-                        alt=""
-                      />
-                      <input
-                        v-if="!viewPassword"
-                        v-model="password1"
-                        maxlength="4"
-                        type="password"
-                        placeholder="Your PIN"
-                        @keydown="enforceNumbersOnly($event)"
-                      />
-                      <input
-                        v-if="viewPassword"
-                        v-model="password1"
-                        maxlength="4"
-                        type="text"
-                        placeholder="Your PIN"
-                        @keydown="enforceNumbersOnly($event)"
-                      />
-                      <label for="exchange-afk">Password</label>
-                      <img
-                        class="suffix-icon suffix password-toggle-switch"
-                        src="~/assets/img/view.png"
-                        alt=""
-                        @click="toggleViewPassword()"
-                      />
-                    </div>
-                    <div class="exchange--dropdown"></div>
-                    <p class="authhint text-center">
-                      Your PIN must be 4 digits and contain only numbers
-                    </p>
-                    <p class="authhint text-center">
-                      Need to confirm your phone number?
-                      <nuxt-link to="confirmation">Click here</nuxt-link>
-                    </p>
-                  </div>
-
-                  <p class="authhint text-center">
-                    By clicking button below, you agree to Payafrik's
-                    <a>terms of acceptable use</a>
-                  </p>
-                  <div class="text-center sub--btn--holder">
-                    <div class="sub-button">
-                      <button
-                        v-if="!processing"
-                        class="w-100"
-                        @click="signUp($event)"
-                      >
-                        Create Account
-                      </button>
-                      <button v-if="processing" class="w-100">
-                        Creating Account...
-                      </button>
-                    </div>
-                  </div>
-                  <div class="text-center">
-                    <nuxt-link to="/login"
-                      ><p class="authhint">
-                        Already have an account?
-                        <span class="reset-color">Sign In</span>
-                      </p></nuxt-link
-                    >
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
+  <form class="w-100">
+    <div class="w-100">
+      <div class="welcome-text">
+        <div class="text-center">
+          <p class="w-100 c-white">sign up</p>
+          <h1 class="w-100 c-white am-type mt-0 mb-50">To PayAfrik</h1>
         </div>
-      </section>
-    </main>
-  </section>
+      </div>
+      <div class="exchange centerdiv mb-20">
+        <div>
+          <img class="prefix-icon" src="~/assets/img/user-icon.png" alt="" />
+          <input
+            v-model="firstName"
+            type="text"
+            placeholder="Enter First Name"
+          />
+          <label for="exchange-afk">First Name</label>
+          <div class="exchange--dropdown"></div>
+        </div>
+      </div>
+      <div class="exchange centerdiv mb-20">
+        <div>
+          <img class="prefix-icon" src="~/assets/img/user-icon.png" alt="" />
+          <input v-model="lastName" type="text" placeholder="Enter Last Name" />
+          <label for="exchange-afk">Last Name</label>
+          <div class="exchange--dropdown"></div>
+        </div>
+      </div>
+      <div class="exchange centerdiv">
+        <div style="margin-bottom: 16px" class="phoneNum">
+          <a-input
+            id="pnum"
+            v-model="username"
+            default-value="mysite"
+            placeholder="Phone Number"
+            type="text"
+          >
+            <a-select
+              slot="addonBefore"
+              v-model="country4Code"
+              placeholder="country"
+              :default-value="countryCodes[0].name"
+              style="width: 90px"
+              show-search
+              option-filter-prop="children"
+              :filter-option="filterOption"
+              @focus="handleFocus"
+              @blur="handleBlur"
+              @change="handleChange"
+            >
+              <a-select-option
+                v-for="country in countryCodes"
+                :key="country.name"
+              >
+                {{ country.name }}
+              </a-select-option>
+            </a-select>
+            <img
+              v-if="selectedCountry.flag"
+              slot="addonAfter"
+              :src="selectedCountry.flag"
+              alt="flag"
+            />
+          </a-input>
+          <div class="prefixNum">{{ selectedCountry.number }}</div>
+          <label for="pnum">Phone Number</label>
+        </div>
+      </div>
+      <div class="exchange centerdiv">
+        <div>
+          <a-input-password
+            id="pin"
+            ref="userNameInput"
+            v-model="password"
+            placeholder="Basic usage"
+          >
+            <a-icon slot="prefix" type="lock" />
+          </a-input-password>
+          <label for="pin">PIN</label>
+        </div>
+      </div>
+      <p class="authhint text-center">
+        Your PIN must be 4 digits and contain only numbers
+      </p>
+      <p class="authhint text-center">
+        Need to confirm your phone number?
+        <nuxt-link to="/confirmation">Click here</nuxt-link>
+      </p>
+
+      <p class="authhint text-center">
+        By clicking button below, you agree to Payafrik's
+        <a>terms of acceptable use</a>
+      </p>
+      <div class="text-center sub--btn--holder">
+        <div class="sub-button">
+          <button class="w-100" :disabled="processing" @click="signUp($event)">
+            Creat<span v-if="!processing">e</span
+            ><span v-if="processing">ing</span> Account
+          </button>
+        </div>
+      </div>
+      <div class="text-center">
+        <nuxt-link to="/auth/login">
+          <p class="authhint">
+            Already have an account?
+            <span class="reset-color">Sign In</span>
+          </p>
+        </nuxt-link>
+      </div>
+    </div>
+  </form>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
+    layout: 'auth',
+    middleware: 'guest',
     components: {},
     data() {
       return {
-        password1: '',
-        password2: '',
+        country4Code: 'Albania',
+        password: '',
+        selectedCountry: {},
         email: '',
         firstName: '',
         lastName: '',
@@ -174,15 +146,30 @@
         countryCode: '+234',
       }
     },
-    computed: {
-      countryCodes() {
-        return this.$store.state.global.countryCodes
-      },
-    },
+    auth: false,
+    computed: mapGetters({
+      countryCodes: 'countryCodes',
+    }),
     mounted() {
       console.log(this.countryCodes)
     },
     methods: {
+      handleChange(value) {
+        this.selectedCountry = this.countryCodes.filter((country) => {
+          return country.name === value
+        })[0]
+      },
+      handleBlur() {
+        console.log('blur')
+      },
+      handleFocus() {
+        console.log('focus')
+      },
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text
+          .toLowerCase()
+          .includes(input.toLowerCase())
+      },
       enforceNumbersOnly(e) {
         const key = e.keyCode ? e.keyCode : e.which
 
@@ -246,6 +233,10 @@
         console.log('signing up...')
         this.processing = true
 
+        this.phone = `${this.selectedCountry.number}${
+          this.username[0] === '0' ? this.username.slice(1) : this.username
+        }`
+
         if (this.phone === '') {
           this.formErrors.phoneError = true
           this.processing = false
@@ -266,10 +257,10 @@
           // username: this.username,
           // phone: this.countryCode + this.phone,
           phone: this.phone,
-          password: this.password1,
+          password: this.password,
           // email: this.email
         }
-        console.log('THE PAYLOAD =>', payload)
+        await console.log('THE PAYLOAD =>', payload)
 
         const headers = {
           'Content-Type': 'application/json',

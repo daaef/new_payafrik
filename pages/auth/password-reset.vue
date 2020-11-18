@@ -1,157 +1,160 @@
 <template>
-  <section class="main-content">
-    <main class="full">
-      <section class="auth__page dash-body">
-        <!-- <a href="#" class="modal-close">
-              <img src="img/close.png" alt="" />
-            </a> -->
-        <div class="auth--content">
-          <div class="col-lg-5 ml-auto mr-auto">
-            <div class="w-100">
-              <form class="w-100">
-                <div class="w-100">
-                  <div class="welcome-text">
-                    <div class="text-center">
-                      <p class="w-100 c-white">Reset your PIN</p>
-                      <!-- <h1 class="w-100 c-white am-type mt-0 mb-50">
-                            PayAfrik Dashboard
-                          </h1> -->
-                    </div>
-                  </div>
-
-                  <div class="exchange centerdiv">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/iphone.png"
-                        alt=""
-                      />
-                      <input
-                        id="exchange-afk"
-                        v-model="username"
-                        type="text"
-                        placeholder="Enter Registered Phone Number"
-                      />
-                      <label for="exchange-afk">Phone Number</label>
-                      <div class="exchange--dropdown"></div>
-                    </div>
-                  </div>
-                  <p class="authhint">Please add your phone code (eg: +234)</p>
-
-                  <div v-if="codeSent" class="exchange centerdiv mb-3">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/right-arrow.png"
-                        alt=""
-                      />
-                      <input
-                        id="reset-code"
-                        v-model="resetCode"
-                        type="text"
-                        placeholder="Code sent to your phone"
-                      />
-
-                      <label for="pin">Reset Code</label>
-                    </div>
-                  </div>
-
-                  <div v-if="codeSent" class="exchange centerdiv">
-                    <div>
-                      <img
-                        class="prefix-icon"
-                        src="~/assets/img/right-arrow.png"
-                        alt=""
-                      />
-                      <input
-                        v-if="!viewPassword"
-                        id="pin"
-                        v-model="password"
-                        maxlength="4"
-                        type="password"
-                        placeholder="Your New 4 Digit PIN"
-                        @keydown="enforceNumbersOnly($event)"
-                      />
-                      <input
-                        v-if="viewPassword"
-                        id="pin-text"
-                        v-model="password"
-                        type="text"
-                        maxlength="4"
-                        placeholder="Your New 4 Digit PIN"
-                        @keydown="enforceNumbersOnly($event)"
-                      />
-                      <label for="pin">PIN</label>
-                      <img
-                        class="suffix-icon suffix password-toggle-switch"
-                        src="~/assets/img/view.png"
-                        alt=""
-                        @click="toggleViewPassword()"
-                      />
-                      <div class="exchange--dropdown"></div>
-                    </div>
-                  </div>
-
-                  <div
-                    v-if="!codeSent"
-                    class="text-center mt-20 sub--btn--holder"
-                  >
-                    <div class="sub-button mt-20">
-                      <button
-                        v-if="!processing"
-                        class="w-100"
-                        @click="requestReset()"
-                      >
-                        Request PIN Reset
-                      </button>
-                      <button v-if="processing" disabled class="w-100">
-                        Requesting reset...
-                      </button>
-                    </div>
-                  </div>
-
-                  <div
-                    v-if="codeSent"
-                    class="text-center mt-20 sub--btn--holder"
-                  >
-                    <div class="sub-button mt-20">
-                      <button
-                        v-if="!processing"
-                        class="w-100"
-                        @click="resetPassword()"
-                      >
-                        Reset PIN
-                      </button>
-                      <button v-if="processing" disabled class="w-100">
-                        Resetting PIN...
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="text-center mt-20">
-                    <nuxt-link to="/signup"
-                      ><p class="authhint">
-                        New to PayAfrik?
-                        <span class="reset-color">Sign Up</span>
-                      </p></nuxt-link
-                    >
-                  </div>
-                </div>
-              </form>
-            </div>
+  <div class="w-100">
+    <form class="w-100">
+      <div class="w-100">
+        <div class="welcome-text">
+          <div class="text-center">
+            <p class="w-100 c-white">Reset your PIN</p>
+            <!-- <h1 class="w-100 c-white am-type mt-0 mb-50">
+                  PayAfrik Dashboard
+                </h1> -->
           </div>
         </div>
-      </section>
-    </main>
-  </section>
+
+        <div class="exchange centerdiv">
+          <div style="margin-bottom: 16px" class="phoneNum">
+            <a-input
+              id="pnum"
+              v-model="username"
+              default-value="mysite"
+              placeholder="Phone Number"
+              type="text"
+            >
+              <a-select
+                slot="addonBefore"
+                v-model="country4Code"
+                placeholder="country"
+                :default-value="countryCodes[0].name"
+                style="width: 90px"
+                show-search
+                option-filter-prop="children"
+                :filter-option="filterOption"
+                @focus="handleFocus"
+                @blur="handleBlur"
+                @change="handleChange"
+              >
+                <a-select-option
+                  v-for="country in countryCodes"
+                  :key="country.name"
+                >
+                  {{ country.name }}
+                </a-select-option>
+              </a-select>
+              <img
+                v-if="selectedCountry.flag"
+                slot="addonAfter"
+                :src="selectedCountry.flag"
+                alt="flag"
+              />
+            </a-input>
+            <div class="prefixNum">{{ selectedCountry.number }}</div>
+            <label for="pnum">Phone Number</label>
+          </div>
+        </div>
+        <div v-if="codeSent" class="exchange centerdiv mb-3">
+          <div>
+            <img
+              class="prefix-icon"
+              src="~/assets/img/right-arrow.png"
+              alt=""
+            />
+            <input
+              id="reset-code"
+              v-model="resetCode"
+              type="text"
+              placeholder="Code sent to your phone"
+            />
+
+            <label for="pin">Reset Code</label>
+          </div>
+        </div>
+
+        <div v-if="codeSent" class="exchange centerdiv">
+          <div>
+            <img
+              class="prefix-icon"
+              src="~/assets/img/right-arrow.png"
+              alt=""
+            />
+            <input
+              v-if="!viewPassword"
+              id="pin"
+              v-model="password"
+              maxlength="4"
+              type="password"
+              placeholder="Your New 4 Digit PIN"
+              @keydown="enforceNumbersOnly($event)"
+            />
+            <input
+              v-if="viewPassword"
+              id="pin-text"
+              v-model="password"
+              type="text"
+              maxlength="4"
+              placeholder="Your New 4 Digit PIN"
+              @keydown="enforceNumbersOnly($event)"
+            />
+            <label for="pin">PIN</label>
+            <img
+              class="suffix-icon suffix password-toggle-switch"
+              src="~/assets/img/view.png"
+              alt=""
+              @click="toggleViewPassword()"
+            />
+            <div class="exchange--dropdown"></div>
+          </div>
+        </div>
+
+        <div v-if="!codeSent" class="text-center mt-20 sub--btn--holder">
+          <div class="sub-button mt-20">
+            <button
+              v-if="!processing"
+              :disabled="processing"
+              class="w-100"
+              @click="requestReset"
+            >
+              Request<span v-if="processing">ing</span> PIN Reset
+            </button>
+          </div>
+        </div>
+
+        <div v-if="codeSent" class="text-center mt-20 sub--btn--holder">
+          <div class="sub-button mt-20">
+            <button
+              class="w-100"
+              :disabled="processing"
+              @click="resetPassword()"
+            >
+              Reset<span v-if="processing">ting</span> PIN
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center mt-20">
+          <nuxt-link to="/signup"
+            ><p class="authhint">
+              New to PayAfrik?
+              <span class="reset-color">Sign Up</span>
+            </p></nuxt-link
+          >
+        </div>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
+
   export default {
     components: {},
+    layout: 'auth',
+    middleware: 'guest',
+    auth: false,
     data() {
       return {
+        country4Code: 'Albania',
+        selectedCountry: {},
         username: '',
         password: '',
         processing: false,
@@ -162,13 +165,37 @@
         resetCode: '',
       }
     },
+    computed: mapGetters({
+      countryCodes: 'countryCodes',
+    }),
+    mounted() {
+      this.confirmationStatus = this.$route.query.confirmation
+    },
     methods: {
+      handleChange(value) {
+        this.selectedCountry = this.countryCodes.filter((country) => {
+          return country.name === value
+        })[0]
+      },
+      handleBlur() {
+        console.log('blur')
+      },
+      handleFocus() {
+        console.log('focus')
+      },
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text
+          .toLowerCase()
+          .includes(input.toLowerCase())
+      },
       toggleViewPassword() {
         this.viewPassword = !this.viewPassword
       },
       async requestReset() {
         const payload = {
-          username: this.username,
+          username: `${this.selectedCountry.number}${
+            this.username[0] === '0' ? this.username.slice(1) : this.username
+          }`,
         }
         this.processing = true
         try {
@@ -189,16 +216,10 @@
         }
       },
       async resetPassword() {
-        let username = ''
-
-        if (this.username.charAt(0) === '+') {
-          username = this.username.substr(1)
-        } else {
-          username = this.username
-        }
-
         const payload = {
-          username,
+          username: `${this.selectedCountry.number}${
+            this.username[0] === '0' ? this.username.slice(1) : this.username
+          }`,
           nonce: this.resetCode,
           password: this.password,
         }
@@ -212,7 +233,7 @@
           console.log(resetResponse)
           this.$toast.success('Password reset successfully!')
           // this.authenticate(signInResponse)
-          this.$router.push('/login')
+          await this.$router.push('/auth/login')
           this.processing = false
         } catch (e) {
           this.$toast.error(JSON.stringify(e.response.data.error))
@@ -242,9 +263,6 @@
       ...mapMutations({
         toggleSidebar: 'global/authenticateUser',
       }),
-    },
-    mounted() {
-      this.confirmationStatus = this.$route.query.confirmation
     },
   }
 </script>

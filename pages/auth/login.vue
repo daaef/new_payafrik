@@ -55,7 +55,7 @@
           <label for="pin">PIN</label>
         </div>
       </div>
-      <nuxt-link to="/password-reset">
+      <nuxt-link to="/auth/password-reset">
         <p class="authhint">
           Forgot Password?
           <span class="reset-color">Reset</span>
@@ -67,16 +67,13 @@
       </p>
       <div class="text-center mt-8 sub--btn--holder">
         <div class="sub-button mt-8">
-          <button v-if="!processing" class="w-100" @click="signIn($event)">
-            Log In
-          </button>
-          <button v-if="processing" disabled class="w-100">
-            Logging in...
+          <button :disabled="processing" class="w-100" @click="signIn($event)">
+            Log<span v-if="processing">ging</span> In
           </button>
         </div>
       </div>
       <div class="text-center mt-12">
-        <nuxt-link to="/signup"
+        <nuxt-link to="/auth/signup"
           ><p class="authhint">
             New to PayAfrik?
             <span class="reset-color">Sign Up</span>

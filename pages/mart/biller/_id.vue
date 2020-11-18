@@ -489,7 +489,7 @@
         Object.entries(this.activeBiller).length === 0 &&
         this.activeBiller.constructor === Object
       ) {
-        this.$router.push('../')
+        this.$router.push('/mart')
       }
     },
     mounted() {
