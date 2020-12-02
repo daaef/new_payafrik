@@ -1,5 +1,6 @@
 export const state = () => ({
   myUserDetails: {},
+  banks: [],
   btcPrices: [],
   ethPrices: [],
   ltcPrices: [],
@@ -84,6 +85,9 @@ export const mutations = {
   loadDashChartData(state, data) {
     // console.log('dash chart data', data)
     state.dashChartData = data
+  },
+  setBanks(state, bank) {
+    state.banks = bank
   },
 }
 export const actions = {
@@ -378,5 +382,8 @@ export const getters = {
   },
   dashPrice(state) {
     return state.dashData.current_price
+  },
+  banks(state) {
+    return state.banks
   },
 }

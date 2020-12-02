@@ -93,13 +93,18 @@
     middleware: 'guest',
     data() {
       return {
-        country4Code: 'Albania',
+        country4Code: 'Nigeria',
         username: '',
         password: '',
         processing: false,
         confirmationStatus: 'false',
         viewPassword: false,
-        selectedCountry: {},
+        selectedCountry: {
+          name: 'Nigeria',
+          flag:
+            'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+          number: '234',
+        },
       }
     },
     methods: {

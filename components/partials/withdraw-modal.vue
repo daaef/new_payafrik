@@ -134,5 +134,17 @@
         profileModalActive: 'profileModalActive',
       }),
     },
+    async mounted() {
+      const headers = {
+        'Content-Type': 'application/json',
+        'pfk-user-token': this.$auth.getToken('local'),
+      }
+
+      const myBanks = await this.$axios.$get(
+        'https://payafrik.immanuel.com.ng/v1/api/flutterwave/banks/NG',
+        { headers }
+      )
+      await this.$store.commit('chart/setBanks', myBanks)
+    },
   }
 </script>

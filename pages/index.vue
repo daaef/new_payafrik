@@ -192,15 +192,20 @@
           <table>
             <thead>
               <tr>
-                <th class="text-left"><span>TYPE</span></th>
-                <th>AMOUNT</th>
+                <th class="text-left"><span>TRANSACTION</span></th>
+                <th>DATE</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              <tr v-for="transaction of transfers" :key="transaction.id">
+                <td>
+                  <strong>{{ +transaction.sent_amount }}</strong> tokens to
+                  {{ transaction.receiver }}
+                </td>
+                <td>{{ new Date(transaction.created).toDateString() }}</td>
+              </tr>
+            </tbody>
           </table>
-          <div class="no-trans">
-            <p class="c-white">No Transactions</p>
-          </div>
         </div>
       </div>
     </div>
@@ -213,7 +218,28 @@
   let dashChartData */
   export default {
     data() {
-      return { width: 1000 }
+      return {
+        width: 1000,
+        baseUrl: process.env.baseUrl,
+        interswitchBaseUrl: process.env.interswitchBaseUrl,
+        loadingPurchases: false,
+        loadingTransfers: false,
+        nextPageUrl: '',
+        previousPageUrl: '',
+        transfersPagination: {
+          page: 1,
+          itemsPerPage: 10,
+          totalRecords: 0,
+        },
+        transfers: [],
+        purchases: [],
+        filters: {
+          minDate: '',
+          maxDate: '',
+          receiver: '',
+          transactionStatus: '',
+        },
+      }
     },
     computed: {
       userDetails() {
@@ -248,10 +274,47 @@
         loading: 'dataLoading',
       }),
     },
+    beforeMount() {
+      this.getUserTransactions(this.baseUrl + 'transactions/transactions')
+    },
     methods: {
       ...mapMutations({
         toggleChatBox: 'toggleChatBox',
       }),
+      async getUserTransactions(url) {
+        this.transfers = []
+        this.loadingTransfers = true
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: this.$auth.getToken('local'),
+        }
+
+        try {
+          const userTransactionsResponse = await this.$axios.$get(url, {
+            headers,
+          })
+          console.log('User transactions ==>', userTransactionsResponse)
+
+          if (
+            this.transfersPagination.itemsPerPage >
+            userTransactionsResponse.count
+          ) {
+            this.transfersPagination.itemsPerPage =
+              userTransactionsResponse.count
+          }
+
+          this.nextPageUrl = userTransactionsResponse.next
+          this.previousPageUrl = userTransactionsResponse.previous
+
+          this.transfersPagination.totalRecords = userTransactionsResponse.count
+          this.transfers = userTransactionsResponse.results
+          this.loadingTransfers = false
+        } catch (e) {
+          this.$toast.error(e.response.data.detail)
+          console.log(e.response.data.detail)
+          this.loadingTransfers = false
+        }
+      },
       async getBTCChartData(period) {
         const dDate = Math.floor(
           this.$moment().subtract(period, 'days').format('x') / 1000

@@ -153,8 +153,13 @@
     auth: false,
     data() {
       return {
-        country4Code: 'Albania',
-        selectedCountry: {},
+        country4Code: 'Nigeria',
+        selectedCountry: {
+          name: 'Nigeria',
+          flag:
+            'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+          number: '234',
+        },
         username: '',
         password: '',
         processing: false,

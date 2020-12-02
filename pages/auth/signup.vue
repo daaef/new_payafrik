@@ -72,7 +72,7 @@
           <a-input-password
             id="pin"
             ref="userNameInput"
-            v-model="password"
+            v-model.number="password"
             placeholder="Basic usage"
           >
             <a-icon slot="prefix" type="lock" />
@@ -121,9 +121,14 @@
     components: {},
     data() {
       return {
-        country4Code: 'Albania',
+        country4Code: 'Nigeria',
         password: '',
-        selectedCountry: {},
+        selectedCountry: {
+          name: 'Nigeria',
+          flag:
+            'https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg',
+          number: '234',
+        },
         email: '',
         firstName: '',
         lastName: '',
@@ -150,9 +155,6 @@
     computed: mapGetters({
       countryCodes: 'countryCodes',
     }),
-    mounted() {
-      console.log(this.countryCodes)
-    },
     methods: {
       handleChange(value) {
         this.selectedCountry = this.countryCodes.filter((country) => {
@@ -188,8 +190,9 @@
         this.viewPassword = !this.viewPassword
       },
       calculatePasswordStrength() {
+        console.log('calculating...')
         let points = 0
-        if (this.password1.length > 0) {
+        if (this.password.length > 0) {
           this.charAdded = true
         } else {
           this.charAdded = false
@@ -197,15 +200,15 @@
           points = 0
         }
         const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
-        if (format.test(this.password1)) {
+        if (format.test(this.password)) {
           points += 20
         }
 
         // check for number and caps
         let i = 0
         let character = ''
-        while (i <= this.password1.length) {
-          character = this.password1.charAt(i)
+        while (i <= this.password.length) {
+          character = this.password.charAt(i)
           if (!isNaN(character * 1)) {
             points += 10
           } else if (character === character.toUpperCase()) {
@@ -213,16 +216,16 @@
           }
           i++
         }
-        if (this.password1.length > 8) {
+        if (this.password.length > 8) {
           points += 20
         }
 
         // assign class
-        if (this.password1.length > 8 && points < 30) {
+        if (this.password.length > 8 && points < 30) {
           this.strengthClass = 'weak'
-        } else if (this.password1.length > 8 && points > 30 && points < 75) {
+        } else if (this.password.length > 8 && points > 30 && points < 75) {
           this.strengthClass = 'medium'
-        } else if (this.password1.length > 8 && points > 75) {
+        } else if (this.password.length > 8 && points > 75) {
           this.strengthClass = 'strong'
         }
         this.passwordScore = points + '%'
