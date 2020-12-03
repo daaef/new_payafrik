@@ -4,7 +4,7 @@
       <div class="balance">
         <img src="~/assets/img//logo.png" class="mobile-logo" alt="logo" />
         <span>AfriToken:</span>
-        <h3>{{ userDetails.balance }}</h3>
+        <h3>{{ userDetails.balance | doubleForm }}</h3>
       </div>
       <ul class="nav-links">
         <li class="mr-32">

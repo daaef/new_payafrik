@@ -1504,7 +1504,7 @@ export const actions = {
     await console.log('in nuxt Server init')
     await console.log(this.$auth.$state)
     await dispatch('chart/getCoinData')
-    await dispatch('getBanks')
+    // await dispatch('getBanks')
   },
   async getCoinData({ commit, dispatch, state }) {
     console.log('running getcoin data')
@@ -1685,6 +1685,9 @@ export const getters = {
   },
   activeCurrency(state) {
     return state.activeCurrency
+  },
+  activeBiller(state) {
+    return state.activeBiller
   },
   sidebarClosed(state) {
     return state.sidebarClosed

@@ -49,10 +49,10 @@
     </div>
     <ul class="main-links">
       <li>
-        <a href="#">
+        <nuxt-link to="/support">
           <img class="mr-20" src="~/assets/img//chat.png" alt="" />
           Support
-        </a>
+        </nuxt-link>
       </li>
       <li>
         <a href="#" @click="$auth.logout()">

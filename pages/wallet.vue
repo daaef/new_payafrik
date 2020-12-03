@@ -9,10 +9,22 @@
         </div>
       </div>
       <div :class="[{ 'pl-0': $device.isMobileOrTablet }, 'summary__chart']">
+        <div
+          v-if="
+            +userDetails.balance !== 0 ||
+            +userDetails.btc_balance !== 0 ||
+            +userDetails.eth_balance !== 0
+          "
+          class="balances"
+        >
+          <h3>{{ +userDetails.balance | exchangeFilter }} AFK</h3>
+          <h3>{{ +userDetails.btc_balance | exchangeFilter }} BTC</h3>
+          <h3>{{ +userDetails.eth_balance | exchangeFilter }} ETH</h3>
+        </div>
         <highchart
           v-if="
-            +userDetails.afk_balance !== 0 &&
-            +userDetails.btc_balance !== 0 &&
+            +userDetails.balance !== 0 ||
+            +userDetails.btc_balance !== 0 ||
             +userDetails.eth_balance !== 0
           "
           :options="{
@@ -43,7 +55,8 @@
                 borderWidth: 1,
                 dataLabels: {
                   enabled: false,
-                  format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                  format:
+                    '<b class=\'balance--pointer\'>{point.name}</b>: {point.percentage:.1f} %',
                   connectorColor: 'silver',
                 },
               },
@@ -53,7 +66,7 @@
                 innerSize: '95%',
                 name: 'balance',
                 data: [
-                  { name: 'AfriToken Balance', y: +userDetails.afk_balance },
+                  { name: 'AfriToken Balance', y: +userDetails.balance },
                   { name: 'Bitcoin Balance', y: +userDetails.btc_balance },
                   { name: 'Ethereum Balance', y: +userDetails.eth_balance },
                 ],
@@ -428,6 +441,17 @@
   .welcome-text,
   .summary__chart {
     padding-left: 115px;
+    position: relative;
+
+    .balances {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-15%, -50%);
+      h3 {
+        color: #fafafa;
+      }
+    }
   }
   #buyCryptoModal {
     display: none;
@@ -581,5 +605,9 @@
     .ltc-wallet {
       margin: auto;
     }
+  }
+
+  .balance--pointer {
+    font-size: 20px;
   }
 </style>

@@ -76,205 +76,140 @@
        </div> -->
 
     <!-- Purchase Modal -->
-    <div
-      id="purchaseModal"
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="purchaseModal"
-      aria-hidden="true"
+
+    <a-modal
+      :visible="purchaseModal"
+      :confirm-loading="makingPayment"
+      centered
+      @cancel="purchaseModal = false"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div v-if="!paymentSuccess && !paymentFailed" class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Pay for <strong>{{ activeItem.paymentitemname }}</strong>
-            </h5>
-            <button
-              type="button"
-              class="close"
-              @click="closeModal('purchaseModal')"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12">
-                  <label>Phone number</label>
-                  <input
-                    v-model="paymentDetails.phone"
-                    type="text"
-                    placeholder="Your phone number"
-                    :class="formErrors.emailError === true ? 'has-error' : ''"
-                  />
-                </div>
-                <div class="col-md-12">
-                  <label>Email Address</label>
-                  <input
-                    v-model="paymentDetails.email"
-                    type="email"
-                    placeholder="Your email address"
-                    :class="formErrors.emailError === true ? 'has-error' : ''"
-                  />
-                </div>
-                <div class="col-md-12">
-                  <label
-                    >Beneficiary:
-                    <strong class="text-uppercase">{{
-                      activeBiller.customerfield1
-                    }}</strong></label
-                  >
-                  <input
-                    v-model="paymentDetails.customerId"
-                    type="text"
-                    placeholder="Unique customer id for this product"
-                    :class="formErrors.emailError === true ? 'has-error' : ''"
-                  />
-                </div>
-                <div class="col-md-12">
-                  <label>Amount</label>
-                  <input
-                    v-model="paymentDetails.amount"
-                    type="number"
-                    :disabled="activeItem.fixed"
-                    placeholder="Payment amount"
-                    :class="formErrors.emailError === true ? 'has-error' : ''"
-                  />
-                </div>
-                <!-- <div class="col-md-12" v-if="activeBiller.customerfield2 !== ''">
-                                    <label><strong>{{activeBiller.customerfield2}}</strong></label>
-                                    <input type="text" placeholder="Your assigned import code" v-bind:class="formErrors.emailError === true ? 'has-error' : ''">
-                                </div> -->
+      <template slot="title">
+        <h3 class="c-white">
+          Payment
+          <span v-if="!paymentSuccess && !paymentFailed"
+            >for {{ activeItem.paymentitemname }}</span
+          >
+          <span v-if="paymentSuccess">Successful!</span>
+          <span v-if="paymentFailed">Failed!</span>
+        </h3>
+      </template>
+      <transition name="appear" mode="in-out">
+        <div v-if="!paymentSuccess && !paymentFailed">
+          <form class="w-100 mt-20 request--card" action="">
+            <div>
+              <div class="mt-12">
+                <input
+                  id="fname"
+                  v-model="paymentDetails.phone"
+                  type="number"
+                  placeholder="Your Phone Number"
+                />
+                <label for="fname"
+                  >Phone <span class="c-white">number</span></label
+                >
+              </div>
+              <div class="mt-12">
+                <input
+                  id="lname"
+                  v-model="paymentDetails.email"
+                  type="email"
+                  placeholder="Your email address"
+                />
+                <label for="lname"
+                  >Email <span class="c-white">Address</span></label
+                >
+              </div>
+              <div class="mt-12">
+                <input
+                  id="add1"
+                  v-model="paymentDetails.customerId"
+                  type="text"
+                  placeholder="Address Line 1"
+                />
+                <label for="add1">
+                  Beneficiary:
+                  <span class="c-white">
+                    <strong class="text-uppercase">
+                      {{ activeBiller.customerfield1 }}
+                    </strong>
+                  </span>
+                </label>
+              </div>
+              <div class="mt-12">
+                <input
+                  id="add2"
+                  v-model="paymentDetails.amount"
+                  type="number"
+                  :disabled="activeItem.fixed"
+                  placeholder="Address Line 2"
+                />
+                <label for="add2"> Amount </label>
               </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-4 offset-md-2">
-                  <button
-                    type="button"
-                    class="greyed-btn"
-                    @click="closeModal('purchaseModal')"
-                  >
-                    Cancel
-                  </button>
-                </div>
-                <div class="col-md-6">
-                  <button
-                    v-if="!makingPayment"
-                    class="success-btn"
-                    type="button"
-                    @click="checkTokenBalance()"
-                  >
-                    Make Payment
-                  </button>
-                  <!-- <button class="success-btn" v-if="!importingWallet" @click="importWallet" type="button">Import</button> -->
-                  <button
-                    v-if="makingPayment"
-                    class="success-btn w-100"
-                    disabled
-                  >
-                    <i class="fa fa-circle-notch fa-spin"></i>
-                  </button>
-                </div>
+          </form>
+        </div>
+        <div v-if="paymentSuccess">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <img
+                  src="https://img.icons8.com/color/80/000000/checked--v1.png"
+                />
+                <h6 class="success mt-2">Transaction Successful</h6>
+                <p class="mt-2">
+                  Transaction Reference:
+                  <strong>{{ pfkTransactionRef }}</strong>
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div v-if="paymentSuccess" class="modal-content animated fadeInUp">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Payment Sucessful
-            </h5>
-            <button
-              type="button"
-              class="close"
-              @click="closeModal('purchaseModal')"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12 text-center">
-                  <img
-                    src="https://img.icons8.com/color/80/000000/checked--v1.png"
-                  />
-                  <h6 class="success mt-2">Transaction Successful</h6>
-                  <p class="mt-2">
-                    Transaction Reference:
-                    <strong>{{ pfkTransactionRef }}</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-4 offset-md-8">
-                  <button
-                    type="button"
-                    class="greyed-btn"
-                    @click="closeModal('purchaseModal')"
-                  >
-                    Close
-                  </button>
-                </div>
+        <div v-if="paymentFailed">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <img src="https://img.icons8.com/office/80/000000/cancel.png" />
+                <h6 class="failed mt-2">Transaction Failed</h6>
+                <p class="mt-2">
+                  Transaction Reference: <strong>12345678</strong>
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div v-if="paymentFailed" class="modal-content animated shake">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Payment Failed
-            </h5>
-            <button
-              type="button"
-              class="close"
-              @click="closeModal('purchaseModal')"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-12 text-center">
-                  <img
-                    src="https://img.icons8.com/office/80/000000/cancel.png"
-                  />
-                  <h6 class="failed mt-2">Transaction Failed</h6>
-                  <p class="mt-2">
-                    Transaction Reference: <strong>12345678</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-4 offset-md-8">
-                  <button
-                    type="button"
-                    class="greyed-btn"
-                    @click="closeModal('purchaseModal')"
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      </transition>
+      <template slot="footer">
+        <button
+          v-if="!paymentSuccess && !paymentFailed"
+          key="submit"
+          class="w-100 inter__btn"
+          type="submit"
+          @click="checkTokenBalance"
+        >
+          <span v-if="makingPayment" class="mr-8">
+            <a-spin>
+              <a-icon
+                slot="indicator"
+                type="loading"
+                style="font-size: 24px; color: #1c27be"
+                spin
+              />
+            </a-spin>
+          </span>
+          MAKE PAYMENT
+        </button>
+        <button
+          v-if="paymentSuccess || paymentFailed"
+          key="submit"
+          class="w-100 inter__btn"
+          type="submit"
+          @click="checkTokenBalance"
+        >
+          CLOSE
+        </button>
+      </template>
+    </a-modal>
+    <!-- Purchase Modal -->
   </section>
 </template>
 
@@ -296,6 +231,7 @@
         paymentDetails: {},
         paymentSuccess: false,
         paymentFailed: false,
+        purchaseModal: false,
         pfkTransactionRef: '',
       }
     },
@@ -308,14 +244,41 @@
         activeCurrency: 'activeCurrency',
       }),
     },
+    beforeMount() {
+      this.getBillersItems()
+      this.closeModal('purchaseModal')
+      if (
+        Object.entries(this.activeBiller).length === 0 &&
+        this.activeBiller.constructor === Object
+      ) {
+        this.$router.push('/mart')
+      }
+    },
+    mounted() {
+      // set initial values for phone and email
+      this.paymentDetails = {
+        phone: this.userDetails.phone,
+        email: this.userDetails.email,
+      }
+    },
     methods: {
+      handleChange(value) {
+        console.log(value)
+      },
+      handleBlur() {
+        console.log('blur')
+      },
+      handleFocus() {
+        console.log('focus')
+      },
       openModal(modalId, item) {
         if (item.amount !== '0') {
           this.paymentDetails.amount = +item.amount / 100
           item.fixed = true
         }
-        /* this.activeItem = item
-        $('#' + modalId).modal('show')
+        this.activeItem = item
+        this.purchaseModal = true
+        /*  $('#' + modalId).modal('show')
         $('.modal-backdrop').hide() */
       },
       closeModal(modalId) {
@@ -366,7 +329,7 @@
         // console.log('usertokenbalance: ', this.userDetails.balance);
         // console.log('paymentamount: ', this.paymentDetails.amount);
 
-        if (this.paymentDetails.amount > this.userDetails.balance) {
+        if (+this.paymentDetails.amount > +this.userDetails.balance) {
           this.$toast.error(
             'Sorry, you do not have enough tokens to purchase this item'
           )
@@ -482,23 +445,6 @@
         }
       },
     },
-    beforeMount() {
-      this.getBillersItems()
-      this.closeModal('purchaseModal')
-      if (
-        Object.entries(this.activeBiller).length === 0 &&
-        this.activeBiller.constructor === Object
-      ) {
-        this.$router.push('/mart')
-      }
-    },
-    mounted() {
-      // set initial values for phone and email
-      this.paymentDetails = {
-        phone: this.userDetails.phone,
-        email: this.userDetails.email,
-      }
-    },
   }
 </script>
 
@@ -506,6 +452,10 @@
   .md-title h6 {
     color: #332c2c;
     font-weight: 500;
+  }
+
+  .card-links li {
+    padding: 10px;
   }
   .modal-title {
     font-size: 1.2em;
@@ -541,10 +491,9 @@
   }
 
   input {
-    padding: 20px;
     color: #ffffff99;
-    background: #111a3f;
-    border: solid 0;
+    border: solid 2px #3341ff;
+    padding-left: 15px;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
     width: 100%;

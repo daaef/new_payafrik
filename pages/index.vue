@@ -9,7 +9,7 @@
       </div>
       <ul class="card-links">
         <li class="link-card">
-          <a href="#">
+          <nuxt-link to="/mart">
             <div class="imge">
               <img src="~/assets/img/purse.png" alt="purse" />
             </div>
@@ -17,10 +17,10 @@
               Manage your wallets &amp; make transactions
             </p>
             <p class="higlight text-center">Make Transactions</p>
-          </a>
+          </nuxt-link>
         </li>
         <li class="link-card">
-          <a href="#">
+          <nuxt-link to="/mart">
             <div class="imge">
               <img src="~/assets/img/bills.png" alt="purse" />
             </div>
@@ -28,10 +28,10 @@
               Pay your bills for utilities &amp; services
             </p>
             <p class="higlight text-center">Pay Bills</p>
-          </a>
+          </nuxt-link>
         </li>
         <li class="link-card">
-          <a href="#">
+          <nuxt-link to="/exchange">
             <div class="imge">
               <img src="~/assets/img/exchange.png" alt="purse" />
             </div>
@@ -39,10 +39,10 @@
               Exchange your cryptocurrencies with ease
             </p>
             <p class="higlight text-center">Exchange</p>
-          </a>
+          </nuxt-link>
         </li>
         <li class="link-card">
-          <a href="#">
+          <nuxt-link to="/support">
             <div class="imge">
               <img src="~/assets/img/supporting.png" alt="purse" />
             </div>
@@ -50,7 +50,7 @@
               Get professional support &amp; quality customer care
             </p>
             <p class="higlight text-center">Support</p>
-          </a>
+          </nuxt-link>
         </li>
       </ul>
       <div class="wallets--and--transactions">

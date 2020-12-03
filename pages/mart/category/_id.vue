@@ -97,7 +97,6 @@
         billers: [],
       }
     },
-    computed: {},
     beforeMount() {
       this.getCategoryBillers()
     },
