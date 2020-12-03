@@ -203,7 +203,7 @@
           key="submit"
           class="w-100 inter__btn"
           type="submit"
-          @click="checkTokenBalance"
+          @click="purchaseModal = false"
         >
           CLOSE
         </button>
