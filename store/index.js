@@ -1502,7 +1502,7 @@ export const mutations = {
 export const actions = {
   async nuxtServerInit({ commit, dispatch, redirect }, { req }) {
     await console.log('in nuxt Server init')
-    await console.log(this.$auth.$state)
+    await console.log('user is', this.$auth.$state)
     await dispatch('chart/getCoinData')
     // await dispatch('getBanks')
   },

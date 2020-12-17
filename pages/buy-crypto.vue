@@ -2,193 +2,61 @@
   <div class="dash-body">
     <div class="container">
       <div class="row">
-        <div class="col-md-10 mr-auto ml-auto">
+        <div class="col-md-10 mr-auto align--middle ml-auto">
           <div class="w-100">
             <form>
               <div class="exchange">
                 <span class="muted mt-5 mb-2 d-block"
                   >Select currency to buy</span
                 >
-                <div class="dropdown coin-options">
-                  <a
-                    v-if="toCurrency === 'AFK'"
-                    id="dropdownMenuButton"
-                    class="coin-option afk dropdown-toggle w-100"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img src="~/assets/img/Africoin.png" alt="" />
-                    <label for="exchange-afk"
-                      >AFK <span class="c-white">Africoin</span>
-                    </label>
-                    <span class="rate">{{ dollarRates.afk }}</span>
-                  </a>
-                  <a
-                    v-if="toCurrency === 'BTC'"
-                    id="dropdownMenuButton"
-                    class="coin-option btc dropdown-toggle w-100"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img src="~/assets/img/bitcoin.png" alt="" />
-                    <label for="exchange-btc"
-                      >BTC <span class="c-white">Bitcoin</span>
-                    </label>
-                    <span class="rate">{{ dollarRates.btc }}</span>
-                  </a>
-                  <a
-                    v-if="toCurrency === 'ETH'"
-                    id="dropdownMenuButton"
-                    class="coin-option eth dropdown-toggle w-100"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img src="~/assets/img/eth.png" alt="" />
-                    <label for="exchange-afk"
-                      >ETH <span class="c-white">Ethereum</span>
-                    </label>
-                    <span class="rate">{{ dollarRates.eth }}</span>
-                  </a>
-                  <a
-                    v-if="toCurrency === 'LTC'"
-                    id="dropdownMenuButton"
-                    class="coin-option eth dropdown-toggle w-100"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img
-                      src="~/assets/img/litecoin.png"
-                      style="width: 35px"
-                      alt=""
-                    />
-                    <label for="exchange-afk"
-                      >LTC <span class="c-white">Litecoin</span>
-                    </label>
-                    <span class="rate">{{ dollarRates.ltc }}</span>
-                  </a>
-                  <a
-                    v-if="toCurrency === 'DASH'"
-                    id="dropdownMenuButton"
-                    class="coin-option eth dropdown-toggle w-100"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    <img
-                      src="~/assets/img/dash.png"
-                      style="width: 35px"
-                      alt=""
-                    />
-                    <label for="exchange-afk"
-                      >DASH <span class="c-white">Dash</span>
-                    </label>
-                    <span class="rate">{{ dollarRates.dash }}</span>
-                  </a>
-                  <div
-                    class="dropdown-menu"
-                    aria-labelledby="dropdownMenuButton"
-                  >
-                    <a
-                      v-if="toCurrency !== 'AFK'"
-                      class="dropdown-item afk"
-                      @click="toCurrency = 'AFK'"
-                    >
-                      <img src="~/assets/img/Africoin.png" alt="" />
-                      <label>AFK <span class="c-white">Africoin</span></label>
-                      <span class="rate">{{ dollarRates.afk }}</span>
-                    </a>
-                    <a
-                      v-if="toCurrency !== 'BTC'"
-                      class="dropdown-item btc"
-                      @click="toCurrency = 'BTC'"
-                    >
-                      <img src="~/assets/img/bitcoin.png" alt="" />
-                      <label for="exchange-afk"
-                        >BTC <span class="c-white">Bitcoin</span></label
-                      >
-                      <span class="rate">{{ dollarRates.btc }}</span>
-                    </a>
-                    <a
-                      v-if="toCurrency !== 'ETH'"
-                      class="dropdown-item eth"
-                      @click="toCurrency = 'ETH'"
-                    >
-                      <img src="~/assets/img/eth.png" alt="" />
-                      <label for="exchange-afk"
-                        >ETH <span class="c-white">Ethereum</span></label
-                      >
-                      <span class="rate">{{ dollarRates.eth }}</span>
-                    </a>
-                    <a
-                      v-if="toCurrency !== 'LTC'"
-                      class="dropdown-item eth"
-                      @click="toCurrency = 'LTC'"
-                    >
-                      <img
-                        src="~/assets/img/litecoin.png"
-                        style="width: 35px"
-                        alt=""
-                      />
-                      <label for="exchange-afk"
-                        >LTC <span class="c-white">Litecoin</span></label
-                      >
-                      <span class="rate">{{ dollarRates.ltc }}</span>
-                    </a>
-                    <a
-                      v-if="toCurrency !== 'DASH'"
-                      class="dropdown-item eth"
-                      @click="toCurrency = 'DASH'"
-                    >
-                      <img
-                        src="~/assets/img/dash.png"
-                        style="width: 35px"
-                        alt=""
-                      />
-                      <label for="exchange-afk"
-                        >DASH <span class="c-white">Dash</span></label
-                      >
-                      <span class="rate">{{ dollarRates.dash }}</span>
-                    </a>
-                  </div>
-                </div>
 
+                <div class="relative custom--select">
+                  <label :class="[crypClass, 'token_modal']" for="currency">
+                    {{ cryptoCurrency }}
+                  </label>
+                  <div class="prefix-img">
+                    <img :src="selImg" alt="" />
+                  </div>
+                  <a-select
+                    id="currency"
+                    v-model="fromCurrency"
+                    :class="dataClass"
+                    style="width: 120px"
+                    :show-arrow="false"
+                    @change="handleChange"
+                    @select="handleSelect"
+                  >
+                    <a-select-option
+                      v-for="myAsset in data"
+                      :key="myAsset.key"
+                      :value="myAsset.currency"
+                    >
+                      <span class="mr-12"
+                        >$ {{ +myAsset.price | doubleForm }}</span
+                      >
+                      <span
+                        >Balance: {{ +myAsset.balance | doubleForm }}
+                        <span :class="myAsset.currClass">{{
+                          myAsset.currency
+                        }}</span></span
+                      >
+                    </a-select-option>
+                  </a-select>
+                </div>
                 <div class="line--input mt-5 mb-4">
                   <span class="muted mb-2 d-block">How much do you need?</span>
                   <input
                     v-model="exchangeAmount"
                     type="number"
-                    :class="{
-                      'c-btc': toCurrency === 'BTC',
-                      'c-afk': toCurrency === 'AFK',
-                      'c-eth': toCurrency === 'ETH',
-                      'c-ltc': toCurrency === 'LTC',
-                      'c-dash': toCurrency === 'DASH',
-                    }"
+                    :class="crypClass"
                     placeholder="0.00"
-                    @keyup="checkKeyPress($event)"
                   />
-                  <span class="wallet--name">{{ toCurrency }}</span>
+                  <span class="wallet--name">{{ fromCurrency }}</span>
                 </div>
 
                 <div class="sending--amnt flex flex-between">
-                  <span v-if="toCurrency === 'AFK'" class="amount c-white">{{
-                    (exchangeAmount * afkDollarRate) | formatNumber
-                  }}</span>
-                  <span v-if="toCurrency === 'BTC'" class="amount c-white">{{
-                    (exchangeAmount * btcData.current_price) | formatNumber
-                  }}</span>
-                  <span v-if="toCurrency === 'ETH'" class="amount c-white">{{
-                    (exchangeAmount * ethData.current_price) | formatNumber
-                  }}</span>
-                  <span v-if="toCurrency === 'LTC'" class="amount c-white">{{
-                    (exchangeAmount * litecoinData.current_price) | formatNumber
-                  }}</span>
-                  <span v-if="toCurrency === 'DASH'" class="amount c-white">{{
-                    (exchangeAmount * dashData.current_price) | formatNumber
+                  <span :class="crypClass">{{
+                    (exchangeAmount * exchangeRate) | formatNumber
                   }}</span>
                   <span class="currency c-white">USD</span>
                 </div>
@@ -202,78 +70,16 @@
             <div class="exchange--breakdown w-100">
               <div class="exchange-breakdown text-right">
                 <div class="mb-16">
-                  <img
-                    v-if="toCurrency === 'AFK'"
-                    src="~/assets/img/Africoin.png"
-                    height="50"
-                    alt=""
-                  />
-                  <img
-                    v-if="toCurrency === 'BTC'"
-                    src="~/assets/img/bitcoin.png"
-                    height="50"
-                    alt=""
-                  />
-                  <img
-                    v-if="toCurrency === 'ETH'"
-                    src="~/assets/img/eth.png"
-                    height="50"
-                    alt=""
-                  />
-                  <img
-                    v-if="toCurrency === 'LTC'"
-                    src="~/assets/img/litecoin.png"
-                    height="50"
-                    style="width: 35px"
-                    alt=""
-                  />
-                  <img
-                    v-if="toCurrency === 'DASH'"
-                    src="~/assets/img/dash.png"
-                    height="50"
-                    style="width: 35px"
-                    alt=""
-                  />
+                  <img :src="selImg" height="50" alt="" />
                 </div>
                 <div>
                   <span class="c-white mb-4 d-block">You are buying</span>
-                  <h6
-                    :class="{
-                      'c-btc': toCurrency === 'BTC',
-                      'c-afk': toCurrency === 'AFK',
-                      'c-eth': toCurrency === 'ETH',
-                      'c-ltc': toCurrency === 'LTC',
-                      'c-dash': toCurrency === 'DASH',
-                    }"
-                  >
-                    {{ exchangeAmount }} {{ toCurrency }}
-                  </h6>
+                  <h3 :class="crypClass">
+                    {{ exchangeAmount | formatNumber }} {{ toCurrency }}
+                  </h3>
                   <!-- <span class="small-text c-white">$0.00</span> -->
-                  <span v-if="toCurrency === 'AFK'" class="small-text c-white"
-                    >${{
-                      (exchangeAmount * afkDollarRate) | formatNumber
-                    }}</span
-                  >
-                  <span v-if="toCurrency === 'BTC'" class="small-text c-white"
-                    >${{
-                      (exchangeAmount * btcData.current_price) | formatNumber
-                    }}</span
-                  >
-                  <span v-if="toCurrency === 'ETH'" class="small-text c-white"
-                    >${{
-                      (exchangeAmount * ethData.current_price) | formatNumber
-                    }}</span
-                  >
-                  <span v-if="toCurrency === 'LTC'" class="small-text c-white"
-                    >${{
-                      (exchangeAmount * litecoinData.current_price)
-                        | formatNumber
-                    }}</span
-                  >
-                  <span v-if="toCurrency === 'DASH'" class="small-text c-white"
-                    >${{
-                      (exchangeAmount * dashData.current_price) | formatNumber
-                    }}</span
+                  <span class="small-text c-white"
+                    >${{ (exchangeAmount * exchangeRate) | formatNumber }}</span
                   >
                 </div>
               </div>
@@ -291,17 +97,7 @@
                 </div>
                 <div>
                   <span class="c-white mb-4 d-block">You will pay</span>
-                  <h6
-                    :class="{
-                      'c-btc': toCurrency === 'BTC',
-                      'c-afk': toCurrency === 'AFK',
-                      'c-eth': toCurrency === 'ETH',
-                      'c-ltc': toCurrency === 'LTC',
-                      'c-dash': toCurrency === 'DASH',
-                    }"
-                  >
-                    NGN {{ amountToPay }}
-                  </h6>
+                  <h3 :class="crypClass">₦{{ amountToPay | formatNumber }}</h3>
                 </div>
               </div>
             </div>
@@ -311,12 +107,13 @@
                   <button
                     v-if="!processing"
                     type="submit"
-                    @click="generateTransaction()"
+                    @click="generateTransaction"
                   >
                     BUY WITH CASH
                   </button>
                   <button v-if="processing" type="submit">
-                    <i class="fas fa-circle-notch fa-spin" />
+                    <a-spin />
+                    BUYING
                   </button>
                 </div>
 
@@ -372,24 +169,7 @@
                   </p>
 
                   <label>Amount due today:</label>
-                  <h2 class="warn">
-                    NGN {{ amountToPay }}
-                    <!-- <span v-if="toCurrency === 'AFK'">{{
-                      (exchangeAmount * nairaValues.afk) | formatNumber
-                    }}</span>
-                    <span v-if="toCurrency === 'BTC'">{{
-                      (exchangeAmount * nairaValues.btc) | formatNumber
-                    }}</span>
-                    <span v-if="toCurrency === 'ETH'">{{
-                      (exchangeAmount * nairaValues.eth) | formatNumber
-                    }}</span>
-                    <span v-if="toCurrency === 'LTC'">{{
-                      (exchangeAmount * nairaValues.ltc) | formatNumber
-                    }}</span>
-                    <span v-if="toCurrency === 'DASH'">{{
-                      (exchangeAmount * nairaValues.dash) | formatNumber
-                    }}</span> -->
-                  </h2>
+                  <h2 class="warn">NGN {{ amountToPay }}</h2>
 
                   <label>Transaction Reference:</label>
                   <p>{{ transactionRef }}</p>
@@ -464,9 +244,9 @@
                 <div class="col-md-12">
                   <p>
                     You are about to pay for
-                    <span class="warn"
-                      >{{ exchangeAmount }} {{ toCurrency }}</span
-                    >
+                    <span class="warn">
+                      {{ exchangeAmount }} {{ toCurrency }}
+                    </span>
                     using Afritoken. Please click on the "PAY NOW" button to
                     complete the transaction.
                   </p>
@@ -500,14 +280,20 @@
   const sha512 = require('js-sha512')
 
   export default {
-    components: {},
     data() {
       return {
         baseUrl: process.env.baseUrl,
         interswitchBaseUrl: process.env.interswitchBaseUrl,
         // toCurrency: 'AFK',
+        exchangeRate: 1,
+        selImg:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACIAAAAiCAYAAAA6RwvCAAADd0lEQVRYhcWYWUhUYRTHf7O0mEtWZotbRhvUQwS20EoELRMGvVRmSbRZYEREDxFtVg/1EkVklD20TEQUUlY+RLQQBFIRWoilTWKmlW1jLmUa5/bdQZ3l3huT/mHgzr3n+5/f3Dvfd75zbYlj72JB8cAiYDYwARgBxKjh3wEPUArcB4qAWrPWZkFmAjuABYDTpPdv4DZwGHhoFGw3uD4SKAQeAIstQIgcaswD5THyX0FWAM8Al4XkweRSXhlWQXYD7g7PPxwSr4vK2xTITmBfGAG6Srx3GYHI4zj4HyF05apcAUFSgVPdAKHrlMrpB3IciO5GkGiVsxPIjDDNDqtyqTXKB7KjByB0bddBZNle2IMgUjLineog4Ip5aO8YlqYPpanpd0gnu93Gd28rG7eU8rKswSqIxuBUBSygzl+qYcmiIcQN6m3odrWglrLyH1YhdM2xqyoaUGXlDeSdrTJ0qfQ0cvZ8NW1t7cydPYhpk2Otgoy3q1IeUO3tcOnK+5C3W2IuXK6huqaZ/jFO7XFmr022CpJqN1o7PtX/JP9ctZYwkIqffOWc+512ZXVGAgnD+jJrxkBc8wdbAYkWEJtR1LXrtTwu/up3vrW1nZNnqmhpaWP0qEgylyVo550OG2syE4mKMr9rEBCvUZAkPHK0kqbmzrOnoLCOO/fqtVmzPiuJ4cP6+K5NSYtl1fLh2Ax/piavgLwxE1n89BsFNz74vn/89JMTp99qx9OnDiDdFe83ZsOaJJISI8zYewTkhSlm4Fieh7oPLdpxXn4VrysaiejrICsjgch+Dr94mfY5G1PMWJcKyD2zINXvmrVZVP76B4VFf+/O/Hlx2ieYliyOJ21SfyPr+46YuKz3wFYT+1dNryoaefT4CxWVjdovPnxgXMgFr5fTTkpyBM9LvNR//hUopBXYJMnr1NbflGQ6l7z4+//evC6ZsaMjDcdMTYtlW05qsMuSu05vJ2aq3XZPaJa0G/rjkL7jZg9A3NJ7no7/iy1m1pQwSnLl6HYdQSqB7G4EyVY5/UBE7mB9R5i1R/VNPgWasrkq8H9C7O96MtjaIYErAcvbrRBqUJ5+EKFAULduYphm0y3l5Q4WYLSaVqiOXraT0tGH3rx2VpsaI2OlbRCvoDK7YZDFTj5SYsVUf1EjFU0vJN8AKcfyokZi5d2IlA9jAX8AjTrqj3odLhAAAAAASUVORK5CYII=',
+        cryptoCurrency: 'Africoin',
+        fromCurrency: 'AFK',
+        dataClass: 'afk_chart',
+        crypClass: 'afk-color',
         exchangeAmount: '',
-        toCurrency: 'BTC',
+        toCurrency: 'AFK',
         toValue: 0,
         afkDollarRate: 1,
         calculatingRate: false,
@@ -535,7 +321,18 @@
         },
       }
     },
-
+    watch: {
+      // whenever question changes, this function will run
+      exchangeAmount(val) {
+        console.log('exchange amount', val)
+        this.amountToPay =
+          val * this.nairaValues[this.fromCurrency.toLowerCase()]
+      },
+      // whenever question changes, this function will run
+      rightExchangeValue(val) {
+        this.rightExchangeValue1 = val * this.rightPrice
+      },
+    },
     computed: {
       userDetails() {
         return this.$store.state.auth.user
@@ -567,9 +364,10 @@
         weekPeriod: 'chart/weekPeriod',
         allPeriod: 'chart/allPeriod',
         loading: 'dataLoading',
+        activeCurrency: 'activeCurrency',
       }),
     },
-    created() {
+    async created() {
       this.dollarRates = {
         afk: '1 AFK | $1',
         btc: '1 BTC | $' + this.btcData.current_price,
@@ -578,24 +376,47 @@
         dash: '1 DASH | $' + this.dashData.current_price,
       }
       console.log('BTCDATA++', this.btcData)
-
-      this.getNairaValues()
+      const nairaVals = this.nairaValues
+      for (const myData of this.data) {
+        if (myData.currency === 'AFK') continue
+        nairaVals[
+          myData.currency.toLocaleLowerCase()
+        ] = await this.getExchangeRate(myData.currency)
+      }
+      console.log('Nairavals are', nairaVals)
     },
+    /* async mounted() {
+
+    }, */
     methods: {
+      handleChange(value) {
+        console.log(`selected ${value}`)
+      },
+      handleSelect(val) {
+        const current = this.data.filter((datum) => {
+          return datum.currency === val
+        })
+        this.cryptoCurrency = current[0].asset_name.name
+        this.selImg = current[0].asset_name.img
+        this.crypClass = current[0].currClass
+        this.dataClass = current[0].className
+        this.exchangeRate = current[0].price
+        this.rightExchangeValue1 = this.exchangeAmount * this.rightPrice
+      },
       checkKeyPress(event) {
         if (event.keyCode !== 13) {
           this.calculateRates()
         }
       },
 
-      async getNairaValues() {
-        // this.nairaValues.dash = await this.getExchangeRate("DASH");
+      /* async getNairaValues() {
+        this.nairaValues.dash = await this.getExchangeRate('DASH')
         this.nairaValues.btc = await this.getExchangeRate('BTC')
         this.nairaValues.eth = await this.getExchangeRate('ETH')
-        // this.nairaValues.ltc = await this.getExchangeRate("LTC");
+        this.nairaValues.ltc = await this.getExchangeRate('LTC')
 
         console.log('NAIRA VALUES', this.nairaValues)
-      },
+      }, */
 
       calculateRates() {
         // this.calculatingRate = true
@@ -603,7 +424,7 @@
         let fromNairaValue = 0
         let toNairaValue = 0
 
-        console.log('from: ', this.toCurrency)
+        console.log('from: ', this.fromCurrency)
         if (this.toCurrency === 'ETH') {
           fromNairaValue = this.nairaValues.eth
         } else if (this.toCurrency === 'BTC') {
@@ -637,6 +458,10 @@
       },
 
       calculateAmountDue() {
+        this.amountToPay = Math.ceil(
+          this.exchangeAmount *
+            this.nairaValues[this.toCurrency.toLocaleLowerCase()]
+        )
         if (this.toCurrency === 'ETH') {
           this.amountToPay = Math.ceil(
             this.exchangeAmount * this.nairaValues.eth
@@ -663,24 +488,22 @@
       },
 
       async getExchangeRate(currency) {
-        const payload = {
+        /* const payload = {
           base: currency,
           quote: 'NGN',
         }
 
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
-        }
+          Authorization: this.$auth.getToken('local'),
+        } */
 
         try {
-          const response = await this.$axios.$post(
-            this.baseUrl + 'exchange/utilities/check-rate/',
-            payload,
-            { headers }
+          const response = await this.$axios.$get(
+            `https://api.coinbase.com/v2/prices/${currency}-NGN/spot`
           )
-          console.log(response)
-          return response.data.rate
+          console.log(response.data.amount)
+          return response.data.amount
         } catch (e) {
           console.log(e.response)
           this.$toast.error(e.response.data.data.error)
@@ -748,7 +571,7 @@
 
         const headers = {
           'Content-Type': 'application/json',
-          'pfk-user-token': this.userDetails.token,
+          'pfk-user-token': this.$auth.getToken('local'),
         }
         try {
           const response = await this.$axios.$post(
@@ -786,7 +609,7 @@
 
         const headers = {
           'Content-Type': 'application/json',
-          Authorization: this.userDetails.token,
+          Authorization: this.$auth.getToken('local'),
         }
         try {
           const requestResponse = await this.$axios.$post(
@@ -810,6 +633,7 @@
         closeSideBar: 'global/closeSidebar',
       }),
     },
+    middleware: 'query',
   }
 </script>
 

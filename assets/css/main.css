@@ -1622,7 +1622,7 @@ aside .links--and--logo {
 }
 
 aside .links--and--logo:after {
-  content: "";
+  /*content: "";*/
   height: .5px;
   width: 70%;
   position: absolute;

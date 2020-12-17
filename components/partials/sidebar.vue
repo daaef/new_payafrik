@@ -39,12 +39,12 @@
             Power
           </a>
         </nuxt-link>
-        <!--<nuxt-link tag="li" to="/buy-crypto">
+        <nuxt-link tag="li" to="/buy-crypto">
           <a href="#">
             <img class="mr-20" src="~/assets/img//buy-crypto.png" alt="" /> Buy
             Crypto
           </a>
-        </nuxt-link>-->
+        </nuxt-link>
       </ul>
     </div>
     <ul class="main-links">
