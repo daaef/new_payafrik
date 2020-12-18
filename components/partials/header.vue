@@ -2,7 +2,9 @@
   <header>
     <nav>
       <div class="balance">
-        <img src="~/assets/img//logo.png" class="mobile-logo" alt="logo" />
+        <nuxt-link to="/">
+          <img src="~/assets/img//logo.png" class="mobile-logo" alt="logo" />
+        </nuxt-link>
         <span>AfriToken:</span>
         <h3>{{ userDetails.balance | doubleForm }}</h3>
       </div>
@@ -346,6 +348,7 @@
       border: solid 2px #3341ff;
       padding-left: 15px;
     }
+
     label {
       color: #3341ff;
       left: 15px;

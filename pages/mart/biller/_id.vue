@@ -161,6 +161,23 @@
                   <strong>{{ pfkTransactionRef }}</strong>
                 </p>
               </div>
+              <div v-if="activeBiller.billerid === 'AED'">
+                <p>
+                  Token: <strong>{{ aedc.pincode }}</strong>
+                </p>
+                <p>
+                  Units: <strong>{{ aedc.units }}</strong>
+                </p>
+                <p>
+                  Operator: <strong>{{ aedc.operatorname }}</strong>
+                </p>
+                <p>
+                  Amount: <strong>{{ aedc.topupamount }}</strong>
+                </p>
+                <p>
+                  Charges: <strong>{{ aedc.ServiceCharge }}</strong>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -214,13 +231,14 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapMutations } from 'vuex'
   export default {
     middleware: 'query',
     components: {},
     data() {
       return {
         interswitchBaseUrl: process.env.interswitchBaseUrl,
+        superPayBaseUrl: process.env.superPayBaseUrl,
         baseUrl: process.env.baseUrl,
         billerId: this.$route.params.id,
         loadingPaymentItems: false,
@@ -233,6 +251,9 @@
         paymentFailed: false,
         purchaseModal: false,
         pfkTransactionRef: '',
+        validated: false,
+        validation: {},
+        aedc: {},
       }
     },
     computed: {
@@ -251,7 +272,7 @@
         Object.entries(this.activeBiller).length === 0 &&
         this.activeBiller.constructor === Object
       ) {
-        this.$router.push('/mart')
+        this.$router.push('../')
       }
     },
     mounted() {
@@ -339,54 +360,143 @@
         }
       },
       async validateCustomer() {
+        console.log('ACTIVE BILLER=> ', this.activeBiller)
+        if (this.activeBiller.billerid === 'AED') {
+          this.validateAEDC()
+        } else {
+          this.makingPayment = true
+          const headers = {
+            'Content-Type': 'application/json',
+            'pfk-user-token': this.$auth.getToken('local'),
+          }
+          const payload = {
+            customerId: this.paymentDetails.customerId,
+            paymentCode: this.activeItem.paymentCode,
+          }
+          try {
+            const validationResponse = await this.$axios.$post(
+              this.interswitchBaseUrl + 'validate-customer',
+              payload,
+              { headers }
+            )
+            console.log('validation Response', validationResponse)
+            if (validationResponse.status === true) {
+              this.sendPaymentAdvice()
+            }
+          } catch (e) {
+            this.$toast.error(e.response.data.detail)
+            this.makingPayment = false
+          }
+        }
+      },
+
+      async validateAEDC() {
         this.makingPayment = true
+        let phoneNumber = this.paymentDetails.phone
+        if (this.paymentDetails.phone.charAt(0) === '+') {
+          phoneNumber = '0' + this.paymentDetails.phone.substring(4)
+        }
         const payload = {
-          customerId: this.paymentDetails.customerId,
-          paymentCode: this.activeItem.paymentCode,
+          metreNumber: this.paymentDetails.customerId,
+          phone: phoneNumber,
+          amount: +this.paymentDetails.amount * 100,
+        }
+        const headers = {
+          'Content-Type': 'application/json',
+          'pfk-user-token': this.$auth.getToken('local'),
         }
         try {
           const validationResponse = await this.$axios.$post(
-            this.interswitchBaseUrl + 'validate-customer',
-            payload
+            this.superPayBaseUrl + 'aedc/validate-customer',
+            payload,
+            { headers }
           )
-          console.log('Signup Response', validationResponse)
-          if (validationResponse.status === true) {
-            this.sendPaymentAdvice()
-          }
+          console.log('validation Response', validationResponse)
+          this.validation = validationResponse.data
+          this.validated = true
+          this.makingPayment = false
         } catch (e) {
-          this.$toast.error(e.response.data.detail)
+          this.$toast.error(e.response.data.message)
           this.makingPayment = false
         }
       },
+
       async sendPaymentAdvice() {
+        if (this.activeBiller.billerid === 'AED') {
+          this.payForAEDC()
+        } else {
+          this.makingPayment = true
+          const headers = {
+            'Content-Type': 'application/json',
+            'pfk-user-token': this.$auth.getToken('local'),
+          }
+          let phoneNumber = this.paymentDetails.phone
+          if (this.paymentDetails.phone.charAt[0] === '+') {
+            phoneNumber = '0' + this.paymentDetails.phone.substring(3)
+          }
+          const payload = {
+            paymentCode: this.activeItem.paymentCode,
+            customerId: this.paymentDetails.customerId,
+            customerMobile: phoneNumber,
+            customerEmail: this.paymentDetails.email,
+            amount: (this.paymentDetails.amount * 100).toString(),
+          }
+          try {
+            const adviceResponse = await this.$axios.$post(
+              this.interswitchBaseUrl + 'payment-advice',
+              payload,
+              { headers }
+            )
+            console.log('Advice Response', adviceResponse)
+            if (
+              adviceResponse.status === true &&
+              adviceResponse.data.responseCodeGrouping === 'SUCCESSFUL'
+            ) {
+              this.pfkTransactionRef =
+                adviceResponse.data.payafrikTransactionRef
+              this.$toast.success('Successful')
+              this.paymentSuccess = true
+              // this.getUserDetails()
+              this.$store.dispatch('getUserDetails')
+            }
+          } catch (e) {
+            console.log(e.response)
+            this.paymentFailed = true
+            if (e.response.data.name) {
+              this.$toast.error(
+                e.response.data.name + ': ' + e.response.data.message
+              )
+            } else {
+              this.$toast.error(e.response.data.message)
+            }
+            this.makingPayment = false
+          }
+        }
+      },
+      async payForAEDC() {
         this.makingPayment = true
         const headers = {
           'Content-Type': 'application/json',
           'pfk-user-token': this.$auth.getToken('local'),
         }
-
         const payload = {
-          paymentCode: this.activeItem.paymentCode,
-          customerId: this.paymentDetails.customerId,
-          customerMobile: this.paymentDetails.phone,
-          customerEmail: this.paymentDetails.email,
-          amount: (this.paymentDetails.amount * 100).toString(),
+          tid: this.validation.tid,
+          amount: +this.validation.totalamount * 100,
         }
         try {
           const adviceResponse = await this.$axios.$post(
-            this.interswitchBaseUrl + 'payment-advice',
+            this.superPayBaseUrl + 'aedc/payment',
             payload,
             { headers }
           )
-          console.log('Signup Response', adviceResponse)
-          if (
-            adviceResponse.status === true &&
-            adviceResponse.data.responseCodeGrouping === 'SUCCESSFUL'
-          ) {
-            // const transactionRef = adviceResponse.data.payafrikTransactionRef
+          console.log('Advice Response', adviceResponse)
+          if (adviceResponse.status === true) {
             this.pfkTransactionRef = adviceResponse.data.payafrikTransactionRef
+            this.aedc = adviceResponse.data.message
             this.$toast.success('Successful')
             this.paymentSuccess = true
+            // this.getUserDetails()
+            this.$store.dispatch('getUserDetails')
           }
         } catch (e) {
           console.log(e.response)
@@ -401,13 +511,11 @@
           this.makingPayment = false
         }
       },
-
       async getUserDetails() {
         const headers = {
           'Content-Type': 'application/json',
           Authorization: this.$auth.getToken('local'),
         }
-
         try {
           const updatedUserDetails = await this.$axios.$get(
             this.baseUrl + 'auth/user/profile/',
@@ -422,7 +530,12 @@
           console.log(e.response)
         }
       },
-
+      authenticate(user) {
+        this.$store.commit('global/authenticateUser', user)
+      },
+      ...mapMutations({
+        authenticate: 'global/authenticateUser',
+      }),
       async queryTransaction(transactionRef) {
         try {
           const paymentItemsResponse = await this.$axios.$get(

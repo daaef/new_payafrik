@@ -1411,7 +1411,7 @@ nav .nav-dropdown .user-account, .navigation .nav-dropdown .user-account {
     display: none
   }
 
-  nav .balance > *:not(.mobile-logo), .navigation .balance > *:not(.mobile-logo) {
+  nav .balance > *:not(a), .navigation .balance > *:not(a) {
     display: none
   }
 

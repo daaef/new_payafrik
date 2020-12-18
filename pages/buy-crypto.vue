@@ -75,7 +75,7 @@
                 <div>
                   <span class="c-white mb-4 d-block">You are buying</span>
                   <h3 :class="crypClass">
-                    {{ exchangeAmount | formatNumber }} {{ toCurrency }}
+                    {{ exchangeAmount | formatNumber }} {{ fromCurrency }}
                   </h3>
                   <!-- <span class="small-text c-white">$0.00</span> -->
                   <span class="small-text c-white"
@@ -118,10 +118,7 @@
                 </div>
 
                 <div class="sub-button">
-                  <button
-                    target="_blank"
-                    @click="openModal('buyWithTokenModal')"
-                  >
+                  <button target="_blank" @click="buyWithToken = true">
                     <!-- href="https://commerce.coinbase.com/checkout/0bb96b95-c8bc-42bd-b1b7-a67a48f4357b" -->
                     BUY WITH TOKENS
                   </button>
@@ -133,145 +130,85 @@
       </div>
     </div>
 
-    <!-- Cofirmation Modal -->
-    <div
-      id="cryptoPurchaseConfirmationModal"
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="cryptoPurchaseConfirmationModal"
-      aria-hidden="true"
+    <a-modal
+      title="Buy Crypto"
+      :visible="buyWIthCash"
+      centered
+      @cancel="buyWIthCash = false"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Buy Crypto
-            </h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
+      <p>
+        You are about to pay for
+        <span class="warn"
+          >{{ exchangeAmount | doubleForm }} {{ toCurrency }}</span
+        >.
+      </p>
+
+      <label>Amount due today:</label>
+      <h2 class="c-btc">{{ toCurrency }}{{ amountToPay | doubleForm }}</h2>
+
+      <label>Transaction Reference:</label>
+      <p>{{ transactionRef }}</p>
+      <template slot="footer">
+        <div class="text-right sub--btn--holder">
+          <div class="sub-button">
+            <form
+              name="form1"
+              action="https://webpay.interswitchng.com/collections/w/pay"
+              method="post"
             >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="container ml-3">
-              <div class="row">
-                <div class="col-md-12">
-                  <p>
-                    You are about to pay for
-                    <span class="warn"
-                      >{{ exchangeAmount }} {{ toCurrency }}</span
-                    >.
-                  </p>
-
-                  <label>Amount due today:</label>
-                  <h2 class="warn">NGN {{ amountToPay }}</h2>
-
-                  <label>Transaction Reference:</label>
-                  <p>{{ transactionRef }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="col-md-12 ml-auto mr-auto">
-              <form
-                name="form1"
-                action="https://webpay.interswitchng.com/collections/w/pay"
-                method="post"
-              >
-                <input v-model="productId" name="product_id" type="hidden" />
-                <input
-                  v-model="paymentItemId"
-                  name="pay_item_id"
-                  type="hidden"
-                />
-                <input v-model="amountInKobo" name="amount" type="hidden" />
-                <input v-model="currency" name="currency" type="hidden" />
-                <input
-                  v-model="redirectUrl"
-                  name="site_redirect_url"
-                  type="hidden"
-                />
-                <input v-model="transactionRef" name="txn_ref" type="hidden" />
-                <input v-model="customerId" name="cust_id" type="hidden" />
-                <input v-model="customerName" name="cust_name" type="hidden" />
-                <input v-model="transactionHash" name="hash" type="hidden" />
-                <button class="w-100" type="submit">
-                  <img
-                    src="~/assets/img/interswitch_icon.png"
-                    class="mr-2"
-                  />PAY WITH INTERSWICH
-                </button>
-              </form>
-            </div>
+              <input v-model="productId" name="product_id" type="hidden" />
+              <input v-model="paymentItemId" name="pay_item_id" type="hidden" />
+              <input v-model="amountInKobo" name="amount" type="hidden" />
+              <input v-model="currency" name="currency" type="hidden" />
+              <input
+                v-model="redirectUrl"
+                name="site_redirect_url"
+                type="hidden"
+              />
+              <input v-model="transactionRef" name="txn_ref" type="hidden" />
+              <input v-model="customerId" name="cust_id" type="hidden" />
+              <input v-model="customerName" name="cust_name" type="hidden" />
+              <input v-model="transactionHash" name="hash" type="hidden" />
+              <button class="w-100" type="submit">
+                <img src="~/assets/img/interswitch_icon.png" class="mr-2" />PAY
+                WITH INTERSWICH
+              </button>
+            </form>
           </div>
         </div>
-      </div>
-    </div>
+      </template>
+    </a-modal>
 
-    <!-- Buy with crypto Modal -->
-    <div
-      id="buyWithTokenModal"
-      class="modal fade"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="buyWithTokenModal"
-      aria-hidden="true"
+    <a-modal
+      :title="`Buy ${fromCurrency}`"
+      :visible="buyWithToken"
+      centered
+      @cancel="buyWithToken = false"
     >
-      <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 id="exampleModalCenterTitleTitle" class="modal-title">
-              Buy {{ toCurrency }}
-            </h5>
+      <p>
+        You are about to pay for
+        <span class="warn"> {{ exchangeAmount }} {{ fromCurrency }} </span>
+        using Afritoken. Please click on the "PAY NOW" button to complete the
+        transaction.
+      </p>
+      <template slot="footer">
+        <div class="text-right sub--btn--holder">
+          <div class="sub-button">
             <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
+              v-if="!purchasingWithTokens"
+              class="w-100"
+              type="submit"
+              @click="purchaseWithTokens()"
             >
-              <span aria-hidden="true">&times;</span>
+              PAY NOW
+            </button>
+            <button v-if="purchasingWithTokens" class="w-100" type="submit">
+              <a-spin />
             </button>
           </div>
-          <div class="modal-body">
-            <div class="container ml-3">
-              <div class="row">
-                <div class="col-md-12">
-                  <p>
-                    You are about to pay for
-                    <span class="warn">
-                      {{ exchangeAmount }} {{ toCurrency }}
-                    </span>
-                    using Afritoken. Please click on the "PAY NOW" button to
-                    complete the transaction.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <div class="col-md-12 ml-auto mr-auto">
-              <button
-                v-if="!purchasingWithTokens"
-                class="w-100"
-                type="submit"
-                @click="purchaseWithTokens()"
-              >
-                PAY NOW
-              </button>
-              <button v-if="purchasingWithTokens" class="w-100" type="submit">
-                <i class="fas fa-circle-notch fa-spin" />
-              </button>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
+      </template>
+    </a-modal>
   </div>
 </template>
 
@@ -293,7 +230,7 @@
         dataClass: 'afk_chart',
         crypClass: 'afk-color',
         exchangeAmount: '',
-        toCurrency: 'AFK',
+        toCurrency: '₦',
         toValue: 0,
         afkDollarRate: 1,
         calculatingRate: false,
@@ -306,6 +243,8 @@
         customerName: '',
         customerId: '',
         purchasingWithTokens: false,
+        buyWIthCash: false,
+        buyWithToken: false,
         processing: false,
         exchanging: false,
         amountToPay: 0,
@@ -322,15 +261,10 @@
       }
     },
     watch: {
-      // whenever question changes, this function will run
       exchangeAmount(val) {
         console.log('exchange amount', val)
         this.amountToPay =
           val * this.nairaValues[this.fromCurrency.toLowerCase()]
-      },
-      // whenever question changes, this function will run
-      rightExchangeValue(val) {
-        this.rightExchangeValue1 = val * this.rightPrice
       },
     },
     computed: {
@@ -368,14 +302,6 @@
       }),
     },
     async created() {
-      this.dollarRates = {
-        afk: '1 AFK | $1',
-        btc: '1 BTC | $' + this.btcData.current_price,
-        eth: '1 ETH | $' + this.ethData.current_price,
-        ltc: '1 LTC | $' + this.litecoinData.current_price,
-        dash: '1 DASH | $' + this.dashData.current_price,
-      }
-      console.log('BTCDATA++', this.btcData)
       const nairaVals = this.nairaValues
       for (const myData of this.data) {
         if (myData.currency === 'AFK') continue
@@ -385,9 +311,6 @@
       }
       console.log('Nairavals are', nairaVals)
     },
-    /* async mounted() {
-
-    }, */
     methods: {
       handleChange(value) {
         console.log(`selected ${value}`)
@@ -452,39 +375,8 @@
 
         rate = (fromNairaValue * this.exchangeAmount) / toNairaValue
         this.exchangeValue = rate
-        this.calculateAmountDue()
         // this.calculatingRate = false
         console.log(rate)
-      },
-
-      calculateAmountDue() {
-        this.amountToPay = Math.ceil(
-          this.exchangeAmount *
-            this.nairaValues[this.toCurrency.toLocaleLowerCase()]
-        )
-        if (this.toCurrency === 'ETH') {
-          this.amountToPay = Math.ceil(
-            this.exchangeAmount * this.nairaValues.eth
-          )
-        } else if (this.toCurrency === 'BTC') {
-          this.amountToPay = Math.ceil(
-            this.exchangeAmount * this.nairaValues.btc
-          )
-        } else if (this.toCurrency === 'AFK') {
-          this.amountToPay = Math.ceil(
-            this.exchangeAmount * this.nairaValues.afk
-          )
-        } else if (this.toCurrency === 'LTC') {
-          this.amountToPay = Math.ceil(
-            this.exchangeAmount * this.nairaValues.ltc
-          )
-        } else if (this.toCurrency === 'DASH') {
-          this.amountToPay = Math.ceil(
-            this.exchangeAmount * this.nairaValues.dash
-          )
-        }
-
-        this.calculateParams()
       },
 
       async getExchangeRate(currency) {
@@ -555,6 +447,7 @@
       },
 
       async generateTransaction() {
+        this.calculateParams()
         this.processing = true
         const payload = {
           amount: this.amountToPay,
@@ -581,7 +474,7 @@
           )
           console.log('request response', response)
           this.processing = false
-          this.openModal('cryptoPurchaseConfirmationModal')
+          this.buyWIthCash = true
         } catch (e) {
           console.log(e.response)
           this.$toast.error(e.response.data.error)
@@ -604,7 +497,7 @@
         const payload = {
           amount: this.exchangeAmount,
           from_currency: 'AFRITOKEN',
-          to_currency: this.toCurrency,
+          to_currency: this.fromCurrency,
         }
 
         const headers = {
@@ -620,7 +513,6 @@
           console.log('request response', requestResponse)
           this.$toast.success('Token purchase successful!')
           this.purchasingWithTokens = false
-          this.closeModal('#buyWithTokenModal')
         } catch (e) {
           console.log(e.response)
           this.$toast.error(JSON.stringify(e.response.data.error))
@@ -806,7 +698,7 @@
   }
 
   #cryptoPurchaseConfirmationModal .modal-content,
-  #buyWithTokenModal .modal-content {
+  #buyWIthCashModal .modal-content {
     background-color: #131c4b;
     border: dashed 1px #4451ff;
     box-shadow: 25px 25px 100px #00000044;
@@ -815,13 +707,13 @@
   }
 
   #cryptoPurchaseConfirmationModal .modal-header,
-  #buyWithTokenModal .modal-header {
+  #buyWIthCashModal .modal-header {
     margin-bottom: 15px;
     border: none !important;
   }
 
   #cryptoPurchaseConfirmationModal .modal-header button,
-  #buyWithTokenModal .modal-header button {
+  #buyWIthCashModal .modal-header button {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -829,7 +721,7 @@
   }
 
   #cryptoPurchaseConfirmationModal .modal-header h5,
-  #buyWithTokenModal .modal-header h5 {
+  #buyWIthCashModal .modal-header h5 {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -837,12 +729,12 @@
   }
 
   #cryptoPurchaseConfirmationModal .modal-footer,
-  #buyWithTokenModal .modal-footer {
+  #buyWIthCashModal .modal-footer {
     border: none !important;
   }
 
   #cryptoPurchaseConfirmationModal .modal-footer button,
-  #buyWithTokenModal .modal-footer button {
+  #buyWIthCashModal .modal-footer button {
     background: #11154b;
     color: #f6f6f6;
     border: solid #2832c3;
@@ -852,7 +744,7 @@
   }
 
   #cryptoPurchaseConfirmationModal .modal-footer button.cancel,
-  #buyWithTokenModal .modal-footer button.cancel {
+  #buyWIthCashModal .modal-footer button.cancel {
     border: solid transparent;
   }
 </style>
