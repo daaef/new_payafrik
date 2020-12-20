@@ -47,6 +47,7 @@
 </template>
 <script>
   export default {
+    layout: 'main',
     data() {
       return {
         interswitchBaseUrl: process.env.interswitchBaseUrl,

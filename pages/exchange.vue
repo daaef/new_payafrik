@@ -184,6 +184,7 @@
     directives: {
       currency: CurrencyDirective,
     },
+    layout: 'main',
     middleware: 'query',
     data() {
       return {

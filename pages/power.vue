@@ -87,6 +87,7 @@
   import PowerBar from '~/components/powerBar'
 
   export default {
+    layout: 'main',
     middleware: 'query',
     components: { PowerBar },
     data() {

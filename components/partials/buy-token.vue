@@ -332,17 +332,9 @@
         }
         this.transactionRef = this.reference()
         this.amountToPay = this.tokens * this.pricePerToken * 100
-        this.redirectUrl =
-          // 'https://portal.payafrik.io/user-area/payment-done?ref=' +
-          'http://localhost:3000/payment-done?ref=' +
-          this.transactionRef +
-          '&amount=' +
-          this.amountToPay +
-          '&prodId=' +
-          this.productId
-        this.customerId = 'CUST' + this.userDetails.username
-        this.customerName =
-          this.userDetails.first_name + ' ' + this.userDetails.last_name
+        this.redirectUrl = `https://portal.payafrik.io/user-area/payment-done?ref=${this.transactionRef}&amount=${this.amountToPay}&prodId=${this.productId}`
+        this.customerId = `CUST${this.userDetails.username}`
+        this.customerName = `${this.userDetails.first_name} ${this.userDetails.last_name}`
         const macKey =
           'kP31VzqzzYKmvW7ShN3BNXOP4fQY1AOMeIv5XwiXT7GzBfFhuZ0Yga8iuNh85H7NdAUBNWCtkCopcuLWGOA1NK42DCAeclercLH8L8NgEWh8S9AVZzxD3oPjAjTQ9A5W'
         this.transactionHash = sha512(

@@ -217,6 +217,7 @@
   /*
   let dashChartData */
   export default {
+    layout: 'main',
     data() {
       return {
         width: 1000,

@@ -1135,13 +1135,14 @@ form div img, form div .prefix-icon {
   z-index: 20;
 }
 
-form div label {
+form .centerdiv label {
   position: absolute;
   top: 10px;
   left: 53px;
   font-family: "Avenir Medium", sans-serif;
   font-weight: 600;
   z-index: 50;
+  line-height: 1;
 }
 
 .text-large {
@@ -2704,10 +2705,9 @@ aside .links--and--logo:after {
 }
 
 .main-content main .dash-body > div .welcome-text {
-  height: 100px;
   display: flex;
   align-items: center;
-  justify-content: center
+  justify-content: center;
 }
 
 .main-content main .dash-body > div .welcome-text p {
@@ -2736,7 +2736,6 @@ aside .links--and--logo:after {
   transition: all .5s;
   padding-bottom: 20px;
 }
-
 @media (max-width: 1174px) {
   .main-content main .dash-body > div .card-links .link-card {
     width: calc((100%) / 2 - 10px);
@@ -3672,6 +3671,20 @@ div.prefix-icon {
   font-weight: 600;
   color: #f9921b;
   font-size: .9rem;
+  line-height: 1.4;
+}
+
+.ant-form-item {
+  margin-bottom: 0!important;
+}
+
+.ant-form-item-children {
+  position: static;
+}
+
+.ant-form-item-control {
+  max-height: 78.5px;
+  min-height: 78.5px;
 }
 
 .phoneNum input {
@@ -4292,4 +4305,10 @@ input.ltc-color {
 .dash-color {
   border-color: #018ee3;
   color: #FFFFFF;
+}
+
+.has-error .ant-form-explain, .has-error .ant-form-split {
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
 }

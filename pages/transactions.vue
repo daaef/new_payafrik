@@ -120,6 +120,8 @@
 
 <script>
   export default {
+    layout: 'main',
+    middleware: 'query',
     components: {},
     data() {
       return {

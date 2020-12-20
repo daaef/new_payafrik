@@ -424,8 +424,7 @@
         this.transactionRef = this.reference()
         // amount =  this.amountToPay * 100;
         this.redirectUrl =
-          // "http://localhost:3000/user-area/payment-done?ref=" +
-          'https://portal.payafrik.io/user-area/payment-done?ref=' +
+          +'https://portal.payafrik.io/user-area/payment-done?ref=' +
           this.transactionRef +
           '&amount=' +
           this.amountInKobo +
@@ -526,6 +525,7 @@
       }),
     },
     middleware: 'query',
+    layout: 'main',
   }
 </script>
 

@@ -63,7 +63,7 @@
       </nuxt-link>
       <p class="authhint text-center">
         Need to confirm your phone number?
-        <nuxt-link to="confirmation">Click here</nuxt-link>
+        <nuxt-link to="/confirmation">Click here</nuxt-link>
       </p>
       <div class="text-center mt-8 sub--btn--holder">
         <div class="sub-button mt-8">

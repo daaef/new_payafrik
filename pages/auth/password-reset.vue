@@ -51,87 +51,101 @@
             <label for="pnum">Phone Number</label>
           </div>
         </div>
-        <div v-if="codeSent" class="exchange centerdiv mb-3">
-          <div>
-            <img
-              class="prefix-icon"
-              src="~/assets/img/right-arrow.png"
-              alt=""
-            />
-            <input
-              id="reset-code"
-              v-model="resetCode"
-              type="text"
-              placeholder="Code sent to your phone"
-            />
+        <transition name="appear" mode="in-out">
+          <div v-if="codeSent" class="exchange centerdiv mb-3">
+            <div>
+              <img
+                class="prefix-icon"
+                src="~/assets/img/right-arrow.png"
+                alt=""
+              />
+              <input
+                id="reset-code"
+                v-model="resetCode"
+                type="text"
+                placeholder="Code sent to your phone"
+              />
 
-            <label for="pin">Reset Code</label>
+              <label for="pin">Reset Code</label>
+            </div>
           </div>
-        </div>
 
-        <div v-if="codeSent" class="exchange centerdiv">
-          <div>
-            <img
-              class="prefix-icon"
-              src="~/assets/img/right-arrow.png"
-              alt=""
-            />
-            <input
-              v-if="!viewPassword"
-              id="pin"
-              v-model="password"
-              maxlength="4"
-              type="password"
-              placeholder="Your New 4 Digit PIN"
-              @keydown="enforceNumbersOnly($event)"
-            />
-            <input
-              v-if="viewPassword"
-              id="pin-text"
-              v-model="password"
-              type="text"
-              maxlength="4"
-              placeholder="Your New 4 Digit PIN"
-              @keydown="enforceNumbersOnly($event)"
-            />
-            <label for="pin">PIN</label>
-            <img
-              class="suffix-icon suffix password-toggle-switch"
-              src="~/assets/img/view.png"
-              alt=""
-              @click="toggleViewPassword()"
-            />
-            <div class="exchange--dropdown"></div>
+          <!--  <div class="exchange centerdiv">
+            <div>
+              <img
+                class="prefix-icon"
+                src="~/assets/img/right-arrow.png"
+                alt=""
+              />
+              <input
+                v-if="!viewPassword"
+                id="pin"
+                v-model="password"
+                maxlength="4"
+                type="password"
+                placeholder="Your New 4 Digit PIN"
+                @keydown="enforceNumbersOnly"
+              />
+              <input
+                v-if="viewPassword"
+                id="pin-text"
+                v-model="password"
+                type="text"
+                maxlength="4"
+                placeholder="Your New 4 Digit PIN"
+                @keydown="enforceNumbersOnly"
+              />
+              <label for="pin">PIN</label>
+              <img
+                class="suffix-icon suffix password-toggle-switch"
+                src="~/assets/img/view.png"
+                alt=""
+                @click="toggleViewPassword"
+              />
+              <div class="exchange&#45;&#45;dropdown"></div>
+            </div>
+          </div>-->
+
+          <div v-if="codeSent" class="exchange centerdiv">
+            <div>
+              <a-input-password
+                id="pin"
+                ref="userNameInput"
+                v-model="password"
+                placeholder="Your New 4 Digit PIN"
+              >
+                <a-icon slot="prefix" type="lock" />
+              </a-input-password>
+              <label for="pin">PIN</label>
+            </div>
           </div>
-        </div>
-
-        <div v-if="!codeSent" class="text-center mt-20 sub--btn--holder">
-          <div class="sub-button mt-20">
-            <button
-              v-if="!processing"
-              :disabled="processing"
-              class="w-100"
-              @click="requestReset"
-            >
-              Request<span v-if="processing">ing</span> PIN Reset
-            </button>
+          <div v-if="!codeSent" class="text-center mt-20 sub--btn--holder">
+            <div class="sub-button mt-20">
+              <button
+                v-if="!processing"
+                :disabled="processing"
+                class="w-100"
+                @click="requestReset"
+              >
+                Request<span v-if="processing">ing</span> PIN Reset
+              </button>
+            </div>
           </div>
-        </div>
 
-        <div v-if="codeSent" class="text-center mt-20 sub--btn--holder">
-          <div class="sub-button mt-20">
-            <button
-              class="w-100"
-              :disabled="processing"
-              @click="resetPassword()"
-            >
-              Reset<span v-if="processing">ting</span> PIN
-            </button>
+          <div v-if="codeSent" class="text-center mt-20 sub--btn--holder">
+            <div class="sub-button mt-20">
+              <button
+                class="w-100"
+                :disabled="processing"
+                @click="resetPassword()"
+              >
+                Reset<span v-if="processing">ting</span> PIN
+              </button>
+            </div>
           </div>
-        </div>
-
+        </transition>
         <div class="text-center mt-20">
-          <nuxt-link to="/signup"
+          <nuxt-link to="/auth/signup"
             ><p class="authhint">
               New to PayAfrik?
               <span class="reset-color">Sign Up</span>
@@ -274,73 +288,73 @@
 
 <style scoped>
   /* .section{
-    background-color:#1f3d74;
-    background: url('../assets/img/blockchain-bg.jpg') no-repeat center center;
-    background-size:cover;
-    padding:35px;
+  background-color:#1f3d74;
+  background: url('../assets/img/blockchain-bg.jpg') no-repeat center center;
+  background-size:cover;
+  padding:35px;
 }
 img.logo{
-    width:30%;
-    filter: brightness(0) invert(1) opacity(0.8);;
+  width:30%;
+  filter: brightness(0) invert(1) opacity(0.8);;
 }
 .login-container{
-    background-color:#fff;
-    border-radius:5px;
-    padding:35px;
-    padding-top:50px;
-    width:100%;
-    margin-top:75px;
+  background-color:#fff;
+  border-radius:5px;
+  padding:35px;
+  padding-top:50px;
+  width:100%;
+  margin-top:75px;
 }
 .login-container p{
-    color:#181818;
+  color:#181818;
 }
 button.login{
-    color:#ffffffde;
-    background-color: #1fa545;
+  color:#ffffffde;
+  background-color: #1fa545;
 }
 button.login:hover{
-    color:#ffffffde;
-    background-color: #13642a;
+  color:#ffffffde;
+  background-color: #13642a;
 }
 i.ti-check-box{
-    font-size:1.5em;
-    padding:5px;
+  font-size:1.5em;
+  padding:5px;
 }
 p.confirm-success{
-    margin-bottom:15px;
-    color:#1fa545;
-    font-size: 0.8em;
+  margin-bottom:15px;
+  color:#1fa545;
+  font-size: 0.8em;
 }
 p > a{
-    font-size:1em;
+  font-size:1em;
 }
 p{
-    margin:0;
+  margin:0;
 }
 p, a{
-    font-size:0.8em;
-    color:#ffffffd4;
+  font-size:0.8em;
+  color:#ffffffd4;
 }
 a{
-    font-weight:700;
+  font-weight:700;
 }
 a.hover{
-    color:#fffffffd;
-    text-decoration:none;
+  color:#fffffffd;
+  text-decoration:none;
 }
 h6{
-    font-size:0.8em;
+  font-size:0.8em;
 }
 .password-container{
-    position: relative;
+  position: relative;
 }
 
 a.password-toggle-switch{
-    position: absolute;
-    top:22px;
-    right:15px;
-    z-index:999;
-    color:#666;
+  position: absolute;
+  top:22px;
+  right:15px;
+  z-index:999;
+  color:#666;
 } */
   .exchange {
     position: relative;
