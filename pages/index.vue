@@ -106,7 +106,7 @@
                   key="data"
                   title="30 DAY TREND"
                   data-index="data"
-                  class="relative"
+                  class="relative table--trend"
                 >
                   <template slot-scope="data">
                     <trend

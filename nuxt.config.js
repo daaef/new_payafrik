@@ -7,6 +7,7 @@ export default {
   env: {
     baseUrl: process.env.BASE_URL || 'https://api.payafrik.io/',
     interswitchBaseUrl: 'https://payafrik.immanuel.com.ng/v1/api/interswitch/',
+    superPayBaseUrl: 'https://payafrik.immanuel.com.ng/v1/api/superpay/',
     // interswitchBaseUrl: 'http://localhost:5000/v1/api/interswitch/'
   },
   server: {

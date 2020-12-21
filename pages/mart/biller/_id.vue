@@ -20,7 +20,7 @@
             >
               <div class="link-card no-img mt-20 w-100">
                 <!-- <i class="fas fa-angle-right c-white fa-2x"></i> -->
-                <a @click="openModal('purchaseModal', item)">
+                <a @click="openModal(item)">
                   <p class="higlight">{{ item.paymentitemname }}</p>
                   <p class="desc c-white mb-8">Click to buy this item</p>
                 </a>
@@ -41,39 +41,6 @@
         <p class="c-white">Loading payment items...</p>
       </div>
     </section>
-    <!-- <div class="container">
-            <div class="row mb-3">
-                <div v-if="!loadingPaymentItems && paymentItems.length > 0" class="col-md-6">
-                    <h6 class="text-uppercase mt-4">Payment items for {{activeBiller.billername}}</h6>
-                    <div class="underline"></div>
-                </div>
-                <div class="col-md-2"></div>
-                <div v-if="!loadingPaymentItems && paymentItems.length > 0" class="col-md-4">
-                    <input type="text" placeholder="Filter payment items" class="pull-right">
-                </div>
-            </div>
-
-            <div v-if="loadingPaymentItems" class="text-center mt-5">
-                <i class="fas fa-circle-notch fa-spin fa-lg text-grey mb-3"></i>
-                <p class="text-grey">Loading payment items...</p>
-            </div>
-
-            <div v-if="!loadingPaymentItems && paymentItems.length === 0" class="text-center mt-5">
-                <img class="empty-state" src="../../../../assets/img/no_data.svg">
-                <p class="text-grey">Sorry! No payment items found for this biller</p>
-            </div>
-
-            <div class="row" v-if="!loadingPaymentItems && paymentItems.length > 0">
-                <div v-for="item of paymentItems" v-bind:key="item.paymentitemid" class="col-md-4 mb-4">
-                    <div class="shadowed-box wrapper border-light">
-                        <div class="md-title">
-                            <h6>{{item.paymentitemname}}</h6>
-                        </div>
-                        <a @click="openModal('purchaseModal', item)">Buy this item</a>
-                    </div>
-                </div>
-            </div>
-       </div> -->
 
     <!-- Purchase Modal -->
 
@@ -95,36 +62,60 @@
       </template>
       <transition name="appear" mode="in-out">
         <div v-if="!paymentSuccess && !paymentFailed">
-          <form class="w-100 mt-20 request--card" action="">
-            <div>
-              <div class="mt-12">
-                <input
+          <a-form-model
+            ref="ruleForm"
+            :model="paymentDetails"
+            :rules="rules"
+            class="w-100 mt-20 request--card"
+          >
+            <a-form-model-item ref="phone" has-feedback prop="phone">
+              <div>
+                <a-input
                   id="fname"
                   v-model="paymentDetails.phone"
                   type="number"
                   placeholder="Your Phone Number"
+                  @blur="
+                    () => {
+                      $refs.phone.onFieldBlur()
+                    }
+                  "
                 />
                 <label for="fname"
                   >Phone <span class="c-white">number</span></label
                 >
               </div>
-              <div class="mt-12">
-                <input
+            </a-form-model-item>
+            <a-form-model-item ref="email" has-feedback prop="email">
+              <div>
+                <a-input
                   id="lname"
                   v-model="paymentDetails.email"
                   type="email"
                   placeholder="Your email address"
+                  @blur="
+                    () => {
+                      $refs.email.onFieldBlur()
+                    }
+                  "
                 />
                 <label for="lname"
                   >Email <span class="c-white">Address</span></label
                 >
               </div>
-              <div class="mt-12">
-                <input
+            </a-form-model-item>
+            <a-form-model-item ref="customerId" has-feedback prop="customerId">
+              <div>
+                <a-input
                   id="add1"
                   v-model="paymentDetails.customerId"
                   type="text"
                   placeholder="Address Line 1"
+                  @blur="
+                    () => {
+                      $refs.customerId.onFieldBlur()
+                    }
+                  "
                 />
                 <label for="add1">
                   Beneficiary:
@@ -135,18 +126,25 @@
                   </span>
                 </label>
               </div>
-              <div class="mt-12">
-                <input
+            </a-form-model-item>
+            <a-form-model-item ref="amount" has-feedback prop="amount">
+              <div>
+                <a-input
                   id="add2"
                   v-model="paymentDetails.amount"
                   type="number"
                   :disabled="activeItem.fixed"
                   placeholder="Address Line 2"
+                  @blur="
+                    () => {
+                      $refs.amount.onFieldBlur()
+                    }
+                  "
                 />
                 <label for="add2"> Amount </label>
               </div>
-            </div>
-          </form>
+            </a-form-model-item>
+          </a-form-model>
         </div>
         <div v-if="paymentSuccess">
           <div class="container">
@@ -231,7 +229,7 @@
 </template>
 
 <script>
-  import { mapGetters, mapMutations } from 'vuex'
+  import { mapGetters } from 'vuex'
   export default {
     layout: 'main',
     middleware: 'query',
@@ -247,7 +245,50 @@
         formErrors: {},
         activeItem: {},
         makingPayment: false,
-        paymentDetails: {},
+        paymentDetails: {
+          phone: null,
+          email: null,
+          customerId: null,
+          customerfield1: null,
+          amount: null,
+        },
+        rules: {
+          phone: [
+            {
+              required: true,
+              message: 'Please Fill in Your Phone Number',
+              trigger: 'blur',
+            },
+          ],
+          email: [
+            {
+              required: true,
+              message: 'Please Fill in Your Email',
+              trigger: 'blur',
+            },
+          ],
+          customerId: [
+            {
+              required: true,
+              message: 'Please Fill in This Field',
+              trigger: 'blur',
+            },
+          ],
+          customerfield1: [
+            {
+              required: true,
+              message: 'Please Fill in This Field',
+              trigger: 'blur',
+            },
+          ],
+          amount: [
+            {
+              required: true,
+              message: 'Please input The Amount',
+              trigger: 'blur',
+            },
+          ],
+        },
         paymentSuccess: false,
         paymentFailed: false,
         purchaseModal: false,
@@ -268,7 +309,7 @@
     },
     beforeMount() {
       this.getBillersItems()
-      this.closeModal('purchaseModal')
+      this.closeModal()
       if (
         Object.entries(this.activeBiller).length === 0 &&
         this.activeBiller.constructor === Object
@@ -293,22 +334,19 @@
       handleFocus() {
         console.log('focus')
       },
-      openModal(modalId, item) {
+      openModal(item) {
         if (item.amount !== '0') {
           this.paymentDetails.amount = +item.amount / 100
           item.fixed = true
         }
         this.activeItem = item
         this.purchaseModal = true
-        /*  $('#' + modalId).modal('show')
-        $('.modal-backdrop').hide() */
       },
       closeModal(modalId) {
         this.activeItem = {}
         this.paymentSuccess = false
         this.paymentFailed = false
         this.makingPayment = false
-        /* $('#' + modalId).modal('hide') */
       },
 
       async getBillersItems() {
@@ -334,19 +372,6 @@
         }
       },
       checkTokenBalance() {
-        if (
-          !this.paymentDetails.customerId ||
-          this.paymentDetails.customerId === '' ||
-          !this.paymentDetails.phone ||
-          this.paymentDetails.phone === '' ||
-          !this.paymentDetails.email ||
-          this.paymentDetails.email === '' ||
-          !this.paymentDetails.amount ||
-          this.paymentDetails.amount === ''
-        ) {
-          this.$toast.error('Please check missing fields')
-          return
-        }
         this.makingPayment = true
         // console.log('usertokenbalance: ', this.userDetails.balance);
         // console.log('paymentamount: ', this.paymentDetails.amount);
@@ -363,68 +388,75 @@
       async validateCustomer() {
         console.log('ACTIVE BILLER=> ', this.activeBiller)
         if (this.activeBiller.billerid === 'AED') {
-          this.validateAEDC()
+          await this.validateAEDC()
         } else {
           this.makingPayment = true
           const headers = {
             'Content-Type': 'application/json',
             'pfk-user-token': this.$auth.getToken('local'),
           }
-          const payload = {
-            customerId: this.paymentDetails.customerId,
-            paymentCode: this.activeItem.paymentCode,
-          }
-          try {
-            const validationResponse = await this.$axios.$post(
-              this.interswitchBaseUrl + 'validate-customer',
-              payload,
-              { headers }
-            )
-            console.log('validation Response', validationResponse)
-            if (validationResponse.status === true) {
-              this.sendPaymentAdvice()
+
+          await this.$refs.ruleForm.validate(async (valid) => {
+            if (valid) {
+              const payload = {
+                customerId: this.paymentDetails.customerId,
+                paymentCode: this.activeItem.paymentCode,
+              }
+              try {
+                const validationResponse = await this.$axios.$post(
+                  this.interswitchBaseUrl + 'validate-customer',
+                  payload,
+                  { headers }
+                )
+                this.closeModal()
+                console.log('validation Response', validationResponse)
+                if (validationResponse.status === true) {
+                  await this.sendPaymentAdvice()
+                }
+              } catch (e) {
+                this.$toast.error(e.response.data.detail)
+                this.closeModal()
+                this.makingPayment = false
+              }
             }
-          } catch (e) {
-            this.$toast.error(e.response.data.detail)
-            this.makingPayment = false
-          }
+          })
         }
       },
 
       async validateAEDC() {
         this.makingPayment = true
-        let phoneNumber = this.paymentDetails.phone
-        if (this.paymentDetails.phone.charAt(0) === '+') {
-          phoneNumber = '0' + this.paymentDetails.phone.substring(4)
-        }
-        const payload = {
-          metreNumber: this.paymentDetails.customerId,
-          phone: phoneNumber,
-          amount: +this.paymentDetails.amount * 100,
-        }
         const headers = {
           'Content-Type': 'application/json',
           'pfk-user-token': this.$auth.getToken('local'),
         }
-        try {
-          const validationResponse = await this.$axios.$post(
-            this.superPayBaseUrl + 'aedc/validate-customer',
-            payload,
-            { headers }
-          )
-          console.log('validation Response', validationResponse)
-          this.validation = validationResponse.data
-          this.validated = true
-          this.makingPayment = false
-        } catch (e) {
-          this.$toast.error(e.response.data.message)
-          this.makingPayment = false
-        }
+        await this.$refs.ruleForm.validate(async (valid) => {
+          if (valid) {
+            const payload = {
+              customerId: this.paymentDetails.customerId,
+              paymentCode: this.activeItem.paymentCode,
+            }
+            try {
+              const validationResponse = await this.$axios.$post(
+                this.interswitchBaseUrl + 'validate-customer',
+                payload,
+                { headers }
+              )
+              console.log('validation Response', validationResponse)
+              if (validationResponse.status === true) {
+                await this.sendPaymentAdvice()
+              }
+            } catch (e) {
+              this.$toast.error(e.response.data.detail)
+              this.closeModal()
+              this.makingPayment = false
+            }
+          }
+        })
       },
 
       async sendPaymentAdvice() {
         if (this.activeBiller.billerid === 'AED') {
-          this.payForAEDC()
+          await this.payForAEDC()
         } else {
           this.makingPayment = true
           const headers = {
@@ -436,40 +468,23 @@
             phoneNumber = '0' + this.paymentDetails.phone.substring(3)
           }
           const payload = {
-            paymentCode: this.activeItem.paymentCode,
-            customerId: this.paymentDetails.customerId,
-            customerMobile: phoneNumber,
-            customerEmail: this.paymentDetails.email,
-            amount: (this.paymentDetails.amount * 100).toString(),
+            metreNumber: this.paymentDetails.customerId,
+            phone: phoneNumber,
+            amount: +this.paymentDetails.amount * 100,
           }
           try {
-            const adviceResponse = await this.$axios.$post(
-              this.interswitchBaseUrl + 'payment-advice',
+            const validationResponse = await this.$axios.$post(
+              this.superPayBaseUrl + 'aedc/validate-customer',
               payload,
               { headers }
             )
-            console.log('Advice Response', adviceResponse)
-            if (
-              adviceResponse.status === true &&
-              adviceResponse.data.responseCodeGrouping === 'SUCCESSFUL'
-            ) {
-              this.pfkTransactionRef =
-                adviceResponse.data.payafrikTransactionRef
-              this.$toast.success('Successful')
-              this.paymentSuccess = true
-              // this.getUserDetails()
-              this.$store.dispatch('getUserDetails')
-            }
+            console.log('validation Response', validationResponse)
+            this.validation = validationResponse.data
+            this.validated = true
+            this.makingPayment = false
+            this.closeModal()
           } catch (e) {
-            console.log(e.response)
-            this.paymentFailed = true
-            if (e.response.data.name) {
-              this.$toast.error(
-                e.response.data.name + ': ' + e.response.data.message
-              )
-            } else {
-              this.$toast.error(e.response.data.message)
-            }
+            this.$toast.error(e.response.data.message)
             this.makingPayment = false
           }
         }
@@ -532,11 +547,13 @@
         }
       },
       authenticate(user) {
-        this.$store.commit('global/authenticateUser', user)
+        const userLoad = {
+          key: 'user',
+          value: user,
+        }
+
+        this.$store.commit('auth/SET', userLoad)
       },
-      ...mapMutations({
-        authenticate: 'global/authenticateUser',
-      }),
       async queryTransaction(transactionRef) {
         try {
           const paymentItemsResponse = await this.$axios.$get(

@@ -146,7 +146,7 @@
             </div>
           </div>
 
-          <a-form-model-item ref="username" has-feedback prop="username">
+          <a-form-model-item ref="username" has-feedback="" prop="username">
             <div class="exchange centerdiv">
               <div style="margin-bottom: 16px" class="phoneNum">
                 <a-input
@@ -201,7 +201,7 @@
             </div>
           </div>
           <div class="text-center mt-20">
-            <nuxt-link to="/signup"
+            <nuxt-link to="/auth/signup"
               ><p class="authhint">
                 New to PayAfrik?
                 <span class="reset-color">Sign Up</span>

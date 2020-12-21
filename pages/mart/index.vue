@@ -139,8 +139,6 @@
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
-
   export default {
     layout: 'main',
     middleware: 'query',
@@ -176,36 +174,6 @@
           console.log(e)
         }
       },
-
-      async getAllBillers() {
-        this.loadingBillers = true
-        try {
-          const billersResponse = await this.$axios.$get(
-            this.interswitchBaseUrl + 'billers'
-          )
-          console.log(billersResponse)
-          if (billersResponse.status === true) {
-            this.billers = billersResponse.data
-          }
-          this.loadingBillers = false
-        } catch (e) {
-          // this.$toast.error(e.response.data.error)
-          this.loadingBillers = false
-          console.log(e)
-        }
-      },
-
-      closeSideBar() {
-        this.$store.commit('global/closeSidebar')
-      },
-      ...mapMutations({
-        toggleSidebar: 'global/toggleSidebar',
-        closeSideBar: 'global/closeSidebar',
-      }),
-    },
-    beforeMount() {
-      // this.getBillerCategories();
-      // this.getAllBillers()
     },
   }
 </script>

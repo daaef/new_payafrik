@@ -1135,8 +1135,8 @@ form div img, form div .prefix-icon {
   z-index: 20;
 }
 
-form .centerdiv label {
-  position: absolute;
+form .centerdiv label, form div label {
+  position: absolute!important;
   top: 10px;
   left: 53px;
   font-family: "Avenir Medium", sans-serif;
@@ -3682,7 +3682,7 @@ div.prefix-icon {
   position: static;
 }
 
-.ant-form-item-control {
+.ant-form-item-control, .ant-form-item-children {
   max-height: 78.5px;
   min-height: 78.5px;
 }

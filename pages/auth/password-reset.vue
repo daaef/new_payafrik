@@ -277,7 +277,12 @@
       },
 
       authenticate(user) {
-        this.$store.commit('global/authenticateUser', user)
+        const userLoad = {
+          key: 'user',
+          value: user,
+        }
+
+        this.$store.commit('auth/SET', userLoad)
       },
       ...mapMutations({
         toggleSidebar: 'global/authenticateUser',

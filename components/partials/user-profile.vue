@@ -393,9 +393,6 @@
       this.email = this.userDetails.email
       this.dob = this.userDetails.dob
     },
-    beforeMount() {
-      // this.getUserDetails();
-    },
     methods: {
       openModal(modalId, docType, docSide) {
         this.documentType = docType
@@ -517,7 +514,12 @@
           )
           updatedUserDetails.token = this.$auth.getToken('local')
           console.log('updated user =====>', updatedUserDetails)
-          this.authenticate(updatedUserDetails)
+
+          const userLoad = {
+            key: 'user',
+            value: updatedUserDetails,
+          }
+          this.$store.commit('auth/SET', userLoad)
           this.firstname = this.userDetails.first_name
           this.lastname = this.userDetails.last_name
           this.username = this.userDetails.username

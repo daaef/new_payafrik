@@ -42,50 +42,9 @@
       <p class="c-white">Loading billers...</p>
     </div>
   </section>
-  <!-- <div>
-        <div  v-if="!loadingBillers && billers.length > 0"  class="container paddingTop50 mainbody">
-          <div class="headerTitle">
-            <nuxt-link to="/user-area/mart"><img src="../../../../assets/img/back.png" alt="" /></nuxt-link>
-            <p class="mainTitle">{{billers[0].categoryname}} Billers</p>
-          </div>
-          <div class="dividerdark"></div>
-          <div class="paddingTop20"></div>
-          <div class="row">
-            <div class="col-md-12">
-              <div class="row">
-                <div v-for="biller of billers" v-bind:key="biller.billerid" class="col-md-4">
-                    <div class="billercard">
-                      <div class="cardrow">
-                        <div class="imgHolder">
-                        </div>
-                        <div class="content">
-                          <p>{{biller.billername}}</p>
-                          <p class="cat">Category: {{biller.categoryname}}</p>
-                          <div class="pay">
-                            <a @click='setBillerAndNavigate(biller)'>See Payment Items</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-if="!loadingBillers && billers.length === 0" class="text-center mt-5">
-            <img class="empty-state" src="../../../../assets/img/no_data.svg">
-            <p class="c-white">Sorry! No billers found for this category</p>
-        </div>
-        <div v-if="loadingBillers" class="text-center mt-5">
-            <i class="fas fa-circle-notch fa-spin fa-lg c-white mb-3"></i>
-            <p class="c-white">Loading billers...</p>
-        </div>
-    </div> -->
 </template>
 
 <script>
-  import { mapMutations } from 'vuex'
   export default {
     layout: 'main',
     middleware: 'query',
@@ -121,10 +80,6 @@
           console.log(e)
         }
       },
-
-      ...mapMutations({
-        toggleChatBox: 'setActiveBiller',
-      }),
 
       setBillerAndNavigate(biller) {
         this.$store.commit('setActiveBiller', biller)

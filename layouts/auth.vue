@@ -5,7 +5,7 @@
       <section class="dash-body auth__page">
         <div class="col-lg-5 text-center">
           <div class="w-100">
-            <div class="welcome-text">
+            <div class="welcome-text mb-24">
               <div class="text-center">
                 <img src="~/assets/img/logo.png" alt="" />
               </div>
