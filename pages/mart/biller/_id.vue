@@ -33,7 +33,7 @@
         v-if="!loadingPaymentItems && paymentItems.length === 0"
         class="text-center mt-5"
       >
-        <img class="empty-state" src="~/assets/img/no_data.svg" />
+        <img class="empty-state" src="~/assets/img/no_data.svg" alt="" />
         <p class="c-white">Sorry! No payment items found for this biller</p>
       </div>
       <div v-if="loadingPaymentItems" class="text-center mt-5">
@@ -152,6 +152,7 @@
               <div class="col-md-12 text-center">
                 <img
                   src="https://img.icons8.com/color/80/000000/checked--v1.png"
+                  alt=""
                 />
                 <h6 class="success mt-2">Transaction Successful</h6>
                 <p class="mt-2">
@@ -388,7 +389,11 @@
       async validateCustomer() {
         console.log('ACTIVE BILLER=> ', this.activeBiller)
         if (this.activeBiller.billerid === 'AED') {
-          await this.validateAEDC()
+          await this.$refs.ruleForm.validate(async (valid) => {
+            if (valid) {
+              await this.validateAEDC()
+            }
+          })
         } else {
           this.makingPayment = true
           const headers = {
@@ -429,67 +434,37 @@
           'Content-Type': 'application/json',
           'pfk-user-token': this.$auth.getToken('local'),
         }
-        await this.$refs.ruleForm.validate(async (valid) => {
-          if (valid) {
-            const payload = {
-              customerId: this.paymentDetails.customerId,
-              paymentCode: this.activeItem.paymentCode,
-            }
-            try {
-              const validationResponse = await this.$axios.$post(
-                this.interswitchBaseUrl + 'validate-customer',
-                payload,
-                { headers }
-              )
-              console.log('validation Response', validationResponse)
-              if (validationResponse.status === true) {
-                await this.sendPaymentAdvice()
-              }
-            } catch (e) {
-              this.$toast.error(e.response.data.detail)
-              this.closeModal()
-              this.makingPayment = false
-            }
+        let phoneNumber = this.paymentDetails.phone
+        if (this.paymentDetails.phone.charAt[0] === '+') {
+          phoneNumber = '0' + this.paymentDetails.phone.substring(3)
+        }
+        const payload = {
+          metreNumber: this.paymentDetails.customerId,
+          phone: phoneNumber,
+          amount: +this.paymentDetails.amount * 100,
+        }
+        try {
+          const validationResponse = await this.$axios.$post(
+            this.superPayBaseUrl + 'aedc/validate-customer',
+            payload,
+            { headers }
+          )
+          console.log('validation Response', validationResponse)
+          this.validation = validationResponse.data
+          if (validationResponse.status === true) {
+            console.log('running payForAEDC')
+            await this.payForAEDC()
           }
-        })
-      },
-
-      async sendPaymentAdvice() {
-        if (this.activeBiller.billerid === 'AED') {
-          await this.payForAEDC()
-        } else {
-          this.makingPayment = true
-          const headers = {
-            'Content-Type': 'application/json',
-            'pfk-user-token': this.$auth.getToken('local'),
-          }
-          let phoneNumber = this.paymentDetails.phone
-          if (this.paymentDetails.phone.charAt[0] === '+') {
-            phoneNumber = '0' + this.paymentDetails.phone.substring(3)
-          }
-          const payload = {
-            metreNumber: this.paymentDetails.customerId,
-            phone: phoneNumber,
-            amount: +this.paymentDetails.amount * 100,
-          }
-          try {
-            const validationResponse = await this.$axios.$post(
-              this.superPayBaseUrl + 'aedc/validate-customer',
-              payload,
-              { headers }
-            )
-            console.log('validation Response', validationResponse)
-            this.validation = validationResponse.data
-            this.validated = true
-            this.makingPayment = false
-            this.closeModal()
-          } catch (e) {
-            this.$toast.error(e.response.data.message)
-            this.makingPayment = false
-          }
+          this.validated = true
+          this.makingPayment = false
+          this.closeModal()
+        } catch (e) {
+          this.$toast.error(e.response.data.message)
+          this.makingPayment = false
         }
       },
       async payForAEDC() {
+        console.log('In payForAEDC')
         this.makingPayment = true
         const headers = {
           'Content-Type': 'application/json',
@@ -499,12 +474,15 @@
           tid: this.validation.tid,
           amount: +this.validation.totalamount * 100,
         }
+
+        console.log('Created Payload payForAEDC')
         try {
           const adviceResponse = await this.$axios.$post(
             this.superPayBaseUrl + 'aedc/payment',
             payload,
             { headers }
           )
+          console.log('request made payForAEDC')
           console.log('Advice Response', adviceResponse)
           if (adviceResponse.status === true) {
             this.pfkTransactionRef = adviceResponse.data.payafrikTransactionRef
@@ -515,6 +493,7 @@
             this.$store.dispatch('getUserDetails')
           }
         } catch (e) {
+          console.log('Error In PayEDC')
           console.log(e.response)
           this.paymentFailed = true
           if (e.response.data.name) {
