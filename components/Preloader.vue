@@ -50,7 +50,7 @@
     mounted() {
       setTimeout(() => {
         this.finish()
-      }, 20500)
+      }, 1500)
     },
     methods: {
       start() {
