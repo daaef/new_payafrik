@@ -87,8 +87,6 @@
   import PowerBar from '~/components/powerBar'
 
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: { PowerBar },
     data() {
       return {
@@ -133,6 +131,13 @@
         loading: 'dataLoading',
       }),
     },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

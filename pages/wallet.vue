@@ -354,6 +354,9 @@
         // console.log('theres a query')
         this.changeWallet(this.$route.query.active)
       }
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
     },
     beforeMount() {
       this.closeSideBar()
@@ -375,7 +378,7 @@
         this.activeWallet = wallet
         setTimeout(() => {
           this.loadChart()
-        }, 500)
+        }, 1500)
       },
       closeSideBar() {
         this.$store.commit('global/closeSidebar')

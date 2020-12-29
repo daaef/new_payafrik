@@ -232,8 +232,6 @@
 <script>
   import { mapGetters } from 'vuex'
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: {},
     data() {
       return {
@@ -324,24 +322,32 @@
         phone: this.userDetails.phone,
         email: this.userDetails.email,
       }
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
     },
     methods: {
-      handleChange(value) {
-        console.log(value)
-      },
-      handleBlur() {
-        console.log('blur')
-      },
-      handleFocus() {
-        console.log('focus')
-      },
-      openModal(item) {
-        if (item.amount !== '0') {
-          this.paymentDetails.amount = +item.amount / 100
-          item.fixed = true
+      authenticate(user) {
+        const userLoad = {
+          key: 'user',
+          value: user,
         }
-        this.activeItem = item
-        this.purchaseModal = true
+
+        this.$store.commit('auth/SET', userLoad)
+      },
+      checkTokenBalance() {
+        this.makingPayment = true
+        // console.log('usertokenbalance: ', this.userDetails.balance);
+        // console.log('paymentamount: ', this.paymentDetails.amount);
+
+        if (+this.paymentDetails.amount > +this.userDetails.balance) {
+          this.$toast.error(
+            'Sorry, you do not have enough tokens to purchase this item'
+          )
+          this.makingPayment = false
+        } else {
+          this.validateCustomer()
+        }
       },
       closeModal(modalId) {
         this.activeItem = {}
@@ -372,96 +378,41 @@
           console.log(e)
         }
       },
-      checkTokenBalance() {
-        this.makingPayment = true
-        // console.log('usertokenbalance: ', this.userDetails.balance);
-        // console.log('paymentamount: ', this.paymentDetails.amount);
-
-        if (+this.paymentDetails.amount > +this.userDetails.balance) {
-          this.$toast.error(
-            'Sorry, you do not have enough tokens to purchase this item'
-          )
-          this.makingPayment = false
-        } else {
-          this.validateCustomer()
-        }
-      },
-      async validateCustomer() {
-        console.log('ACTIVE BILLER=> ', this.activeBiller)
-        if (this.activeBiller.billerid === 'AED') {
-          await this.$refs.ruleForm.validate(async (valid) => {
-            if (valid) {
-              await this.validateAEDC()
-            }
-          })
-        } else {
-          this.makingPayment = true
-          const headers = {
-            'Content-Type': 'application/json',
-            'pfk-user-token': this.$auth.getToken('local'),
-          }
-
-          await this.$refs.ruleForm.validate(async (valid) => {
-            if (valid) {
-              const payload = {
-                customerId: this.paymentDetails.customerId,
-                paymentCode: this.activeItem.paymentCode,
-              }
-              try {
-                const validationResponse = await this.$axios.$post(
-                  this.interswitchBaseUrl + 'validate-customer',
-                  payload,
-                  { headers }
-                )
-                this.closeModal()
-                console.log('validation Response', validationResponse)
-                if (validationResponse.status === true) {
-                  await this.sendPaymentAdvice()
-                }
-              } catch (e) {
-                this.$toast.error(e.response.data.detail)
-                this.closeModal()
-                this.makingPayment = false
-              }
-            }
-          })
-        }
-      },
-
-      async validateAEDC() {
-        this.makingPayment = true
+      async getUserDetails() {
         const headers = {
           'Content-Type': 'application/json',
-          'pfk-user-token': this.$auth.getToken('local'),
-        }
-        let phoneNumber = this.paymentDetails.phone
-        if (this.paymentDetails.phone.charAt[0] === '+') {
-          phoneNumber = '0' + this.paymentDetails.phone.substring(3)
-        }
-        const payload = {
-          metreNumber: this.paymentDetails.customerId,
-          phone: phoneNumber,
-          amount: +this.paymentDetails.amount * 100,
+          Authorization: this.$auth.getToken('local'),
         }
         try {
-          const validationResponse = await this.$axios.$post(
-            this.superPayBaseUrl + 'aedc/validate-customer',
-            payload,
+          const updatedUserDetails = await this.$axios.$get(
+            this.baseUrl + 'auth/user/profile/',
             { headers }
           )
-          console.log('validation Response', validationResponse)
-          this.validation = validationResponse.data
-          if (validationResponse.status === true) {
-            console.log('running payForAEDC')
-            await this.payForAEDC()
-          }
-          this.validated = true
-          this.makingPayment = false
-          this.closeModal()
+          updatedUserDetails.token = this.$auth.getToken('local')
+          console.log('User ==>', updatedUserDetails)
+          this.authenticate(updatedUserDetails)
         } catch (e) {
-          this.$toast.error(e.response.data.message)
-          this.makingPayment = false
+          this.$toast.error(e.response.data.detail)
+          this.importingWallet = false
+          console.log(e.response)
         }
+      },
+      handleBlur() {
+        console.log('blur')
+      },
+      handleChange(value) {
+        console.log(value)
+      },
+      handleFocus() {
+        console.log('focus')
+      },
+      openModal(item) {
+        if (item.amount !== '0') {
+          this.paymentDetails.amount = +item.amount / 100
+          item.fixed = true
+        }
+        this.activeItem = item
+        this.purchaseModal = true
       },
       async payForAEDC() {
         console.log('In payForAEDC')
@@ -519,33 +470,6 @@
           this.makingPayment = false
         }
       },
-      async getUserDetails() {
-        const headers = {
-          'Content-Type': 'application/json',
-          Authorization: this.$auth.getToken('local'),
-        }
-        try {
-          const updatedUserDetails = await this.$axios.$get(
-            this.baseUrl + 'auth/user/profile/',
-            { headers }
-          )
-          updatedUserDetails.token = this.$auth.getToken('local')
-          console.log('User ==>', updatedUserDetails)
-          this.authenticate(updatedUserDetails)
-        } catch (e) {
-          this.$toast.error(e.response.data.detail)
-          this.importingWallet = false
-          console.log(e.response)
-        }
-      },
-      authenticate(user) {
-        const userLoad = {
-          key: 'user',
-          value: user,
-        }
-
-        this.$store.commit('auth/SET', userLoad)
-      },
       async queryTransaction(transactionRef) {
         try {
           const paymentItemsResponse = await this.$axios.$get(
@@ -567,7 +491,86 @@
           console.log(e)
         }
       },
+
+      async validateAEDC() {
+        this.makingPayment = true
+        const headers = {
+          'Content-Type': 'application/json',
+          'pfk-user-token': this.$auth.getToken('local'),
+        }
+        let phoneNumber = this.paymentDetails.phone
+        if (this.paymentDetails.phone.charAt[0] === '+') {
+          phoneNumber = '0' + this.paymentDetails.phone.substring(3)
+        }
+        const payload = {
+          metreNumber: this.paymentDetails.customerId,
+          phone: phoneNumber,
+          amount: +this.paymentDetails.amount * 100,
+        }
+        try {
+          const validationResponse = await this.$axios.$post(
+            this.superPayBaseUrl + 'aedc/validate-customer',
+            payload,
+            { headers }
+          )
+          console.log('validation Response', validationResponse)
+          this.validation = validationResponse.data
+          if (validationResponse.status === true) {
+            console.log('running payForAEDC')
+            await this.payForAEDC()
+          }
+          this.validated = true
+          this.makingPayment = false
+          this.closeModal()
+        } catch (e) {
+          this.$toast.error(e.response.data.message)
+          this.makingPayment = false
+        }
+      },
+      async validateCustomer() {
+        console.log('ACTIVE BILLER=> ', this.activeBiller)
+        if (this.activeBiller.billerid === 'AED') {
+          await this.$refs.ruleForm.validate(async (valid) => {
+            if (valid) {
+              await this.validateAEDC()
+            }
+          })
+        } else {
+          this.makingPayment = true
+          const headers = {
+            'Content-Type': 'application/json',
+            'pfk-user-token': this.$auth.getToken('local'),
+          }
+
+          await this.$refs.ruleForm.validate(async (valid) => {
+            if (valid) {
+              const payload = {
+                customerId: this.paymentDetails.customerId,
+                paymentCode: this.activeItem.paymentCode,
+              }
+              try {
+                const validationResponse = await this.$axios.$post(
+                  this.interswitchBaseUrl + 'validate-customer',
+                  payload,
+                  { headers }
+                )
+                this.closeModal()
+                console.log('validation Response', validationResponse)
+                if (validationResponse.status === true) {
+                  await this.sendPaymentAdvice()
+                }
+              } catch (e) {
+                this.$toast.error(e.response.data.detail)
+                this.closeModal()
+                this.makingPayment = false
+              }
+            }
+          })
+        }
+      },
     },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <transition name="appear" mode="in-out">
+  <XyzTransition appear xyz="fade ease-out-back">
     <div v-if="loading" class="loader">
       <div class="animated__circs">
         <svg
@@ -28,7 +28,7 @@
                 points="1029,7 0,0 514,1192 "
               />
               <polygon
-                id="logo--up"
+                id="logo--down"
                 fill="#0740A9"
                 class="fil0"
                 points="1760,1375 731,1381 1245,189 "
@@ -38,7 +38,7 @@
         </svg>
       </div>
     </div>
-  </transition>
+  </XyzTransition>
 </template>
 
 <script>
@@ -72,32 +72,6 @@
     justify-content: center;
     align-items: center;
     position: relative;
-
-    &::before {
-      content: '';
-      background: url(../assets/img/circ1.png);
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      z-index: 4567890;
-      background-size: cover;
-      top: 0;
-      left: 0;
-      animation: circRotate infinite 20s linear;
-    }
-
-    &::after {
-      content: '';
-      background: url(../assets/img/circ2.png);
-      position: absolute;
-      height: 90%;
-      width: 90%;
-      z-index: 4567890;
-      top: 10px;
-      left: 10px;
-      background-size: cover;
-      animation: circRotate infinite 20s linear reverse;
-    }
   }
 
   .loader {
@@ -107,17 +81,20 @@
     align-items: center;
     height: 100%;
     width: 100%;
-    z-index: 999980;
-    background: #111649;
+    z-index: 9999980;
+    top: 0;
+    left: 0;
+    background: linear-gradient(270deg, #111649, #101968);
+    background-size: 400% 400%;
+    animation: bgSwitch 4s ease infinite;
 
-    img {
-      height: 35px !important;
+    svg {
+      height: 50px !important;
     }
   }
 
   .appear-enter {
-    //transform: scaleX(0);
-    opacity: 0;
+    transform: translateX(0);
   }
 
   .appear-enter-active {
@@ -125,8 +102,7 @@
   }
 
   .appear-leave-active {
-    //transform: scaleX(0);
-    opacity: 0;
+    transform: translateX(100%);
     transition: all 0.5s ease-in-out;
   }
 
@@ -136,6 +112,44 @@
     }
     100% {
       transform: rotate(360deg);
+    }
+  }
+
+  #logo--up {
+    animation: logoTop infinite 1s linear;
+  }
+
+  @keyframes logoTop {
+    0% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(100px);
+    }
+  }
+
+  @keyframes bgSwitch {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  #logo--down {
+    animation: logoDown infinite 1s linear;
+  }
+
+  @keyframes logoDown {
+    0% {
+      transform: translateY(10px);
+    }
+    100% {
+      transform: translateY(-100px);
     }
   }
 </style>

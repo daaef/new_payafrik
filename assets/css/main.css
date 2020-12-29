@@ -4775,17 +4775,3 @@ input.ltc-color {
   top: 0;
   transform: translateY(-100%);
 }
-
-#logo--top {
-  animation: logoTop linear infinite 1s;
-}
-
-@keyframes logoTop {
-  from {
-    transform: translateY(0px);
-  }
-
-  to {
-    transform: translateY(20px);
-  }
-}

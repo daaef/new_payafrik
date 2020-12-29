@@ -30,5 +30,10 @@
   // import Logo from '~/components/Logo.vue'
   export default {
     components: {},
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
   }
 </script>

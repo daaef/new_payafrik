@@ -162,9 +162,6 @@
 
   export default {
     components: {},
-    layout: 'auth',
-    middleware: 'guest',
-    auth: false,
     data() {
       return {
         country4Code: 'Nigeria',
@@ -189,26 +186,48 @@
     }),
     mounted() {
       this.confirmationStatus = this.$route.query.confirmation
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
     },
     methods: {
-      handleChange(value) {
-        this.selectedCountry = this.countryCodes.filter((country) => {
-          return country.name === value
-        })[0]
+      authenticate(user) {
+        const userLoad = {
+          key: 'user',
+          value: user,
+        }
+
+        this.$store.commit('auth/SET', userLoad)
       },
-      handleBlur() {
-        console.log('blur')
-      },
-      handleFocus() {
-        console.log('focus')
+
+      enforceNumbersOnly(e) {
+        const key = e.keyCode ? e.keyCode : e.which
+        if (
+          !(
+            [8, 9, 13, 27, 46, 110, 190].includes(key) ||
+            (key === 65 && (e.ctrlKey || e.metaKey)) ||
+            (key >= 35 && key <= 40) ||
+            (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
+            (key >= 96 && key <= 105)
+          )
+        )
+          e.preventDefault()
       },
       filterOption(input, option) {
         return option.componentOptions.children[0].text
           .toLowerCase()
           .includes(input.toLowerCase())
       },
-      toggleViewPassword() {
-        this.viewPassword = !this.viewPassword
+      handleBlur() {
+        console.log('blur')
+      },
+      handleChange(value) {
+        this.selectedCountry = this.countryCodes.filter((country) => {
+          return country.name === value
+        })[0]
+      },
+      handleFocus() {
+        console.log('focus')
       },
       async requestReset() {
         const payload = {
@@ -261,33 +280,16 @@
           console.log(e.response)
         }
       },
-
-      enforceNumbersOnly(e) {
-        const key = e.keyCode ? e.keyCode : e.which
-        if (
-          !(
-            [8, 9, 13, 27, 46, 110, 190].includes(key) ||
-            (key === 65 && (e.ctrlKey || e.metaKey)) ||
-            (key >= 35 && key <= 40) ||
-            (key >= 48 && key <= 57 && !(e.shiftKey || e.altKey)) ||
-            (key >= 96 && key <= 105)
-          )
-        )
-          e.preventDefault()
-      },
-
-      authenticate(user) {
-        const userLoad = {
-          key: 'user',
-          value: user,
-        }
-
-        this.$store.commit('auth/SET', userLoad)
+      toggleViewPassword() {
+        this.viewPassword = !this.viewPassword
       },
       ...mapMutations({
         toggleSidebar: 'global/authenticateUser',
       }),
     },
+    layout: 'auth',
+    middleware: 'guest',
+    auth: false,
   }
 </script>
 

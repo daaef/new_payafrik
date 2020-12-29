@@ -267,6 +267,11 @@
           val * this.nairaValues[this.fromCurrency.toLowerCase()]
       },
     },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     computed: {
       userDetails() {
         return this.$store.state.auth.user

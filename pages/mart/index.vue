@@ -140,8 +140,6 @@
 
 <script>
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: {},
     data() {
       return {
@@ -155,6 +153,11 @@
       }
     },
     computed: {},
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
       async getBillerCategories() {
         this.loadingCategories = true
@@ -175,6 +178,8 @@
         }
       },
     },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

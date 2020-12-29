@@ -46,8 +46,6 @@
 
 <script>
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: {},
     data() {
       return {
@@ -59,6 +57,11 @@
     },
     beforeMount() {
       this.getCategoryBillers()
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
     },
     methods: {
       async getCategoryBillers() {
@@ -92,6 +95,8 @@
         })
       },
     },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

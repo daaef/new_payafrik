@@ -47,7 +47,6 @@
 </template>
 <script>
   export default {
-    layout: 'main',
     data() {
       return {
         interswitchBaseUrl: process.env.interswitchBaseUrl,
@@ -61,36 +60,13 @@
         return this.$store.state.authenticatedUser
       },
     },
+    mounted() {
+      this.verifyPayment()
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
-      async verifyPayment() {
-        this.processing = true
-        const ref = this.$route.query.ref
-        const productId = this.$route.query.prodId
-        const amount = this.$route.query.amount
-        this.transactionRef = ref
-
-        const url =
-          this.interswitchBaseUrl +
-          'query-transaction/webpay/' +
-          ref +
-          '/' +
-          amount +
-          '/' +
-          productId
-        try {
-          const response = await this.$axios.$get(url)
-          console.log('VERIFICATION RESPONSE +++++', response)
-          this.transactionData = response.data
-          this.updateTransaction()
-          this.processing = false
-        } catch (e) {
-          // this.$toast.error(e.response.data.error)
-          this.loadingPaymentItems = false
-          console.log(e)
-          this.processing = false
-        }
-      },
-
       async updateTransaction() {
         let transactionStatus = ''
         if (this.transactionData.ResponseCode === '00') {
@@ -124,11 +100,36 @@
           this.processing = false
         }
       },
+      async verifyPayment() {
+        this.processing = true
+        const ref = this.$route.query.ref
+        const productId = this.$route.query.prodId
+        const amount = this.$route.query.amount
+        this.transactionRef = ref
+
+        const url =
+          this.interswitchBaseUrl +
+          'query-transaction/webpay/' +
+          ref +
+          '/' +
+          amount +
+          '/' +
+          productId
+        try {
+          const response = await this.$axios.$get(url)
+          console.log('VERIFICATION RESPONSE +++++', response)
+          this.transactionData = response.data
+          this.updateTransaction()
+          this.processing = false
+        } catch (e) {
+          // this.$toast.error(e.response.data.error)
+          this.loadingPaymentItems = false
+          console.log(e)
+          this.processing = false
+        }
+      },
     },
-    mounted() {
-      this.verifyPayment()
-    },
-    beforeMount() {},
+    layout: 'main',
   }
 </script>
 

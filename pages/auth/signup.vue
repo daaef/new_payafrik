@@ -156,8 +156,6 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    layout: 'auth',
-    middleware: 'guest',
     components: {},
     data() {
       return {
@@ -231,11 +229,31 @@
         },
       }
     },
-    auth: false,
     computed: mapGetters({
       countryCodes: 'countryCodes',
     }),
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text
+          .toLowerCase()
+          .includes(input.toLowerCase())
+      },
+      handleBlur() {
+        console.log('blur')
+      },
+      handleChange(value) {
+        this.selectedCountry = this.countryCodes.filter((country) => {
+          return country.name === value
+        })[0]
+      },
+      handleFocus() {
+        console.log('focus')
+      },
       onSubmit() {
         this.$refs.ruleForm.validate((valid) => {
           if (valid) {
@@ -244,22 +262,6 @@
       },
       resetForm() {
         this.$refs.ruleForm.resetFields()
-      },
-      handleChange(value) {
-        this.selectedCountry = this.countryCodes.filter((country) => {
-          return country.name === value
-        })[0]
-      },
-      handleBlur() {
-        console.log('blur')
-      },
-      handleFocus() {
-        console.log('focus')
-      },
-      filterOption(input, option) {
-        return option.componentOptions.children[0].text
-          .toLowerCase()
-          .includes(input.toLowerCase())
       },
 
       async signUp(event) {
@@ -305,6 +307,9 @@
         })
       },
     },
+    layout: 'auth',
+    middleware: 'guest',
+    auth: false,
   }
 </script>
 

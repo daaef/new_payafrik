@@ -181,8 +181,6 @@
   import { mapMutations } from 'vuex'
 
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: {},
     data() {
       return {
@@ -194,14 +192,29 @@
       }
     },
     computed: {
-      userDetails() {
-        return this.$store.state.auth.user
-      },
       allTickets() {
         return this.$store.state.global.supportTickets
       },
+      userDetails() {
+        return this.$store.state.auth.user
+      },
+    },
+    beforeMount() {
+      if (this.allTickets && this.allTickets.length === 0) {
+        this.getTickets()
+      } else {
+        this.loadTicket()
+      }
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
     },
     methods: {
+      closeSideBar() {
+        this.$store.commit('global/closeSidebar')
+      },
       formatDate(date) {
         const d = new Date(date)
         let month = '' + (d.getMonth() + 1)
@@ -212,19 +225,6 @@
         if (day.length < 2) day = '0' + day
 
         return [year, month, day].join('-')
-      },
-
-      loadTicket() {
-        // if(this.allTickets.length === 0){
-        //   this.getTickets()
-        // }else{
-        this.allTickets.forEach((ticket) => {
-          if (ticket.id === this.$route.params.ticketId) {
-            console.log('selected ticket===> ', ticket)
-            this.selectedTicket = ticket
-          }
-        })
-        // }
       },
 
       async getTickets() {
@@ -257,6 +257,19 @@
           console.log(e.response)
           this.loadingTickets = false
         }
+      },
+
+      loadTicket() {
+        // if(this.allTickets.length === 0){
+        //   this.getTickets()
+        // }else{
+        this.allTickets.forEach((ticket) => {
+          if (ticket.id === this.$route.params.ticketId) {
+            console.log('selected ticket===> ', ticket)
+            this.selectedTicket = ticket
+          }
+        })
+        // }
       },
 
       async sendResponse() {
@@ -294,22 +307,13 @@
           this.processing = false
         }
       },
-
-      closeSideBar() {
-        this.$store.commit('global/closeSidebar')
-      },
       ...mapMutations({
         toggleSidebar: 'global/toggleSidebar',
         closeSideBar: 'global/closeSidebar',
       }),
     },
-    beforeMount() {
-      if (this.allTickets && this.allTickets.length === 0) {
-        this.getTickets()
-      } else {
-        this.loadTicket()
-      }
-    },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

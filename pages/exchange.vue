@@ -184,8 +184,6 @@
     directives: {
       currency: CurrencyDirective,
     },
-    layout: 'main',
-    middleware: 'query',
     data() {
       return {
         exchanging: false,
@@ -239,63 +237,17 @@
     },
     mounted() {
       this.leftExchangeValue1 = this.leftExchangeValue1 * this.leftPrice
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
     },
     methods: {
       blurredRightExchange() {
         this.leftExchangeValue =
           this.rightExchangeValue * (this.rightPrice / this.leftPrice)
       },
-      toggleChatBox() {
-        this.$store.commit('global/toggleChatBox')
-      },
       calculateConvertion(val) {
         return numeral(val).format('0,0.00')
-      },
-      handleLeftSelect(val) {
-        const current = this.data.filter((datum) => {
-          return datum.currency === val
-        })
-        this.leftCryptoCurrency = current[0].asset_name.name
-        this.leftSelImg = current[0].asset_name.img
-        this.leftCrypClass = current[0].currClass
-        this.leftDataClass = current[0].className
-        this.leftPrice = current[0].price
-        this.leftExchangeValue1 = this.leftExchangeValue * this.leftPrice
-        this.rightExchangeValue =
-          this.leftExchangeValue * (this.leftPrice / this.rightPrice)
-        console.log('changing leftExcangevalue')
-      },
-      flipCurrencies() {
-        ;[
-          this.leftDataClass,
-          this.rightDataClass,
-          this.leftFromCurrency,
-          this.rightFromCurrency,
-          this.leftPrice,
-          this.rightPrice,
-        ] = [
-          this.rightDataClass,
-          this.leftDataClass,
-          this.rightFromCurrency,
-          this.leftFromCurrency,
-          this.rightPrice,
-          this.leftPrice,
-        ]
-        this.handleLeftSelect(this.leftFromCurrency)
-        this.handleRightSelect(this.rightFromCurrency)
-        this.leftExchangeValue1 = this.leftExchangeValue * this.leftPrice
-      },
-      handleRightSelect(val) {
-        const current = this.data.filter((datum) => {
-          return datum.currency === val
-        })
-        this.rightCryptoCurrency = current[0].asset_name.name
-        this.rightSelImg = current[0].asset_name.img
-        this.rightCrypClass = current[0].currClass
-        this.rightDataClass = current[0].className
-        this.rightPrice = current[0].price
-        this.rightExchangeValue =
-          this.leftExchangeValue * (this.leftPrice / this.rightPrice)
       },
       async exchange() {
         this.exchanging = true
@@ -340,6 +292,55 @@
           this.exchanging = false
         }
       },
+      flipCurrencies() {
+        ;[
+          this.leftDataClass,
+          this.rightDataClass,
+          this.leftFromCurrency,
+          this.rightFromCurrency,
+          this.leftPrice,
+          this.rightPrice,
+        ] = [
+          this.rightDataClass,
+          this.leftDataClass,
+          this.rightFromCurrency,
+          this.leftFromCurrency,
+          this.rightPrice,
+          this.leftPrice,
+        ]
+        this.handleLeftSelect(this.leftFromCurrency)
+        this.handleRightSelect(this.rightFromCurrency)
+        this.leftExchangeValue1 = this.leftExchangeValue * this.leftPrice
+      },
+      handleLeftSelect(val) {
+        const current = this.data.filter((datum) => {
+          return datum.currency === val
+        })
+        this.leftCryptoCurrency = current[0].asset_name.name
+        this.leftSelImg = current[0].asset_name.img
+        this.leftCrypClass = current[0].currClass
+        this.leftDataClass = current[0].className
+        this.leftPrice = current[0].price
+        this.leftExchangeValue1 = this.leftExchangeValue * this.leftPrice
+        this.rightExchangeValue =
+          this.leftExchangeValue * (this.leftPrice / this.rightPrice)
+        console.log('changing leftExcangevalue')
+      },
+      handleRightSelect(val) {
+        const current = this.data.filter((datum) => {
+          return datum.currency === val
+        })
+        this.rightCryptoCurrency = current[0].asset_name.name
+        this.rightSelImg = current[0].asset_name.img
+        this.rightCrypClass = current[0].currClass
+        this.rightDataClass = current[0].className
+        this.rightPrice = current[0].price
+        this.rightExchangeValue =
+          this.leftExchangeValue * (this.leftPrice / this.rightPrice)
+      },
+      toggleChatBox() {
+        this.$store.commit('global/toggleChatBox')
+      },
       toggleTokenModal() {
         this.$store.commit('global/toggleTokenModal')
       },
@@ -347,5 +348,7 @@
         toggleChatBox: 'toggleChatBox',
       }),
     },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>

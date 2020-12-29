@@ -120,8 +120,6 @@
 
 <script>
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: {},
     data() {
       return {
@@ -154,19 +152,12 @@
     beforeMount() {
       this.getUserTransactions(this.baseUrl + 'transactions/transactions')
     },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
-      formatDate(date) {
-        const d = new Date(date)
-        let month = '' + (d.getMonth() + 1)
-        let day = '' + d.getDate()
-        const year = d.getFullYear()
-
-        if (month.length < 2) month = '0' + month
-        if (day.length < 2) day = '0' + day
-
-        return [year, month, day].join('-')
-      },
-
       applyFilters() {
         if (
           this.filters.minDate === '' &&
@@ -196,6 +187,43 @@
           this.transfersPagination.page -= 1
         }
         this.getUserTransactions()
+      },
+      formatDate(date) {
+        const d = new Date(date)
+        let month = '' + (d.getMonth() + 1)
+        let day = '' + d.getDate()
+        const year = d.getFullYear()
+
+        if (month.length < 2) month = '0' + month
+        if (day.length < 2) day = '0' + day
+
+        return [year, month, day].join('-')
+      },
+
+      async getUserPurchases() {
+        this.loadingPurchases = true
+        const headers = {
+          'Content-Type': 'application/json',
+          'pfk-user-token': this.$auth.getToken('local'),
+        }
+
+        try {
+          const userPurchasesResponse = await this.$axios.$get(
+            this.interswitchBaseUrl + 'transactions/user/',
+            { headers }
+          )
+          console.log('User transactions ==>', userPurchasesResponse)
+          // if (this.transfersPagination.itemsPerPage > userTransactionsResponse.count) {
+          //     this.transfersPagination.itemsPerPage = userTransactionsResponse.count
+          // }
+          // this.transfersPagination.totalRecords = userTransactionsResponse.count
+          this.purchases = userPurchasesResponse.data.transactions
+          this.loadingPurchases = false
+        } catch (e) {
+          this.$toast.error(e.message)
+          console.log(e.message)
+          this.loadingPurchases = false
+        }
       },
       async getUserTransactions(url) {
         this.transfers = []
@@ -231,33 +259,9 @@
           this.loadingTransfers = false
         }
       },
-
-      async getUserPurchases() {
-        this.loadingPurchases = true
-        const headers = {
-          'Content-Type': 'application/json',
-          'pfk-user-token': this.$auth.getToken('local'),
-        }
-
-        try {
-          const userPurchasesResponse = await this.$axios.$get(
-            this.interswitchBaseUrl + 'transactions/user/',
-            { headers }
-          )
-          console.log('User transactions ==>', userPurchasesResponse)
-          // if (this.transfersPagination.itemsPerPage > userTransactionsResponse.count) {
-          //     this.transfersPagination.itemsPerPage = userTransactionsResponse.count
-          // }
-          // this.transfersPagination.totalRecords = userTransactionsResponse.count
-          this.purchases = userPurchasesResponse.data.transactions
-          this.loadingPurchases = false
-        } catch (e) {
-          this.$toast.error(e.message)
-          console.log(e.message)
-          this.loadingPurchases = false
-        }
-      },
     },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

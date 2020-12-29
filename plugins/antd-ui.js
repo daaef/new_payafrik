@@ -4,7 +4,9 @@ import Antd from 'ant-design-vue/lib'
 import VueCurrencyInput from 'vue-currency-input'
 import UIkit from 'uikit'
 import Icons from 'uikit/dist/js/uikit-icons'
+import VueAnimXYZ from '@animxyz/vue'
 
+Vue.use(VueAnimXYZ)
 // loads the Icon plugin
 UIkit.use(Icons)
 

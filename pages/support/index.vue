@@ -157,8 +157,6 @@
   import { mapMutations } from 'vuex'
 
   export default {
-    layout: 'main',
-    middleware: 'query',
     components: {},
     data() {
       return {
@@ -192,15 +190,64 @@
         return this.$store.state.auth.user
       },
     },
+    beforeMount() {
+      this.getTickets()
+    },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
-      handleChange(value) {
-        console.log(value)
+      closeSideBar() {
+        this.$store.commit('global/closeSidebar')
       },
-      handleBlur() {
-        console.log('blur')
-      },
-      handleFocus() {
-        console.log('focus')
+
+      async createSupportTicket() {
+        this.creatingTicket = true
+        if (!this.newTicket.body || this.newTicket.body === '') {
+          return
+        }
+        this.processing = true
+        console.log(this.newTicket)
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: this.$auth.getToken('local'),
+        }
+
+        const ticketContent =
+          this.userDetails.username +
+          '|' +
+          this.userDetails.first_name +
+          ' ' +
+          this.userDetails.last_name +
+          '|' +
+          this.newTicket.title +
+          '|' +
+          this.newTicket.body
+
+        const requestBody = {
+          content: ticketContent,
+          customer: this.newTicket.username,
+        }
+
+        try {
+          const createResponse = await this.$axios.$post(
+            this.baseUrl + 'utilities/tickets/create-ticket/',
+            requestBody,
+            { headers }
+          )
+          console.log('Ticket create response ==>', createResponse)
+          this.$toast.success('Support ticket created successfully')
+          this.getTickets()
+          this.closeModal('newTicketModal')
+          this.creatingTicket = false
+        } catch (e) {
+          this.creatingTicket = false
+          this.$toast.error(e.response)
+          console.log(e.response)
+          this.processing = false
+        }
       },
       formatDate(date) {
         const d = new Date(date)
@@ -250,65 +297,22 @@
           this.loadingTickets = false
         }
       },
-
-      async createSupportTicket() {
-        this.creatingTicket = true
-        if (!this.newTicket.body || this.newTicket.body === '') {
-          return
-        }
-        this.processing = true
-        console.log(this.newTicket)
-        const headers = {
-          'Content-Type': 'application/json',
-          Authorization: this.$auth.getToken('local'),
-        }
-
-        const ticketContent =
-          this.userDetails.username +
-          '|' +
-          this.userDetails.first_name +
-          ' ' +
-          this.userDetails.last_name +
-          '|' +
-          this.newTicket.title +
-          '|' +
-          this.newTicket.body
-
-        const requestBody = {
-          content: ticketContent,
-          customer: this.newTicket.username,
-        }
-
-        try {
-          const createResponse = await this.$axios.$post(
-            this.baseUrl + 'utilities/tickets/create-ticket/',
-            requestBody,
-            { headers }
-          )
-          console.log('Ticket create response ==>', createResponse)
-          this.$toast.success('Support ticket created successfully')
-          this.getTickets()
-          this.closeModal('newTicketModal')
-          this.creatingTicket = false
-        } catch (e) {
-          this.creatingTicket = false
-          this.$toast.error(e.response)
-          console.log(e.response)
-          this.processing = false
-        }
+      handleBlur() {
+        console.log('blur')
       },
-
-      closeSideBar() {
-        this.$store.commit('global/closeSidebar')
+      handleChange(value) {
+        console.log(value)
+      },
+      handleFocus() {
+        console.log('focus')
       },
       ...mapMutations({
         toggleSidebar: 'global/toggleSidebar',
         closeSideBar: 'global/closeSidebar',
       }),
     },
-    beforeMount() {
-      this.getTickets()
-    },
+    layout: 'main',
+    middleware: 'query',
   }
 </script>
 

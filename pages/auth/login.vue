@@ -105,8 +105,6 @@
 
   export default {
     name: 'Login',
-    layout: 'auth',
-    middleware: 'guest',
     data() {
       return {
         country4Code: 'Nigeria',
@@ -168,25 +166,37 @@
         },
       }
     },
+    computed: mapGetters({
+      countryCodes: 'countryCodes',
+    }),
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
+      filterOption(input, option) {
+        return option.componentOptions.children[0].text
+          .toLowerCase()
+          .includes(input.toLowerCase())
+      },
+      handleBlur() {
+        console.log('blur')
+      },
       handleChange(value) {
         this.selectedCountry = this.countryCodes.filter((country) => {
           return country.name === value
         })[0]
       },
-      handleBlur() {
-        console.log('blur')
-      },
       handleFocus() {
         console.log('focus')
       },
+      onSelect({ name, iso2, dialCode }) {
+        console.log(`${dialCode}`)
+        this.prefixNum = dialCode
+      },
       resetForm() {
         this.$refs.ruleForm.resetFields()
-      },
-      filterOption(input, option) {
-        return option.componentOptions.children[0].text
-          .toLowerCase()
-          .includes(input.toLowerCase())
       },
       async signIn(e) {
         e.preventDefault()
@@ -223,14 +233,9 @@
           }
         })
       },
-      onSelect({ name, iso2, dialCode }) {
-        console.log(`${dialCode}`)
-        this.prefixNum = dialCode
-      },
     },
-    computed: mapGetters({
-      countryCodes: 'countryCodes',
-    }),
+    layout: 'auth',
+    middleware: 'guest',
   }
 </script>
 

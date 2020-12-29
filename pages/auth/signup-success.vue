@@ -35,6 +35,11 @@
     data() {
       return {}
     },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {},
   }
 </script>

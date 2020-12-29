@@ -217,7 +217,6 @@
   /*
   let dashChartData */
   export default {
-    layout: 'main',
     data() {
       return {
         width: 1000,
@@ -278,44 +277,12 @@
     beforeMount() {
       this.getUserTransactions(this.baseUrl + 'transactions/transactions')
     },
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
-      ...mapMutations({
-        toggleChatBox: 'toggleChatBox',
-      }),
-      async getUserTransactions(url) {
-        this.transfers = []
-        this.loadingTransfers = true
-        const headers = {
-          'Content-Type': 'application/json',
-          Authorization: this.$auth.getToken('local'),
-        }
-
-        try {
-          const userTransactionsResponse = await this.$axios.$get(url, {
-            headers,
-          })
-          console.log('User transactions ==>', userTransactionsResponse)
-
-          if (
-            this.transfersPagination.itemsPerPage >
-            userTransactionsResponse.count
-          ) {
-            this.transfersPagination.itemsPerPage =
-              userTransactionsResponse.count
-          }
-
-          this.nextPageUrl = userTransactionsResponse.next
-          this.previousPageUrl = userTransactionsResponse.previous
-
-          this.transfersPagination.totalRecords = userTransactionsResponse.count
-          this.transfers = userTransactionsResponse.results
-          this.loadingTransfers = false
-        } catch (e) {
-          // this.$toast.error(e.response.data.detail)
-          console.log(e.response.data.detail)
-          this.loadingTransfers = false
-        }
-      },
       async getBTCChartData(period) {
         const dDate = Math.floor(
           this.$moment().subtract(period, 'days').format('x') / 1000
@@ -377,6 +344,43 @@
         })
         return btcArray
       },
+      ...mapMutations({
+        toggleChatBox: 'toggleChatBox',
+      }),
+      async getUserTransactions(url) {
+        this.transfers = []
+        this.loadingTransfers = true
+        const headers = {
+          'Content-Type': 'application/json',
+          Authorization: this.$auth.getToken('local'),
+        }
+
+        try {
+          const userTransactionsResponse = await this.$axios.$get(url, {
+            headers,
+          })
+          console.log('User transactions ==>', userTransactionsResponse)
+
+          if (
+            this.transfersPagination.itemsPerPage >
+            userTransactionsResponse.count
+          ) {
+            this.transfersPagination.itemsPerPage =
+              userTransactionsResponse.count
+          }
+
+          this.nextPageUrl = userTransactionsResponse.next
+          this.previousPageUrl = userTransactionsResponse.previous
+
+          this.transfersPagination.totalRecords = userTransactionsResponse.count
+          this.transfers = userTransactionsResponse.results
+          this.loadingTransfers = false
+        } catch (e) {
+          // this.$toast.error(e.response.data.detail)
+          console.log(e.response.data.detail)
+          this.loadingTransfers = false
+        }
+      },
       /*
       async triggerFetchData() {
         await this.$store.dispatch('getCoinData')
@@ -395,6 +399,7 @@
         this.$store.commit('global/toggleTokenModal')
       },
     },
+    layout: 'main',
     middleware: 'query',
   }
 </script>
