@@ -17,7 +17,7 @@
           "
           class="balances"
         >
-          <h3>{{ +userDetails.balance | exchangeFilter }} AFK</h3>
+          <h3>{{ +userDetails.balance | doubleForm }} tokens</h3>
           <h3>{{ +userDetails.btc_balance | exchangeFilter }} BTC</h3>
           <h3>{{ +userDetails.eth_balance | exchangeFilter }} ETH</h3>
         </div>
@@ -66,7 +66,7 @@
                 innerSize: '95%',
                 name: 'balance',
                 data: [
-                  { name: 'AfriToken Balance', y: +userDetails.balance },
+                  { name: 'Main Balance', y: +userDetails.balance },
                   { name: 'Bitcoin Balance', y: +userDetails.btc_balance },
                   { name: 'Ethereum Balance', y: +userDetails.eth_balance },
                 ],
@@ -85,7 +85,9 @@
             You have 0 credit in all your wallets
           </span>
           <div class="sub-button mt-20">
-            <button class="w-100">Buy Crypto</button>
+            <nuxt-link class="c-white" to="/buy-crypto">
+              <button class="w-100">Buy Crypto</button>
+            </nuxt-link>
           </div>
         </a-empty>
       </div>
@@ -239,7 +241,6 @@
                   <label>Select card type</label>
                   <select v-model="cryptoToReceive">
                     <option value="">Select currency to receive</option>
-                    <option value="AFK">Africoin</option>
                     <option value="BTC">Bitcoin</option>
                     <option value="ETH">Ethereum</option>
                     <option value="BTC">LiteCoin</option>
@@ -297,11 +298,11 @@
     data() {
       return {
         baseUrl: process.env.baseUrl,
-        activeWallet: 'afk',
+        activeWallet: 'btc',
         processing: false,
         amount: 0,
         cryptoToReceive: '',
-        tabClass: 'afk_chart',
+        tabClass: 'btc_chart',
         collapse: ['1'],
       }
     },
@@ -359,7 +360,11 @@
     },
     methods: {
       callback(val) {
-        console.log(val)
+        const currentChart = this.chartData.find((chart) => {
+          return chart.className === val
+        })
+        console.log('wallet is', currentChart)
+        console.log('Chart data val is', currentChart)
         this.tabClass = val
       },
       openModal(modalId) {
@@ -448,7 +453,7 @@
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(-15%, -50%);
+      transform: translate(0%, -50%);
       h3 {
         color: #fafafa;
       }

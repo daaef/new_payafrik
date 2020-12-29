@@ -1,5 +1,5 @@
 <template>
-  <div class="dash-body">
+  <div class="dash-body buy--crypto">
     <div class="container">
       <div class="row">
         <div class="col-md-10 mr-auto align--middle ml-auto">
@@ -21,7 +21,7 @@
                     id="currency"
                     v-model="fromCurrency"
                     :class="dataClass"
-                    style="width: 120px"
+                    style="width: 100% !important"
                     :show-arrow="false"
                     @change="handleChange"
                     @select="handleSelect"

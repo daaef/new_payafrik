@@ -1387,6 +1387,9 @@ export const mutations = {
   setTransfers(state, payload) {
     state.transfers = payload
   },
+  setActiveCurrency(state, currency) {
+    state.activeCurrency = currency
+  },
   setLtcPrices(state, payload) {
     state.ltcPrices = payload
   },

@@ -311,7 +311,7 @@
           this.transfers = userTransactionsResponse.results
           this.loadingTransfers = false
         } catch (e) {
-          this.$toast.error(e.response.data.detail)
+          // this.$toast.error(e.response.data.detail)
           console.log(e.response.data.detail)
           this.loadingTransfers = false
         }

@@ -11,7 +11,7 @@
       </div>
 
       <div class="w-100">
-        <ul class="card-links row">
+        <ul class="card-links row" uk-height-match="target: > li > div">
           <li
             v-for="biller of billers"
             :key="biller.billerid"

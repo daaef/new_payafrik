@@ -490,7 +490,20 @@
             this.$toast.success('Successful')
             this.paymentSuccess = true
             // this.getUserDetails()
-            this.$store.dispatch('getUserDetails')
+            const headers2 = {
+              'Content-Type': 'application/json',
+              PFK_AUTH_TOKEN: this.$auth.getToken('local'),
+            }
+            const getUser = await this.$axios.$get(
+              'https://api.payafrik.io/auth/user/profile/',
+              { headers2 }
+            )
+
+            const userLoad = {
+              key: 'user',
+              value: getUser,
+            }
+            this.$store.commit('auth/SET', userLoad)
           }
         } catch (e) {
           console.log('Error In PayEDC')

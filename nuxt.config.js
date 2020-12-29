@@ -67,6 +67,8 @@ export default {
     '@/plugins/antd-ui',
     { src: '~/plugins/particles.js', mode: 'client' },
   ],
+
+  loading: '~/components/Preloader.vue',
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components

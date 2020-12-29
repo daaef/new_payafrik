@@ -2,6 +2,13 @@ import Vue from 'vue'
 import Trend from 'vuetrend'
 import Antd from 'ant-design-vue/lib'
 import VueCurrencyInput from 'vue-currency-input'
+import UIkit from 'uikit'
+import Icons from 'uikit/dist/js/uikit-icons'
+
+// loads the Icon plugin
+UIkit.use(Icons)
+
+console.log('UIkit on antdUI', UIkit)
 
 Vue.use(VueCurrencyInput)
 Vue.use(Antd)

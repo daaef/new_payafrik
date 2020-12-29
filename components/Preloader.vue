@@ -2,7 +2,40 @@
   <transition name="appear" mode="in-out">
     <div v-if="loading" class="loader">
       <div class="animated__circs">
-        <img src="~/assets/img/logo.png" alt="" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xml:space="preserve"
+          width="1.27143in"
+          height="0.998063in"
+          version="1.1"
+          style="
+            shape-rendering: geometricPrecision;
+            text-rendering: geometricPrecision;
+            image-rendering: optimizeQuality;
+            fill-rule: evenodd;
+            clip-rule: evenodd;
+          "
+          viewBox="0 0 1760 1381"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+        >
+          <g id="Layer_x0020_1">
+            <metadata id="CorelCorpID_0Corel-Layer" />
+            <g id="_1093129483136">
+              <polygon
+                id="logo--up"
+                fill="#FDB302"
+                class="fil0"
+                points="1029,7 0,0 514,1192 "
+              />
+              <polygon
+                id="logo--up"
+                fill="#0740A9"
+                class="fil0"
+                points="1760,1375 731,1381 1245,189 "
+              />
+            </g>
+          </g>
+        </svg>
       </div>
     </div>
   </transition>
@@ -17,7 +50,7 @@
     mounted() {
       setTimeout(() => {
         this.finish()
-      }, 500)
+      }, 20500)
     },
     methods: {
       start() {
@@ -39,6 +72,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
+
     &::before {
       content: '';
       background: url(../assets/img/circ1.png);
@@ -51,6 +85,7 @@
       left: 0;
       animation: circRotate infinite 20s linear;
     }
+
     &::after {
       content: '';
       background: url(../assets/img/circ2.png);
@@ -74,6 +109,7 @@
     width: 100%;
     z-index: 999980;
     background: #111649;
+
     img {
       height: 35px !important;
     }

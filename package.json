@@ -28,6 +28,7 @@
     "nuxt-compress": "^3.0.0",
     "nuxt-highcharts": "^1.0.3",
     "sass-loader": "^10.0.2",
+    "uikit": "^3.6.5",
     "vue": "^2.6.12",
     "vue-animejs": "^2.1.1",
     "vue-money-mask": "^0.8.1",

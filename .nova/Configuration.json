@@ -1,3 +1,6 @@
 {
+  "apexskier.eslint.config.eslintConfigPath" : "\/Users\/daaef\/Projects\/Nuxt\/payafrik-dash\/.eslintrc.js",
+  "apexskier.eslint.config.eslintPath" : "\/Users\/daaef\/Projects\/Nuxt\/payafrik-dash\/node_modules\/eslint\/bin\/eslint.js",
+  "apexskier.eslint.config.fixOnSave" : "Enable",
   "taskfinder.npm.path" : "\/Users\/daaef\/.nvm\/versions\/node\/v12.18.1\/lib\/node_modules\/npm\/bin\/npm"
 }
