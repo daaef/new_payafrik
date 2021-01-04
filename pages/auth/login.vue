@@ -1,11 +1,5 @@
 <template>
-  <a-form-model
-    ref="ruleForm"
-    :model="form"
-    :rules="rules"
-    :wrapper-col="wrapperCol"
-    class="w-100"
-  >
+  <a-form-model ref="ruleForm" :model="form" :rules="rules" class="w-100">
     <a-form-model-item ref="username" has-feedback prop="username">
       <div class="exchange centerdiv">
         <div style="margin-bottom: 16px" class="phoneNum">

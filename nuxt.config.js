@@ -86,6 +86,18 @@ export default {
     'nuxt-compress',
     '@nuxtjs/pwa',
   ],
+  pwa: {
+    icon: false,
+    meta: {
+      title: 'PayAfrik',
+      author: 'Aef Badmus',
+    },
+    manifest: {
+      name: 'Welcome to PayAfrik',
+      short_name: 'PayAfrik Platform',
+      lang: 'en',
+    }, // disables the icon module
+  },
   /*
    ** Nuxt.js modules
    */
