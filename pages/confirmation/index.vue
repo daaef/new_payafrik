@@ -303,6 +303,11 @@
     computed: mapGetters({
       countryCodes: 'countryCodes',
     }),
+    mounted() {
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+      }, 1500)
+    },
     methods: {
       onSubmit() {
         this.$refs.ruleForm.validate((valid) => {
@@ -437,11 +442,6 @@
           }
         })
       },
-    },
-    mounted() {
-      setTimeout(() => {
-        this.$nuxt.$loading.finish()
-      }, 1500)
     },
   }
 </script>

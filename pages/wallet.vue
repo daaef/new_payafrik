@@ -449,14 +449,13 @@
 <style scoped lang="scss">
   .welcome-text,
   .summary__chart {
-    padding-left: 115px;
     position: relative;
 
     .balances {
       position: absolute;
       top: 50%;
       left: 50%;
-      transform: translate(0%, -50%);
+      transform: translate(-50%, -50%);
       h3 {
         color: #fafafa;
       }

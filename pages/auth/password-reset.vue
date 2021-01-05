@@ -51,8 +51,8 @@
             <label for="pnum">Phone Number</label>
           </div>
         </div>
-        <transition name="appear" mode="in-out">
-          <div v-if="codeSent" class="exchange centerdiv mb-3">
+        <XyzTransitionGroup appear xyz="fade ease-out-back">
+          <div v-if="codeSent" key="1" class="exchange centerdiv mb-3">
             <div>
               <img
                 class="prefix-icon"
@@ -69,44 +69,7 @@
               <label for="pin">Reset Code</label>
             </div>
           </div>
-
-          <!--  <div class="exchange centerdiv">
-            <div>
-              <img
-                class="prefix-icon"
-                src="~/assets/img/right-arrow.png"
-                alt=""
-              />
-              <input
-                v-if="!viewPassword"
-                id="pin"
-                v-model="password"
-                maxlength="4"
-                type="password"
-                placeholder="Your New 4 Digit PIN"
-                @keydown="enforceNumbersOnly"
-              />
-              <input
-                v-if="viewPassword"
-                id="pin-text"
-                v-model="password"
-                type="text"
-                maxlength="4"
-                placeholder="Your New 4 Digit PIN"
-                @keydown="enforceNumbersOnly"
-              />
-              <label for="pin">PIN</label>
-              <img
-                class="suffix-icon suffix password-toggle-switch"
-                src="~/assets/img/view.png"
-                alt=""
-                @click="toggleViewPassword"
-              />
-              <div class="exchange&#45;&#45;dropdown"></div>
-            </div>
-          </div>-->
-
-          <div v-if="codeSent" class="exchange centerdiv">
+          <div v-if="codeSent" key="2" class="exchange centerdiv">
             <div>
               <a-input-password
                 id="pin"
@@ -119,10 +82,13 @@
               <label for="pin">PIN</label>
             </div>
           </div>
-          <div v-if="!codeSent" class="text-center mt-20 sub--btn--holder">
+          <div
+            v-if="!codeSent"
+            key="3"
+            class="text-center mt-20 sub--btn--holder"
+          >
             <div class="sub-button mt-20">
               <button
-                v-if="!processing"
                 :disabled="processing"
                 class="w-100"
                 @click="requestReset"
@@ -132,7 +98,11 @@
             </div>
           </div>
 
-          <div v-if="codeSent" class="text-center mt-20 sub--btn--holder">
+          <div
+            v-if="codeSent"
+            key="4"
+            class="text-center mt-20 sub--btn--holder"
+          >
             <div class="sub-button mt-20">
               <button
                 class="w-100"
@@ -143,7 +113,7 @@
               </button>
             </div>
           </div>
-        </transition>
+        </XyzTransitionGroup>
         <div class="text-center mt-20">
           <nuxt-link to="/auth/signup"
             ><p class="authhint">
