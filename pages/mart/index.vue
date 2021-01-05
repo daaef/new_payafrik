@@ -2,7 +2,7 @@
   <section class="dash-body">
     <div>
       <div class="welcome-text">
-        <div class="text-center">
+        <div>
           <p class="w-100 c-white">payafrik</p>
           <h1 class="w-100 c-white am-type mt-0 mb-0">Mart</h1>
         </div>

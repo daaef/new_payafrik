@@ -4,7 +4,7 @@
       <div class="logo">
         <img src="~/assets/img//logo.png" alt="logo" />
       </div>
-      <ul>
+      <ul class="top--links">
         <nuxt-link tag="li" to="/">
           <a href="#">
             <img class="mr-20" src="~/assets/img//home.png" alt="" /> Home
@@ -69,4 +69,13 @@
   }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+  .links--and--logo {
+    height: calc(100% - 150px);
+    .top--links {
+      max-height: calc(100% - 120px);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+  }
+</style>

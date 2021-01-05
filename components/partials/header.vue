@@ -5,43 +5,62 @@
         <nuxt-link to="/">
           <img src="~/assets/img//logo.png" class="mobile-logo" alt="logo" />
         </nuxt-link>
-        <span>AfriToken:</span>
+        <span>Token Balance:</span>
         <h3>{{ userDetails.balance | doubleForm }}</h3>
       </div>
       <ul class="nav-links">
         <li class="mr-32">
-          <a href="#" @click="$store.commit('setBuyToken')">
-            <img class="mr-8" src="~/assets/img//plus.png" alt="plus" />
-            BUY TOKEN
-          </a>
+          <a-tooltip placement="bottom">
+            <template slot="title">
+              <span>TOP UP</span>
+            </template>
+            <a href="#" @click="$store.commit('setBuyToken')">
+              <img class="mr-8" src="~/assets/img//plus.png" alt="plus" />
+            </a>
+          </a-tooltip>
         </li>
         <li class="mr-32">
-          <a href="#" @click="$store.commit('setWithdraw')">
-            <img class="mr-8" src="~/assets/img//wallet.png" alt="wallet" />
-            WITHDRAW
-          </a>
+          <a-tooltip placement="bottom">
+            <template slot="title">
+              <span>WITHDRAW</span>
+            </template>
+            <a href="#" @click="$store.commit('setWithdraw')">
+              <img class="mr-8" src="~/assets/img//wallet.png" alt="wallet" />
+            </a>
+          </a-tooltip>
         </li>
         <li class="mr-32">
-          <a href="#" @click="$store.commit('setTransferToken')">
-            <img class="mr-8" src="~/assets/img//transfer.png" alt="transfer" />
-            TRANSFER AFRITOKEN
-          </a>
+          <a-tooltip placement="bottom">
+            <template slot="title">
+              <span>TRANSFER</span>
+            </template>
+            <a href="#" @click="$store.commit('setTransferToken')">
+              <img
+                class="mr-8"
+                src="~/assets/img//transfer.png"
+                alt="transfer"
+              />
+            </a>
+          </a-tooltip>
         </li>
         <li>
-          <a href="#" @click="requestCard = true">
-            <img
-              class="mr-8"
-              src="~/assets/img//credit_card.png"
-              alt="transfer"
-            />
-            REQUEST CARD
-          </a>
+          <a-tooltip placement="bottom">
+            <template slot="title">
+              <span>REQUEST CARD</span>
+            </template>
+            <a href="#" @click="requestCard = true">
+              <img
+                class="mr-8"
+                src="~/assets/img//credit_card.png"
+                alt="transfer"
+              />
+            </a>
+          </a-tooltip>
         </li>
       </ul>
       <div class="user-account">
         <a href="#" @click="$store.commit('setProfileModal')">
-          <img class="mr-12" src="~/assets/img//user.png" alt="user icon" />
-          <span>+{{ userDetails.username }}</span>
+          <img src="~/assets/img/user.png" alt="user icon" />
         </a>
       </div>
       <MobileHeader />

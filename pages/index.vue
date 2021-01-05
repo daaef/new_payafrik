@@ -1,33 +1,28 @@
 <template>
-  <section class="dash-body">
+  <section class="dash-body homepage">
     <div>
-      <div class="welcome-text">
-        <div class="text-center">
-          <p class="w-100 c-white">welcome to</p>
-          <h1 class="w-100 c-white am-type mt-0 mb-0">PayAfrik.io</h1>
-        </div>
-      </div>
+      <WelcomeText />
       <ul class="card-links">
         <li class="link-card">
           <nuxt-link to="/mart">
             <div class="imge">
               <img src="~/assets/img/purse.png" alt="purse" />
             </div>
-            <p class="desc c-white text-center mb-8">
+            <!--<p class="desc c-white text-center mb-8">
               Manage your wallets &amp; make transactions
-            </p>
+            </p>-->
             <p class="higlight text-center">Make Transactions</p>
           </nuxt-link>
         </li>
         <li class="link-card">
-          <nuxt-link to="/mart">
+          <nuxt-link to="/mart/category/1">
             <div class="imge">
               <img src="~/assets/img/bills.png" alt="purse" />
             </div>
-            <p class="desc c-white text-center mb-8">
+            <!--<p class="desc c-white text-center mb-8">
               Pay your bills for utilities &amp; services
-            </p>
-            <p class="higlight text-center">Pay Bills</p>
+            </p>-->
+            <p class="higlight text-center">Bills &amp; Utilities</p>
           </nuxt-link>
         </li>
         <li class="link-card">
@@ -35,10 +30,10 @@
             <div class="imge">
               <img src="~/assets/img/exchange.png" alt="purse" />
             </div>
-            <p class="desc c-white text-center mb-8">
+            <!--<p class="desc c-white text-center mb-8">
               Exchange your cryptocurrencies with ease
-            </p>
-            <p class="higlight text-center">Exchange</p>
+            </p>-->
+            <p class="higlight text-center">Swap Crypto</p>
           </nuxt-link>
         </li>
         <li class="link-card">
@@ -46,10 +41,54 @@
             <div class="imge">
               <img src="~/assets/img/supporting.png" alt="purse" />
             </div>
-            <p class="desc c-white text-center mb-8">
+            <!-- <p class="desc c-white text-center mb-8">
               Get professional support &amp; quality customer care
-            </p>
+            </p>-->
             <p class="higlight text-center">Support</p>
+          </nuxt-link>
+        </li>
+        <li class="link-card">
+          <nuxt-link to="/mart/category/3">
+            <div class="imge">
+              <img src="~/assets/img/networks.png" alt="purse" />
+            </div>
+            <!-- <p class="desc c-white text-center mb-8">
+              Get professional support &amp; quality customer care
+            </p>-->
+            <p class="higlight text-center">Airtime &amp; Data</p>
+          </nuxt-link>
+        </li>
+        <li class="link-card">
+          <nuxt-link to="/power">
+            <div class="imge">
+              <img src="~/assets/img/buy_power.png" alt="purse" />
+            </div>
+            <!-- <p class="desc c-white text-center mb-8">
+              Get professional support &amp; quality customer care
+            </p>-->
+            <p class="higlight text-center">Power</p>
+          </nuxt-link>
+        </li>
+        <li class="link-card">
+          <nuxt-link to="/transactions">
+            <div class="imge">
+              <img src="~/assets/img/transaction_new.png" alt="purse" />
+            </div>
+            <!-- <p class="desc c-white text-center mb-8">
+              Get professional support &amp; quality customer care
+            </p>-->
+            <p class="higlight text-center">Transactions</p>
+          </nuxt-link>
+        </li>
+        <li class="link-card">
+          <nuxt-link to="/buy-crypto">
+            <div class="imge">
+              <img src="~/assets/img/buy_crypto.png" alt="purse" />
+            </div>
+            <!-- <p class="desc c-white text-center mb-8">
+              Get professional support &amp; quality customer care
+            </p>-->
+            <p class="higlight text-center">Buy &amp; Sell Crypto</p>
           </nuxt-link>
         </li>
       </ul>
@@ -214,9 +253,11 @@
 
 <script>
   import { mapGetters, mapMutations } from 'vuex'
+  import WelcomeText from '~/components/welcomeText'
   /*
   let dashChartData */
   export default {
+    components: { WelcomeText },
     data() {
       return {
         width: 1000,
@@ -403,5 +444,3 @@
     middleware: 'query',
   }
 </script>
-
-<style lang="scss"></style>

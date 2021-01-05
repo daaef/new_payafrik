@@ -2,7 +2,7 @@
   <section class="dash-body">
     <div>
       <div :class="[{ 'pl-0': $device.isMobileOrTablet }, 'welcome-text']">
-        <div class="text-center">
+        <div>
           <h1 class="w-100 c-white am-type mt-0 mb-0 text-large light">
             Wallets
           </h1>

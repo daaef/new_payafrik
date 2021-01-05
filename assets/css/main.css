@@ -1378,15 +1378,15 @@ nav .nav-links li a,
 
 nav .nav-links img,
 .navigation .nav-links img {
-  height: 23px;
-  width: 28px;
+  height: 35px;
+  width: 35px;
   object-fit: contain;
   object-position: left;
 }
 
 nav .nav-links li:nth-child(2) img,
 .navigation .nav-links li:nth-child(2) img {
-  height: 25px;
+  height: 45px;
   margin-top: 12px;
 }
 
@@ -2868,11 +2868,6 @@ aside .links--and--logo:after {
   }
 }
 
-.main-content main .dash-body > div .welcome-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
 .main-content main .dash-body > div .welcome-text p {
   font-size: 1.2rem;
@@ -2891,7 +2886,6 @@ aside .links--and--logo:after {
 }
 
 .main-content main .dash-body > div .card-links .link-card {
-  height: 200px;
   background: linear-gradient(
     to top,
     rgba(20, 30, 75, 0.48),
@@ -2902,7 +2896,6 @@ aside .links--and--logo:after {
   border-radius: 15px;
   position: relative;
   transition: all 0.5s;
-  padding-bottom: 20px;
 }
 @media (max-width: 1174px) {
   .main-content main .dash-body > div .card-links .link-card {
@@ -2991,6 +2984,7 @@ aside .links--and--logo:after {
   font-size: 1.2rem;
   text-rendering: optimizeLegibility;
   letter-spacing: 0.1px;
+  margin: 10px 0 0;
 }
 
 .main-content main .dash-body > div .wallets--and--transactions {

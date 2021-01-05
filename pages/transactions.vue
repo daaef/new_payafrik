@@ -3,7 +3,7 @@
     <div class="utrans--content">
       <div class="w-100">
         <div class="welcome-text">
-          <div class="text-center">
+          <div>
             <p class="w-100 c-white">user</p>
             <h1 class="w-100 c-white am-type mt-0 mb-0">Transactions</h1>
           </div>

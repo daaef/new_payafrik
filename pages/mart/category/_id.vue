@@ -2,7 +2,7 @@
   <section class="dash-body">
     <div v-if="!loadingBillers && billers.length > 0">
       <div class="welcome-text">
-        <div class="text-center">
+        <div>
           <p class="w-100 c-white">Billers for</p>
           <h1 class="w-100 c-white am-type mt-0 mb-0">
             {{ billers[0].categoryname }}

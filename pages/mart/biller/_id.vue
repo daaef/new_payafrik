@@ -3,7 +3,7 @@
     <section class="dash-body">
       <div v-if="!loadingPaymentItems && paymentItems.length > 0">
         <div class="welcome-text">
-          <div class="text-center">
+          <div>
             <p class="w-100 c-white">Paynent Items for</p>
             <h1 class="w-100 c-white am-type mt-0 mb-0">
               {{ activeBiller.billername }}
