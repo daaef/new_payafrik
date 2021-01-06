@@ -1325,6 +1325,7 @@ export const state = () => ({
   litecoinData: {},
   transfers: [],
   dashData: {},
+  data: {},
   supportTickets: [],
   btcChartData: [],
   ethChartData: [],
@@ -1414,11 +1415,14 @@ export const mutations = {
   setProfileModal(state) {
     state.profileModalActive = !state.profileModalActive
   },
-  setWalletSend(state, payload = 'AFK') {
+  setWalletSend(state, payload = 'BTC') {
     state.walletSendActive = !state.walletSendActive
     state.activeCurrency = payload
   },
-  setWalletRecieve(state, payload = 'AFK') {
+  setData(state, data) {
+    state.data = data
+  },
+  setWalletRecieve(state, payload = 'BTC') {
     state.walletRecieveActive = !state.walletRecieveActive
     state.activeCurrency = payload
   },
@@ -1742,5 +1746,8 @@ export const getters = {
   },
   walletRecieveActive(state) {
     return state.walletRecieveActive
+  },
+  data(state) {
+    return state.data
   },
 }

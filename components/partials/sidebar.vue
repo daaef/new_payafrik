@@ -23,25 +23,25 @@
         </nuxt-link>
         <nuxt-link tag="li" to="/exchange">
           <a href="#">
-            <img class="mr-20" src="~/assets/img//side-exchange.png" alt="" />
-            Exchange
+            <img class="mr-20" src="~/assets/img/side_swap_crypto.png" alt="" />
+            Swap Crypto
           </a>
         </nuxt-link>
         <nuxt-link tag="li" to="/transactions">
           <a href="#">
-            <img class="mr-20" src="~/assets/img//trans.png" alt="" />
+            <img class="mr-20" src="~/assets/img//transaction_new.png" alt="" />
             Transactions
           </a>
         </nuxt-link>
         <nuxt-link tag="li" to="/power">
           <a href="#">
-            <img class="mr-20" src="~/assets/img//turn-on.png" alt="" />
+            <img class="mr-20" src="~/assets/img//power.png" alt="" />
             Power
           </a>
         </nuxt-link>
         <nuxt-link tag="li" to="/buy-crypto">
           <a href="#">
-            <img class="mr-20" src="~/assets/img//buy-crypto.png" alt="" /> Buy
+            <img class="mr-20" src="~/assets/img//buy_crypto.png" alt="" /> Buy
             Crypto
           </a>
         </nuxt-link>
@@ -70,12 +70,29 @@
 </script>
 
 <style scoped lang="scss">
+  aside {
+    position: relative;
+    &:after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      height: 90%;
+      width: 0.5px;
+      transform: translateY(-50%);
+      background: rgba(128, 128, 128, 0.16);
+    }
+  }
   .links--and--logo {
     height: calc(100% - 150px);
+    width: 200px;
     .top--links {
       max-height: calc(100% - 120px);
       overflow-y: auto;
       overflow-x: hidden;
     }
+  }
+  .main-links {
+    width: 200px;
   }
 </style>

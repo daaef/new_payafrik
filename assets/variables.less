@@ -326,6 +326,12 @@ tr.ant-table-expanded-row {
   width: 90px;
   text-align: left;
 }
+.exchange--content {
+  .ant-select-selection--single .ant-select-selection__rendered {
+    width: 100%;
+  }
+  height: unset !important;
+}
 
 .align--middle {
   display: flex;
@@ -379,3 +385,45 @@ td.relative.table--trend.relative.table--trend {
       fill: #838383;
     }
   }
+
+@media (max-width: 869px) {
+  .exchange--content {
+    .exchange {
+      width: 100%;
+    }
+    .recieve {
+      width: 100%;
+    }
+
+    .exchange--btn {
+      background: transparent !important;
+      margin: 20px 0;
+    }
+
+    .exchange--breakdown {
+      margin: 30px 0 !important;
+      width: 100% !important;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+
+@media (max-width: 569px) {
+  .exchange--breakdown {
+    .arrow--breakdown {
+      width: 100%;
+      margin: 15px 0;
+      text-align: center;
+    }
+    .exchange-breakdown, .recieve-breakdown {
+      width: 100% !important;
+    }
+    .exchange-breakdown {
+      text-align: left !important;
+    }
+    .recieve-breakdown {
+      text-align: right !important;
+    }
+  }
+}

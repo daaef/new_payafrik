@@ -12,40 +12,10 @@
         <div class="token-details">
           <p class="highlight">AVAILABLE TOKEN</p>
           <h1>{{ +userDetails.balance }}</h1>
-          <p class="light">1 AFK TOKEN = 1.00 NGN</p>
+          <p class="light">1 TOKEN = 1.00 NGN</p>
         </div>
         <div class="transfer--info flex flex-center">
           <form class="text-center">
-            <div class="relative custom--select">
-              <label :class="[crypClass, 'token_modal']" for="currency">
-                {{ cryptoCurrency }}
-              </label>
-              <div class="prefix-img">
-                <img :src="selImg" alt="" />
-              </div>
-              <a-select
-                id="currency"
-                v-model="fromCurrency"
-                :class="dataClass"
-                style="width: 120px"
-                :show-arrow="false"
-                @select="handleSelect"
-              >
-                <a-select-option
-                  v-for="myAsset in data"
-                  :key="myAsset.key"
-                  :value="myAsset.currency"
-                >
-                  <span class="mr-12">$ {{ +myAsset.price | doubleForm }}</span>
-                  <span
-                    >Balance: {{ +myAsset.balance | doubleForm }}
-                    <span :class="myAsset.currClass">{{
-                      myAsset.currency
-                    }}</span></span
-                  >
-                </a-select-option>
-              </a-select>
-            </div>
             <div class="mt-20">
               <div style="margin-bottom: 16px" class="phoneNum">
                 <a-input
@@ -195,7 +165,7 @@
             this.username[0] === '0' ? this.username.slice(1) : this.username
           }`,
           amount: this.afkAmountToTransfer,
-          currency: this.fromCurrency,
+          currency: 'AFRITOKEN',
           address_type: 'USERNAME',
         }
 

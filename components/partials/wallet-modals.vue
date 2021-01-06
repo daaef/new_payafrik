@@ -1,6 +1,7 @@
 <template>
   <div class="wallet--modals">
     <div
+      v-if="walletSendActive"
       :class="[{ 'wallet-active': walletSendActive }, 'wallet--send', 'h-100']"
     >
       <a href="#" class="modal-close" @click="$store.commit('setWalletSend')">
@@ -10,24 +11,58 @@
         <div class="main-modal h-100">
           <div>
             <div class="w-100 text-center mb-20">
-              <img height="50" src="~/assets/img/Africoin.png" alt="" />
+              <img height="50" :src="data.asset_name.img" alt="" />
             </div>
-            <div class="plain--input mt-12 mb-12">
-              <input type="text" placeholder="Send to Africoin Address..." />
+            <div class="w-100 flex flex-between mb-20">
+              <a
+                :class="[wallet ? data.currClass : 'c-white']"
+                href="#"
+                @click="walletActive"
+                >Send to Wallet</a
+              >
+              <a
+                :class="[payafrikUser ? data.currClass : 'c-white']"
+                href="#"
+                @click="payafrikActive"
+                >Send to PayAfrik User</a
+              >
             </div>
+            <XyzTransition appear xyz="fade ease-out-back">
+              <div v-if="wallet" class="plain--input mt-12 mb-12">
+                <input
+                  type="text"
+                  v-model="walletAddress"
+                  placeholder="Wallet Address"
+                />
+              </div>
+              <div v-if="payafrikUser" class="plain--input mt-12 mb-12">
+                <input
+                  type="text"
+                  v-model="payafrikUsername"
+                  placeholder="PayAfrik Username"
+                />
+              </div>
+            </XyzTransition>
             <div class="plain--input mt-12 mb-12">
-              <input type="text" placeholder="Personal note" />
+              <input type="text" v-model="note" placeholder="Personal note" />
               <span class="optional">[optional]</span>
             </div>
             <div class="line--input mt-64 mb-4">
-              <input type="text" class="c-afk" placeholder="0.00" />
-              <span class="wallet--name">AFK</span>
+              <input
+                v-model="amount"
+                type="text"
+                :class="['c-afk', data.currClass]"
+                placeholder="0.00"
+              />
+              <span class="wallet--name">{{ currency }}</span>
             </div>
             <div class="sending--amnt flex flex-between">
-              <span class="amount c-white">0.00</span>
+              <span class="amount c-white">
+                {{ dollarValue | doubleForm }}</span
+              >
               <span class="currency c-white">USD</span>
             </div>
-            <div class="text-center mt-20">
+            <div :class="['text-center', 'mt-20', data.className]">
               <button class="normal-btn afk-bordered">Send</button>
             </div>
           </div>
@@ -35,6 +70,7 @@
       </div>
     </div>
     <div
+      v-if="walletRecieveActive"
       :class="[
         { 'wallet-active': walletRecieveActive },
         'wallet--recieve',
@@ -100,8 +136,10 @@
         amount: 0,
         note: '',
         walletAddress: '',
-        username: '',
-        sendMode: 'address',
+        payafrikUsername: '',
+        payafrikUser: false,
+        wallet: true,
+        dollarValue: 0,
       }
     },
     computed: {
@@ -128,8 +166,15 @@
         profileModalActive: 'profileModalActive',
         walletSendActive: 'walletSendActive',
         walletRecieveActive: 'walletRecieveActive',
-        activeCurrency: 'activeCurrency',
+        currency: 'activeCurrency',
+        data: 'data',
       }),
+    },
+    watch: {
+      amount(val) {
+        console.log('exchange amount', val)
+        this.dollarValue = val * this.data.price
+      },
     },
     methods: {
       copyText() {
@@ -143,35 +188,34 @@
         this.$toast.success('Address copied to clipboard')
       },
       async sendCurrency() {
-        if (
-          this.sendMode === 'address' &&
-          (this.walletAddress === '' || this.amount === 0)
-        ) {
+        if (this.wallet && (this.walletAddress === '' || this.amount === 0)) {
+          this.$toast.error('Fill in the all the fields')
           return
         }
 
         if (
-          this.sendMode === 'username' &&
-          (this.username === '' || this.amount === 0)
+          this.payafrikUser &&
+          (this.payafrikUsername === '' || this.amount === 0)
         ) {
+          this.$toast.error('Fill in the all the fields')
           return
         }
 
         this.sending = true
-        const currency = this.activeCurrency
+        const currency = this.currency
 
         const payload = {
           currency,
           amount: this.amount,
         }
 
-        payload.wallet = this.activeCurrency
+        payload.wallet = currency
 
-        if (this.sendMode === 'address') {
+        if (this.wallet) {
           payload.recipient = this.walletAddress
           payload.address_type = 'WALLET'
         } else {
-          payload.recipient = this.username
+          payload.recipient = this.payafrikUsername
           payload.address_type = 'USERNAME'
         }
 
@@ -200,6 +244,14 @@
           this.$toast.error(e.response.data.error)
           this.sending = false
         }
+      },
+      walletActive() {
+        this.wallet = true
+        this.payafrikUser = false
+      },
+      payafrikActive() {
+        this.wallet = false
+        this.payafrikUser = true
       },
     },
   }

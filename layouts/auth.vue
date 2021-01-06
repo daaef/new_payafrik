@@ -20,7 +20,6 @@
 
 <style>
   .auth main {
-    width: 100%;
     background-image: url('~assets/img/auth_bg.png') !important;
   }
 

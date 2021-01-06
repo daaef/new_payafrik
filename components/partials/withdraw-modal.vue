@@ -12,7 +12,7 @@
         <div class="token-details">
           <p class="highlight">AVAILABLE TOKEN</p>
           <h1>{{ userDetails.balance | doubleForm }}</h1>
-          <p class="light">1 AFK TOKEN = 1.00 NGN</p>
+          <p class="light">1 TOKEN = 1.00 NGN</p>
         </div>
         <div class="account--smart-card">
           <div class="bank--account">

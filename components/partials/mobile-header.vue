@@ -12,7 +12,7 @@
     </label>
     <div class="nav-dropdown">
       <div class="balance">
-        <span>AfriToken:</span>
+        <span>Token Balance:</span>
         <h3>{{ +userDetails.balance }}</h3>
       </div>
       <ul class="nav-links">
@@ -54,22 +54,28 @@
         </nuxt-link>
         <nuxt-link tag="li" to="/exchange">
           <a href="" class="mt-8">
-            <img class="mr-8" src="~/assets/img//side-exchange.png" alt="" />
-            Exchange
+            <img class="mr-8" src="~/assets/img/side_swap_crypto.png" alt="" />
+            Swap Crypto
           </a>
         </nuxt-link>
         <nuxt-link tag="li" to="/transactions">
           <a href="" class="mt-8">
-            <img class="mr-8" src="~/assets/img//trans.png" alt="" />
+            <img class="mr-8" src="~/assets/img//transaction_new.png" alt="" />
             Transactions
           </a>
         </nuxt-link>
-        <!--<nuxt-link tag="li" to="/buy-crypto">
+        <nuxt-link tag="li" to="/power">
+          <a href="#" class="mt-8">
+            <img class="mr-8" src="~/assets/img//power.png" alt="" />
+            Power
+          </a>
+        </nuxt-link>
+        <nuxt-link tag="li" to="/buy-crypto">
           <a href="" class="mt-8">
-            <img class="mr-8" src="~/assets/img//buy-crypto.png" alt="" />
+            <img class="mr-8" src="~/assets/img//buy_crypto.png" alt="" />
             Buy Crypto
           </a>
-        </nuxt-link>-->
+        </nuxt-link>
         <li>
           <a href="" class="mt-8">
             <img class="mr-8" src="~/assets/img//chat.png" alt="" />

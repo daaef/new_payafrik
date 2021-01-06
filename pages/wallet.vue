@@ -125,7 +125,7 @@
                 <div class="wallet-btns flex flex-center flex-wrap w-100 mt-20">
                   <button
                     class="normal-btn afk-bordered mr-20"
-                    @click="$store.commit('setWalletSend', data.currency)"
+                    @click="walletSend($event, data)"
                   >
                     Send
                   </button>
@@ -362,6 +362,11 @@
       this.closeSideBar()
     },
     methods: {
+      walletSend(e, data) {
+        console.log('Sending', data)
+        this.$store.commit('setWalletSend', data.currency)
+        this.$store.commit('setData', data)
+      },
       callback(val) {
         const currentChart = this.chartData.find((chart) => {
           return chart.className === val

@@ -13,7 +13,7 @@
           <div class="token-details">
             <p class="highlight">AVAILABLE TOKEN</p>
             <h1>{{ +userDetails.balance }}</h1>
-            <p class="light">1 AFK TOKEN = {{ pricePerToken }} NGN</p>
+            <p class="light">1 TOKEN = {{ pricePerToken }} NGN</p>
             <input
               v-model="tokens"
               type="number"
