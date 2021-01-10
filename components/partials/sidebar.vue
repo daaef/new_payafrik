@@ -2,7 +2,9 @@
   <aside>
     <div class="links--and--logo">
       <div class="logo">
-        <img src="~/assets/img//logo.png" alt="logo" />
+        <nuxt-link to="/">
+          <img src="~/assets/img//logo.png" alt="logo" />
+        </nuxt-link>
       </div>
       <ul class="top--links">
         <nuxt-link tag="li" to="/">

@@ -88,13 +88,10 @@
         <div class="main-modal h-100">
           <div>
             <div class="w-100 text-center mb-20">
-              <img height="50" src="~/assets/img/Africoin.png" alt="" />
+              <img height="50" :src="data.asset_name.img" alt="" />
             </div>
             <div class="plain--input mt-50 mb-12">
-              <input
-                type="text"
-                value="0x983426eCbA8e739C690B2B58C85fb45976bf58ef"
-              />
+              <input type="text" :value="data.wallet" />
               <a href="#" class="copy--btn">
                 <img src="~/assets/img/copy.png" alt="" />
               </a>

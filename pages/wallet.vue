@@ -131,7 +131,7 @@
                   </button>
                   <button
                     class="normal-btn afk-bordered mr-20"
-                    @click="$store.commit('setWalletRecieve', data.currency)"
+                    @click="walletRecieve($event, data)"
                   >
                     Recieve
                   </button>
@@ -365,6 +365,11 @@
       walletSend(e, data) {
         console.log('Sending', data)
         this.$store.commit('setWalletSend', data.currency)
+        this.$store.commit('setData', data)
+      },
+      walletRecieve(e, data) {
+        console.log('Sending', data)
+        this.$store.commit('setWalletRecieve', data.currency)
         this.$store.commit('setData', data)
       },
       callback(val) {

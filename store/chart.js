@@ -194,7 +194,7 @@ export const actions = {
   },
 }
 export const getters = {
-  chartData(state) {
+  chartData(state, commit, rootState) {
     return [
       {
         key: 1,
@@ -215,6 +215,7 @@ export const getters = {
         balance: state.myUserDetails.btc_balance,
         chart: state.btcPrices,
         query: 'chart/getBitcoinData',
+        wallet: rootState.auth.user.btc_wallet,
       },
       {
         key: 2,
@@ -235,6 +236,7 @@ export const getters = {
         balance: state.myUserDetails.eth_balance,
         chart: state.ethPrices,
         query: 'chart/getEthPriceData',
+        wallet: rootState.auth.user.eth_wallet,
       },
       {
         key: 3,
@@ -255,6 +257,7 @@ export const getters = {
         balance: 0.0,
         chart: state.ltcPrices,
         query: 'chart/getLtcPriceData',
+        wallet: rootState.auth.user.dash_wallet,
       },
       {
         key: 4,
@@ -275,6 +278,7 @@ export const getters = {
         balance: 0.0,
         chart: state.dashPrices,
         query: 'chart/getDashPriceData',
+        wallet: rootState.auth.user.litecoin_wallet,
       },
     ]
   },

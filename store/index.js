@@ -1576,7 +1576,7 @@ export const getters = {
   countryCodes(state) {
     return state.countryCodes
   },
-  chartData(state) {
+  chartData(state, commit, rootState) {
     return [
       {
         className: 'afk_chart',
@@ -1592,6 +1592,7 @@ export const getters = {
         trend: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
         balance: 0.0,
         chart: [0, 2, 5, 9, 5, 10, 3, 5, 0, 0, 1, 8, 2, 9, 0],
+        user: rootState.auth.user,
       },
       {
         className: 'btc_chart',
