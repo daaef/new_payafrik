@@ -47,6 +47,7 @@
 </template>
 <script>
   export default {
+    auth: false,
     data() {
       return {
         interswitchBaseUrl: process.env.interswitchBaseUrl,
@@ -57,7 +58,7 @@
     },
     computed: {
       userDetails() {
-        return this.$store.state.authenticatedUser
+        return this.$store.state.auth.user
       },
     },
     mounted() {
